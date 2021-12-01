@@ -2,42 +2,63 @@ package com.example.myapplication.ui.connectivity;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
+import com.example.myapplication.MainActivity;
+import com.example.myapplication.login;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicReference;
 
 //re  function callback of success http request
 // rel  function   callback of  fail http request
 //Get method= 0
 //post method 1
-public class Http_connect {
-    public static JsonObjectRequest sendReq(String url, Response.Listener<JSONObject> re, Response.ErrorListener rel) {
+@SuppressWarnings("serial")
+public class Http_connect implements Parcelable {
 
-        return new JsonObjectRequest(Request.Method.POST, url, null, re, rel);
+private JSONObject jsonresult=null;
 
-
-
+public Http_connect(){}
+    protected Http_connect(Parcel in) {
     }
 
-    public Http_connect() {
+    public static final Creator<Http_connect> CREATOR = new Creator<Http_connect>() {
+        @Override
+        public Http_connect createFromParcel(Parcel in) {
+            return new Http_connect(in);
+        }
+
+        @Override
+        public Http_connect[] newArray(int size) {
+            return new Http_connect[size];
+        }
+    };
+
+    public void setJsonresult(JSONObject jsonresult) {
+        this.jsonresult = jsonresult;
     }
 
-    public void mainv(Context ctx) {
+    public JSONObject getJsonresult() {
+        return jsonresult;
+    }
 
+
+    public static    void SendReq(Context ctx, String url, int method,Http_connect http) {
         RequestQueue requestQueue;
         NetworkActivity objNetworkActivity = new NetworkActivity(ctx);
+
 
 // Instantiate the cache
         Cache cache = objNetworkActivity.cache;  // 1MB cap
@@ -51,32 +72,34 @@ public class Http_connect {
 // Start the queue
         requestQueue.start();
 
-        Response.Listener<JSONObject> re = response -> {
-            //System.out.printf("" + response.toString());
-            try {
-                if (response != null) {
-                    String d = response.getString("result")+" ";
-                    JSONObject user = response.getJSONObject("user");
-                    d=d+user.getString("account")+" "+user.getString("role")+" ";
-                    System.out.println(d);
+        Response.Listener<JSONObject> re=new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+             http.setJsonresult(response);
+                System.out.println(http.getJsonresult().toString());
+                    //Intent i = new Intent(MainActivity.this,login.class);
+                    //i.putExtra("retieve",http);
 
-
-
-
-                }
-            } catch (JSONException e) {
-                System.out.println("Errore: " + e.toString());
             }
-        };
+        } ;
 
         Response.ErrorListener rel = error -> {
 
             System.err.println(error.getCause());
         };
 
-        JsonObjectRequest result = sendReq("http://10.0.2.2:8080/demo_war_exploded/login?action=auth&account=helo.andrea&password=heheee", re, rel);
+        JsonObjectRequest result = new JsonObjectRequest(method, url, null, re, rel);
         requestQueue.add(result);
+
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+    }
 }

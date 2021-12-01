@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.ui.connectivity.Http_connect;
@@ -25,27 +26,24 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //initialization bottom navigation bar
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_booking, R.id.navigation_account)
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        //http part
-        MainActivity.context = getApplicationContext();
-        Http_connect http = new Http_connect();
-        http.mainv(   MainActivity.context);
+        Intent inte = new Intent(this, login.class);
 
+        // aggiungo stringa in piu (es risultato)
+        setResult(login.RESULT_OK, inte);
+        startActivity(inte);
 
     }
 
-    public static Context getAppContext() {
-        return MainActivity.context;
-    }
+
     }
 
