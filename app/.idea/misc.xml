@@ -3,6 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_corsi_background.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_corsi_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_utente_background.xml" value="0.2203125" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_utente_foreground.xml" value="0.2203125" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/layout/fragment_dashboard.xml" value="0.1331521739130435" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/layout/fragment_home.xml" value="0.12047101449275362" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/mipmap-anydpi-v26/ic_corsi.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/mipmap-anydpi-v26/ic_corsi_round.xml" value="0.1" />
         <entry key="..\:/Users/salvo/Desktop/app/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/salvo/android/app/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.1" />
         <entry key="..\:/Users/salvo/android/app/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.2375" />

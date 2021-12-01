@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name">Prenotazione corsi</string>
+    <string name="title_home">Le mie prenotazioni</string>
+    <string name="title_dashboard">Tutte le prenotazioni</string>
+    <string name="title_account">Account</string>
+    <string name="home_benvenuto">Benvenuto </string>
 </resources>
