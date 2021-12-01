@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import com.example.myapplication.ui.connectivity.Http_connect;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +17,7 @@ import com.example.myapplication.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-
+    private static Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+        MainActivity.context = getApplicationContext();
+        Http_connect http = new Http_connect();
+        http.mainv(   MainActivity.context);
+
+
     }
 
-}
+    public static Context getAppContext() {
+        return MainActivity.context;
+    }
+    }
+
