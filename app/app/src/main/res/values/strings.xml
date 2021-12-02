@@ -3,6 +3,9 @@
     <string name="title_home">Mie prenotazioni</string>
     <string name="title_Booking">Prenotazioni</string>
     <string name="title_account">Account</string>
+    <string name="string_login_credentials">Effettua il login per avere l\'accesso completo alla piattaforma!</string>
+    <string name="string_login_nome_utente">Nome utente</string>
+    <string name="string_login_password">Password</string>
     <string name="string_benvenuto"><font size="1">Benvenuto, %1$s</font></string>
 
     <string name="title_dashboard">Dashboard</string>
