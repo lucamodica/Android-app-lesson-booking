@@ -5,7 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,6 +28,11 @@ import org.json.JSONObject;
 public class login extends AppCompatActivity {
     private static Context context;
    private JSONObject  result ;
+   CharSequence td;
+    Toast t;
+    EditText account,pw;
+    CheckBox ch;
+    int duration;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,16 +40,30 @@ public class login extends AppCompatActivity {
         result=new JSONObject();
        context= getApplicationContext();
 
+
+        //TextField per l' account
+        account = findViewById(R.id.account);
+        // TextField per la password
+        pw = findViewById(R.id.pw);
+        //CheckBox
+        ch =findViewById(R.id.showPsw);
+
+        ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    pw.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }else{
+                    pw.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+            }
+        });
     }
     public void login(View view){
-        CharSequence td;
-        Toast t;
-        int duration=Toast.LENGTH_LONG;;
-        //TextField per l' account
-        EditText account = findViewById(R.id.account);
+
+
         String accounts = account.getText().toString();// Stringa dell account
-        // TextField per la password
-        EditText pw = findViewById(R.id.pw);
+
         String pws= pw.getText().toString();// Stringa della password
         if(accounts!=null && pws!=null&&!TextUtils.isEmpty( accounts) && !TextUtils.isEmpty( pws)){
             String url= "http://10.0.2.2:8080/demo_war_exploded/login?action=auth&account="+accounts+"&password="+pws;
