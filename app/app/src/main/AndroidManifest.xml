@@ -12,17 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication" >
         <activity
-            android:name=".ui.connectivity.login"
+            android:name=".ui.connectivity.selectingparams"
             android:exported="true" />
         <activity
-            android:name=".ui.login.LoginActivity"
-            android:exported="true"
-            android:label="@string/title_activity_login" />
-        <activity
-            android:name=".MainActivity2"
-            android:exported="true"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/Theme.MyApplication.NoActionBar" />
+            android:name=".ui.connectivity.login"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

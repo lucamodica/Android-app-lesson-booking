@@ -29,4 +29,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="inserisci_il_tuo_username">Inserisci il tuo username</string>
     <string name="login">login</string>
+    <string name="title_activity_selectparams">Selectparams</string>
+    <string name="docenti">Docenti</string>
+    <string name="corsi" />
 </resources>

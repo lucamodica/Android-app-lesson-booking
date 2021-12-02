@@ -3,6 +3,7 @@ package com.example.myapplication.ui.connectivity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -83,6 +84,11 @@ public class login extends AppCompatActivity {
                             String c=result.getJSONObject("user").getString("role");
                             String b=result.getJSONObject("user").getString("password");
                             System.out.println(d+b+c);
+                            Intent inte = new Intent(this, selectingparams.class);
+
+                            // aggiungo stringa in piu (es risultato)
+                            setResult(login.RESULT_OK, inte);
+                            startActivity(inte);
                             break;
                         case("invalid_credentials"):
                              td="username o password errati!";// testo
