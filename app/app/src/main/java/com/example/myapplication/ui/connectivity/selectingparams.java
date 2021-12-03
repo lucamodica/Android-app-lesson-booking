@@ -30,65 +30,86 @@ import java.util.ArrayList;
 
 public class selectingparams extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
  private JSONObject course,teacher,auth;
- private String url="http://10.0.2.2:8080/demo_war_exploded/selectTable?objType=";
- private String[] params={"corso","docente","auth"};
+ final private String url="http://10.0.2.2:8080/demo_war_exploded/selectTable?objType=";
+  final private String[] params={"corso","docente","auth"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectingparams);
         course = new JSONObject();
         teacher= new JSONObject();
-        RequestQueue requestQueue;
-        NetworkActivity objNetworkActivity = new NetworkActivity(selectingparams.this);
-        Cache cache = objNetworkActivity.cache;  // 1MB cap
-        Network network = new BasicNetwork(new HurlStack());
-        requestQueue = new RequestQueue(cache, network);
-        requestQueue.start(); requestQueue.add(SendReq(selectingparams.this,url+params[0],0,params[0]));
-        requestQueue.add(SendReq(selectingparams.this,"http://10.0.2.2:8080/demo_war_exploded/login?action=auth&account=hi.marco&password=marco",1,params[2]));
+        auth=new JSONObject();
 
-        ArrayList<Course> courseslist=new ArrayList<>();
-        ArrayList<Teacher> teacherlist=new ArrayList<>();
-        System.out.println(url+params[0]);
-        System.out.println();      requestQueue.add(SendReq(selectingparams.this,url+params[0],0,params[0]));
-        try{
-        if(course.getString("result")=="success"){
-         JSONArray arr =course.getJSONArray("content");
-            for (int i=0;i<arr.length();i++) {
-                Course c= new Course(arr.getJSONObject(i).getJSONObject("title").toString(),arr.getJSONObject(i).getJSONObject("desc").toString());
-          courseslist.add(c);
+
+      SendReq(selectingparams.this,"http://10.0.2.2:8080/demo_war_exploded/login?action=auth&account=hi.marco&password=marco",1,params[2]);
+
+
+        try {
+            auth=getAuth();
+            System.out.println(auth.getString("result"));
+           if(auth.getString("result")=="success") {
+               System.out.println("ciao");
+              SendReq(selectingparams.this, url + params[0], 0, params[0]);
+
+               ArrayList<Course> courseslist = new ArrayList<>();
+               ArrayList<Teacher> teacherlist = new ArrayList<>();
+               System.out.println(url + params[0]);
+
+                   if (course.getString("result") == "success") {
+                       JSONArray arr = course.getJSONArray("content");
+                       for (int i = 0; i < arr.length(); i++) {
+                           Course c = new Course(arr.getJSONObject(i).getJSONObject("title").toString(), arr.getJSONObject(i).getJSONObject("desc").toString());
+                           courseslist.add(c);
+                       }
+                       SendReq(selectingparams.this, url + params[1], 0, params[1]);
+                       if (teacher.getString("result") == "success") {
+                           arr = course.getJSONArray("content");
+                           for (int i = 0; i < arr.length(); i++) {
+                               Teacher t = new Teacher(arr.getJSONObject(i).getJSONObject("name").toString(), arr.getJSONObject(i).getJSONObject("surname").toString(), arr.getJSONObject(i).getJSONObject("id_number").toString());
+                               teacherlist.add(t);
+                           }
+
+                           Spinner corsi = (Spinner) findViewById(R.id.corsi);
+                           corsi.setOnItemSelectedListener(this);
+                           ArrayAdapter<Course> adapter = new ArrayAdapter<Course>(this, android.R.layout.simple_spinner_dropdown_item, courseslist);
+                           corsi.setAdapter(adapter);
+
+                           Spinner teacher = (Spinner) findViewById(R.id.docenti);
+                           teacher.setOnItemSelectedListener(this);
+                           ArrayAdapter<Teacher> adaptert = new ArrayAdapter<Teacher>(this, android.R.layout.simple_spinner_dropdown_item, teacherlist);
+                           teacher.setAdapter(adaptert);
+                       }
+
+                   } else {
+                       System.out.println("errore");
+                   }
+
+           }   }catch(JSONException ed1){
+           System.out.println(ed1.toString());
            }
-            requestQueue.add(SendReq(selectingparams.this,url+params[1],0,params[1]));
-            if(teacher.getString("result")=="success") {
-                arr = course.getJSONArray("content");
-                for (int i = 0; i < arr.length(); i++) {
-                   Teacher t = new Teacher(arr.getJSONObject(i).getJSONObject("name").toString(), arr.getJSONObject(i).getJSONObject("surname").toString(),arr.getJSONObject(i).getJSONObject("id_number").toString());
-                   teacherlist.add(t);
-                }
-
-                Spinner corsi = (Spinner) findViewById(R.id.corsi);
-                corsi.setOnItemSelectedListener(this);
-                ArrayAdapter<Course> adapter = new ArrayAdapter<Course>(this, android.R.layout.simple_spinner_dropdown_item, courseslist);
-                corsi.setAdapter(adapter);
-
-                Spinner teacher = (Spinner) findViewById(R.id.docenti);
-                teacher.setOnItemSelectedListener(this);
-                ArrayAdapter<Teacher> adaptert = new ArrayAdapter<Teacher>(this, android.R.layout.simple_spinner_dropdown_item, teacherlist);
-                teacher.setAdapter(adaptert);
-            }
-
-        }else{
-            System.out.println("errore");
-        }
-        }catch(JSONException ed){
-            System.out.println(ed.toString());
-        }
-
-    }
-
-    public  JsonObjectRequest SendReq(Context ctx, String url, int method,String params) {
+       }
 
 
+
+
+    public  void SendReq(Context ctx, String url, int method,String params) {
+
+        RequestQueue requestQueue;
+        NetworkActivity objNetworkActivity = new NetworkActivity(ctx);
+        // Instantiate the cache
+        Cache cache = objNetworkActivity.cache;  // 1MB cap
+        // Set up the network to use HttpURLConnection as the HTTP client.
+        Network network = new BasicNetwork(new HurlStack());
+// Instantiate the RequestQueue with the cache and network.
+        requestQueue = new RequestQueue(cache, network);
+// Start the queue
+        requestQueue.start();
         Response.Listener<JSONObject> re=new Response.Listener<JSONObject>() {
+
+
+
+
+
             @Override
             public void onResponse(JSONObject response) {
                if(params=="corso"){
@@ -99,6 +120,7 @@ public class selectingparams extends AppCompatActivity implements AdapterView.On
                    setTeacher(response);
                    System.out.println(getTeacher().toString());
                }else{if(params=="auth"){
+                   System.out.println("ciaoi");
                    setAuth(response);
                    System.out.println(getAuth().toString());
                }
@@ -115,7 +137,8 @@ public class selectingparams extends AppCompatActivity implements AdapterView.On
             System.err.println(error.toString());
         };
 
-     return    new JsonObjectRequest(method, url, null, re, rel);
+        requestQueue.start();
+        requestQueue.add(  new JsonObjectRequest(method, url, null, re, rel));
 
 
     }
