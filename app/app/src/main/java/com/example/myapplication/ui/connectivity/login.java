@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.myapplication.R;
 
 import org.json.JSONException;
@@ -29,11 +31,13 @@ import org.json.JSONObject;
 public class login extends AppCompatActivity {
     private static Context context;
    private JSONObject  result ;
-   CharSequence td;
-    Toast t;
+   String pws,accounts;
+      CharSequence td;
+      Toast t;
     EditText account,pw;
     CheckBox ch;
     int duration;
+    String status="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +45,22 @@ public class login extends AppCompatActivity {
         result=new JSONObject();
        context= getApplicationContext();
 
-
+        Button btn= findViewById(R.id.login);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login();
+            }
+        });
         //TextField per l' account
         account = findViewById(R.id.account);
         // TextField per la password
         pw = findViewById(R.id.pw);
         //CheckBox
         ch =findViewById(R.id.showPsw);
+        String accounts = account.getText().toString();// Stringa dell account
 
+        String pws= pw.getText().toString();// Stringa della password
         ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -60,49 +72,53 @@ public class login extends AppCompatActivity {
             }
         });
     }
-    public void login(View view){
+    public void login(){
 
 
-        String accounts = account.getText().toString();// Stringa dell account
+         accounts = account.getText().toString();// Stringa dell account
 
-        String pws= pw.getText().toString();// Stringa della password
+        pws= pw.getText().toString();// Stringa della password
         if(accounts!=null && pws!=null&&!TextUtils.isEmpty( accounts) && !TextUtils.isEmpty( pws)){
-            String url= "http://10.0.2.2:8080/demo_war_exploded/login?action=auth&account="+accounts+"&password="+pws;
+           final String url= "http://10.0.2.2:8080/demo_war_exploded/login?action=auth&account="+accounts+"&password="+pws;
 
             SendReq(context,url,1);
-            result =getResult();
-          if(result!=null){
-              try {
-                  String status = result.getString("result");
-                    switch (status){
-                        case("success"):
-                            td="login avvenuto con successo";// testo
-                            duration = Toast.LENGTH_LONG;//durata
-                            t=  Toast.makeText(login.context,td,duration);
-                            t.show();
-                            String d=result.getJSONObject("user").getString("account");
-                            String c=result.getJSONObject("user").getString("role");
-                            String b=result.getJSONObject("user").getString("password");
-                            System.out.println(d+b+c);
-                            Intent inte = new Intent(this, selectingparams.class);
 
-                            // aggiungo stringa in piu (es risultato)
-                            setResult(login.RESULT_OK, inte);
-                            startActivity(inte);
-                            break;
-                        case("invalid_credentials"):
-                             td="username o password errati!";// testo
-                          duration = Toast.LENGTH_LONG;//durata
-                           t=  Toast.makeText(login.context,td,duration);
-                            t.show();
-                            break;
-                        case("illegal_credentials"):
-                            td="Nessun account trovato!";// testo
-                           duration = Toast.LENGTH_LONG;//durata
-                            t=  Toast.makeText(login.context,td,duration);
-                            t.show();
-                                 break;
-                    }
+          if(getResult().has("result")&&getResult().has("user")){
+              try {
+
+                      status = getResult().getString("result");
+                      switch (status){
+                          case("success"):
+                              td="login avvenuto con successo";// testo
+                              duration = Toast.LENGTH_SHORT;//durata
+                              t=  Toast.makeText(login.context,td,duration);
+                              t.show();
+                            reset();
+                              System.out.println("login successo");
+                              System.out.println("caricando params");
+                              Intent inte = new Intent(this, selectingparams.class);
+
+                              // aggiungo stringa in piu (es risultato)
+                              setResult(selectingparams.RESULT_OK, inte);
+                              startActivity(inte);
+                              break;
+                          case("invalid_credentials"):
+                              td="username o password errati!";// testo
+                              duration = 1000;//durata
+                              t=  Toast.makeText(login.context,td,duration);
+                              t.show();
+                              reset();
+                              break;
+                          case("illegal_credentials"):
+                              td="Nessun account trovato!";// testo
+                              duration =1000;//durata
+                              t=  Toast.makeText(login.context,td,duration);
+                              t.show();
+                              reset();
+                              break;
+                      }
+
+               reset();
               }catch(JSONException ed){
                 ed.printStackTrace();
 
@@ -125,19 +141,15 @@ public class login extends AppCompatActivity {
     }
     public void SendReq(Context ctx, String url, int method) {
         RequestQueue requestQueue;
-        NetworkActivity objNetworkActivity = new NetworkActivity(ctx);
-// Instantiate the cache
-        Cache cache = objNetworkActivity.cache;  // 1MB cap
-// Set up the network to use HttpURLConnection as the HTTP client.
-        Network network = new BasicNetwork(new HurlStack());
+
 // Instantiate the RequestQueue with the cache and network.
-        requestQueue = new RequestQueue(cache, network);
+        requestQueue = Volley.newRequestQueue(ctx);
 // Start the queue
         requestQueue.start();
         Response.Listener<JSONObject> re=new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                setResult(response);
+                setjResult(response);
                 System.out.println(getResult().toString());
 
             }
@@ -152,12 +164,20 @@ public class login extends AppCompatActivity {
         requestQueue.add(result);
 
     }
-    public void setResult(JSONObject jsonresult) {
+    public void setjResult(JSONObject jsonresult) {
         this.result = jsonresult;
     }
 
     public JSONObject getResult() {
         return result;
     }
+public void reset(){
+        account.clearComposingText();
+        pw.clearComposingText();
+    td="";
+    accounts="";
+    pws="";
+
+}
 
 }
