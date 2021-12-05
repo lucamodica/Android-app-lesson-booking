@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
+
+        //login part
         Intent inte = new Intent(this, login.class);
 
         // aggiungo stringa in piu (es risultato)
