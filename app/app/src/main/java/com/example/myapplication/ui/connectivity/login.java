@@ -56,17 +56,13 @@ public class login extends AppCompatActivity {
                 login(v);
             }
         });
-        //CheckBox
+        //CheckBox occhio
         ch = findViewById(R.id.showPsw);
-
-        ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    pw.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                } else {
-                    pw.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                }
+        ch.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b) {
+                pw.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            } else {
+                pw.setTransformationMethod(PasswordTransformationMethod.getInstance());
             }
         });
 
