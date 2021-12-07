@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Student Booking</string>
+    <string name="app_name">LessonBooking</string>
     <string name="title_home">Mie prenotazioni</string>
     <string name="title_Booking">Prenotazioni</string>
     <string name="title_account">Account</string>
@@ -8,11 +8,6 @@
     <string name="string_login_password">Password</string>
     <string name="string_benvenuto"><font size="1">Benvenuto, %1$s</font></string>
 
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="first_fragment_label" />
-    <string name="second_fragment_label" />
-    <string name="title_activity_main2">MainActivity2</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
