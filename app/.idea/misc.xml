@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_booking_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_corsi_background.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_corsi_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_show_psw_foreground.xml" value="0.2203125" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_utente_background.xml" value="0.2203125" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/drawable/ic_utente_foreground.xml" value="0.2203125" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/layout/activity_login2.xml" value="0.33" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/layout/fragment_dashboard.xml" value="0.18" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/layout/fragment_first.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/layout/fragment_home.xml" value="0.12047101449275362" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/layout/fragment_notifications.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/menu/bottom_nav_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/mipmap-anydpi-v26/ic_corsi.xml" value="0.1" />
+        <entry key="..\:/Users/IO pc/Desktop/Progetti/ium-android/app/app/src/main/res/mipmap-anydpi-v26/ic_corsi_round.xml" value="0.1" />
+        <entry key="..\:/Users/salvo/Desktop/app/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.1" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.2375" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.2375" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/drawable/ic_utente_background.xml" value="0.2375" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/drawable/ic_utente_foreground.xml" value="0.2375" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/layout/activity_login2.xml" value="0.1" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/layout/activity_selectingparams.xml" value="0.23632993512511585" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/layout/activity_selectparams.xml" value="0.2" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/layout/fragment_home.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/layout/fragment_notifications.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/salvo/android/app/app/src/main/res/menu/bottom_nav_menu.xml" value="0.22135416666666666" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
