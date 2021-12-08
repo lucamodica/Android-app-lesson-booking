@@ -23,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
-    private JSONObject result;
     private EditText account_field, pw_field;
     private Context ctx;
 
@@ -31,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        result = new JSONObject();
 
         //Context
         ctx = getApplicationContext();
@@ -67,15 +65,21 @@ public class LoginActivity extends AppCompatActivity {
             case ("success"):
                 Toast.makeText(ctx, "login avvenuto con successo",
                         Toast.LENGTH_LONG).show();
-                JSONObject userLogged = result.getJSONObject("user");
-                System.out.println("User logged: " +
-                        userLogged.getString("account"));
-                System.out.println("(role: " +
-                        userLogged.getString("role") + ")");
-                Intent inte = new Intent(this, selectingparams.class);
+
+                JSONObject userLogged = jsonResult.getJSONObject("user");
+                String account = userLogged.getString("account");
+                String role = userLogged.getString("role");
+                String jsessionid = jsonResult.getString("id");
+
+                System.out.println("User logged: " + account);
+                System.out.println("(role: " + role + ")");
+                Intent inte = new Intent(ctx, SelectingParams.class);
 
                 // aggiungo stringa in piu (es risultato)
                 setResult(LoginActivity.RESULT_OK, inte);
+                inte.putExtra("account", account);
+                inte.putExtra("role", role);
+                inte.putExtra("jsessionid", jsessionid);
                 startActivity(inte);
                 break;
 
@@ -107,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                     null,
                     response -> {
                         try {
+                            System.out.println(response);
                             handleResponse(response);
                         } catch (JSONException ed) {
                             ed.printStackTrace();
@@ -120,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             );
 
             NetworkSingleton.getInstance(ctx).addToRequestQueue(jsonReq);
+            System.out.println("Json request: " + jsonReq);
         }
         else {
             Toast.makeText(ctx, "Inserire username e password",

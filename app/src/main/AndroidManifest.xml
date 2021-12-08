@@ -16,7 +16,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".view.activity.selectingparams"
+            android:name=".view.activity.SelectingParams"
             android:exported="true" />
         <activity
             android:name=".view.activity.LoginActivity"
