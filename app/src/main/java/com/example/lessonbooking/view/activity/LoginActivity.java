@@ -23,7 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
-    private JSONObject result;
     private EditText account_field, pw_field;
     private Context ctx;
 
@@ -31,7 +30,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        result = new JSONObject();
 
         //Context
         ctx = getApplicationContext();
@@ -67,12 +65,12 @@ public class LoginActivity extends AppCompatActivity {
             case ("success"):
                 Toast.makeText(ctx, "login avvenuto con successo",
                         Toast.LENGTH_LONG).show();
-                JSONObject userLogged = result.getJSONObject("user");
+                JSONObject userLogged = jsonResult.getJSONObject("user");
                 System.out.println("User logged: " +
                         userLogged.getString("account"));
                 System.out.println("(role: " +
                         userLogged.getString("role") + ")");
-                Intent inte = new Intent(this, selectingparams.class);
+                Intent inte = new Intent(ctx, MainActivity.class);
 
                 // aggiungo stringa in piu (es risultato)
                 setResult(LoginActivity.RESULT_OK, inte);
