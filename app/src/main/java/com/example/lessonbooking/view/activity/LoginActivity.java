@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                         userLogged.getString("account"));
                 System.out.println("(role: " +
                         userLogged.getString("role") + ")");
-                Intent inte = new Intent(this, selectingparams.class);
+                Intent inte = new Intent(this, SelectingParams.class);
 
                 // aggiungo stringa in piu (es risultato)
                 setResult(LoginActivity.RESULT_OK, inte);
