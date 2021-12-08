@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LessonBooking"
-        android:fullBackupContent="">
+        android:fullBackupContent="true">
 
         <activity
             android:name=".view.activity.selectingparams"
