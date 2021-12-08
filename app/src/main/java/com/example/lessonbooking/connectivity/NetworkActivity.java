@@ -11,6 +11,7 @@ public class NetworkActivity {
 
     public NetworkActivity(Context mContext) {
         this.mContext = mContext;
-        this.cache = new DiskBasedCache(mContext.getCacheDir(), 1024 * 1024);
+        this.cache = new DiskBasedCache(mContext.getCacheDir(),
+                1024 * 1024);
     }
 }

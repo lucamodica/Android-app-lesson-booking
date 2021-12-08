@@ -5,7 +5,8 @@
     <string name="title_home">Mie prenotazioni</string>
     <string name="title_Booking">Prenota lezione</string>
     <string name="title_catalog">Catalogo lezioni</string>
-    <string name="string_benvenuto"><font size="1">Benvenuto, %1$s</font></string>
+    <string name="string_welcome"><font size="1">Benvenuto!</font></string>
+    <string name="servlet_url">http://10.0.2.2:8080/tweb/</string>
 
     <!-- Login activity strings -->
     <string name="title_activity_login">LoginActivity</string>

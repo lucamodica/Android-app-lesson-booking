@@ -14,152 +14,117 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
+import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.lessonbooking.R;
-import com.example.lessonbooking.connectivity.NetworkActivity;
+import com.example.lessonbooking.connectivity.NetworkSingleton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
-    private static Context context;
     private JSONObject result;
-    CharSequence td;
-    Toast t;
-    EditText account, pw;
-    Button log_button;
-    CheckBox ch;
-    int duration;
+    private EditText account_field, pw_field;
+    private Context ctx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         result = new JSONObject();
-        context = getApplicationContext();
 
+        //Context
+        ctx = getApplicationContext();
 
-        //TextField per l' account
-        account = findViewById(R.id.account);
-        // TextField per la password
-        pw = findViewById(R.id.pw);
-        //Button login
-        log_button = findViewById(R.id.login);
-        log_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                login(v);
-            }
-        });
-        //CheckBox occhio
-        ch = findViewById(R.id.showPsw);
+        //Account textfield
+        account_field = findViewById(R.id.account);
+
+        //Password textfield
+        pw_field = findViewById(R.id.pw);
+
+        //Login button
+        Button login_button = findViewById(R.id.login);
+        login_button.setOnClickListener(this::login);
+
+        //CheckBox to show password in textfield
+        CheckBox ch = findViewById(R.id.showPsw);
         ch.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
-                pw.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            } else {
-                pw.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                pw_field.setTransformationMethod(
+                        HideReturnsTransformationMethod.getInstance());
+            }
+            else {
+                pw_field.setTransformationMethod(
+                        PasswordTransformationMethod.getInstance());
             }
         });
+    }
+
+    private void handleResponse(JSONObject jsonResult)
+            throws JSONException {
+        String status = jsonResult.getString("result");
+        switch (status) {
+            case ("success"):
+                Toast.makeText(ctx, "login avvenuto con successo",
+                        Toast.LENGTH_LONG).show();
+                JSONObject userLogged = result.getJSONObject("user");
+                System.out.println("User logged: " +
+                        userLogged.getString("account"));
+                System.out.println("(role: " +
+                        userLogged.getString("role") + ")");
+                Intent inte = new Intent(this, selectingparams.class);
+
+                // aggiungo stringa in piu (es risultato)
+                setResult(LoginActivity.RESULT_OK, inte);
+                startActivity(inte);
+                break;
+
+            case ("invalid_credentials"):
+                Toast.makeText(ctx, "username o password errati!",
+                        Toast.LENGTH_LONG).show();
+                break;
+
+            case ("illegal_credentials"):
+                Toast.makeText(ctx, "Nessun account trovato!",
+                        Toast.LENGTH_LONG).show();
+                break;
+        }
 
     }
 
     public void login(View v) {
 
-        String accounts = account.getText().toString();
-        String pws = pw.getText().toString();
-        if (accounts != null && pws != null && !TextUtils.isEmpty(accounts) && !TextUtils.isEmpty(pws)) {
-            String url = "https://localhost:8080/demo_war_exploded/login?action=auth&account=" + accounts + "&password=" + pws;
+        String account = account_field.getText().toString();
+        String pw = pw_field.getText().toString();
 
-            SendReq(context, url, 1);
-            result = getResult();
-            if (result != null) {
-                try {
-                    String status = result.getString("result");
-                    switch (status) {
-                        case ("success"):
-                            td = "login avvenuto con successo";// testo
-                            duration = Toast.LENGTH_LONG;//durata
-                            t = Toast.makeText(LoginActivity.context, td, duration);
-                            t.show();
-                            String d = result.getJSONObject("user").getString("account");
-                            String c = result.getJSONObject("user").getString("role");
-                            String b = result.getJSONObject("user").getString("password");
-                            System.out.println(d + b + c);
-                            Intent inte = new Intent(this, selectingparams.class);
+        if ( !(TextUtils.isEmpty(account) || TextUtils.isEmpty(pw)) ) {
+            String url = getString(R.string.servlet_url) +
+                    "login?action=auth&account=" + account + "&password=" + pw;
 
-                            // aggiungo stringa in piu (es risultato)
-                            setResult(LoginActivity.RESULT_OK, inte);
-                            startActivity(inte);
-                            break;
-                        case ("invalid_credentials"):
-                            td = "username o password errati!";// testo
-                            duration = Toast.LENGTH_LONG;//durata
-                            t = Toast.makeText(LoginActivity.context, td, duration);
-                            t.show();
-                            break;
-                        case ("illegal_credentials"):
-                            td = "Nessun account trovato!";// testo
-                            duration = Toast.LENGTH_LONG;//durata
-                            t = Toast.makeText(LoginActivity.context, td, duration);
-                            t.show();
-                            break;
+            JsonObjectRequest jsonReq = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    null,
+                    response -> {
+                        try {
+                            handleResponse(response);
+                        } catch (JSONException ed) {
+                            ed.printStackTrace();
+                        }
+                    },
+                    error -> {
+                        Toast.makeText(ctx, error.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                        System.err.println(error.getMessage() + ", url= " + url);
                     }
-                } catch (JSONException ed) {
-                    ed.printStackTrace();
+            );
 
-                }
-            } else {
-                td = "login fallito controlla la connessione internet";// testo
-                duration = Toast.LENGTH_LONG;//durata
-                t = Toast.makeText(LoginActivity.context, td, duration);
-                t.show();
-            }
-
-        } else {
-
-            td = "Inserire username e password";// testo
-            duration = Toast.LENGTH_LONG;//durata
-            t = Toast.makeText(LoginActivity.context, td, duration);
-            t.show();
+            NetworkSingleton.getInstance(ctx).addToRequestQueue(jsonReq);
         }
-    }
-
-    public void SendReq(Context ctx, String url, int method) {
-        RequestQueue requestQueue;
-        NetworkActivity objNetworkActivity = new NetworkActivity(ctx);
-
-        // Instantiate the RequestQueue with the cache and network.
-        requestQueue = Volley.newRequestQueue(ctx);
-        // Start the queue
-        requestQueue.start();
-        Response.Listener<JSONObject> re = new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                setResult(response);
-                System.out.println(getResult().toString());
-
-            }
-        };
-
-        Response.ErrorListener rel = error -> {
-            Toast.makeText(LoginActivity.context, "TomCat non trovato", Toast.LENGTH_LONG).show();
-            System.err.println("TomCat non trovato");
-            System.err.println(error.toString());
-        };
-
-        JsonObjectRequest result = new JsonObjectRequest(method, url, null, re, rel);
-        requestQueue.add(result);
-
-    }
-
-    public void setResult(JSONObject jsonresult) {
-        this.result = jsonresult;
-    }
-
-    public JSONObject getResult() {
-        return result;
+        else {
+            Toast.makeText(ctx, "Inserire username e password",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
 }

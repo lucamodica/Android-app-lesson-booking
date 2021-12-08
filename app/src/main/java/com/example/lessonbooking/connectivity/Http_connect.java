@@ -19,7 +19,7 @@ import org.json.JSONObject;
 //post method 1
 public class Http_connect  {
 
-    private JSONObject jsonresult = new JSONObject();
+    private JSONObject jsonresult;
 
     public Http_connect(JSONObject jsonresult) {
         this.jsonresult = jsonresult;
@@ -54,7 +54,8 @@ public class Http_connect  {
             System.err.println(error.toString());
         };
 
-        JsonObjectRequest result = new JsonObjectRequest(method, url, null, re, rel);
+        JsonObjectRequest result = new JsonObjectRequest(method, url,
+                null, re, rel);
         requestQueue.add(result);
 
     }
