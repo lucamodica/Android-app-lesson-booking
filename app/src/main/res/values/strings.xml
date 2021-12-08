@@ -1,29 +1,27 @@
 <resources>
+
+    <!-- Globals -->
     <string name="app_name">LessonBooking</string>
     <string name="title_home">Mie prenotazioni</string>
-    <string name="title_Booking">Prenotazioni</string>
-    <string name="title_account">Account</string>
-    <string name="string_login_credentials">Hai un account?</string>
-    <string name="string_login_nome_utente">Nome utente</string>
-    <string name="string_login_password">Password</string>
-    <string name="string_benvenuto"><font size="1">Benvenuto, %1$s</font></string>
+    <string name="title_Booking">Prenota lezione</string>
+    <string name="title_catalog">Catalogo lezioni</string>
+    <string name="string_welcome"><font size="1">Benvenuto!</font></string>
+    <string name="servlet_url">http://10.0.2.2:8080/tweb/</string>
+
+    <!-- Login activity strings -->
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="header_login">Hai un account?</string>
+    <string name="prompt_account">Nome utente</string>
+    <string name="prompt_password">Password</string>
+    <string name="insert_account">Inserisci il tuo nome utente</string>
+    <string name="button_login">Accedi</string>
+    <string name="invalid_account">Nome utente non valido</string>
+    <string name="invalid_password">Password non valida</string>
+    <string name="login_failed">"Login fallito"</string>
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
-    <string name="inserisci_il_tuo_username">Inserisci il tuo username</string>
-    <string name="login">login</string>
+    <string name="welcome">"Welcome!"</string>
     <string name="title_activity_selectparams">Selectparams</string>
     <string name="docenti">Docenti</string>
     <string name="corsi" />
