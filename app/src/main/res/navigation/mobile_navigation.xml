@@ -13,13 +13,13 @@
 
     <fragment
         android:id="@+id/navigation_booking"
-        android:name="com.example.lessonbooking.view.fragment.dashboard.DashboardFragment"
+        android:name="com.example.lessonbooking.view.fragment.booking.BookingFragment"
         android:label="@string/title_Booking"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_booking" />
 
     <fragment
-        android:id="@+id/navigation_account"
-        android:name="com.example.lessonbooking.view.fragment.notifications.NotificationsFragment"
-        android:label="@string/title_account"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_catalog"
+        android:name="com.example.lessonbooking.view.fragment.catalog.CatalogFragment"
+        android:label="@string/title_catalog"
+        tools:layout="@layout/fragment_catalog" />
 </navigation>

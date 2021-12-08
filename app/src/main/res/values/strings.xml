@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">LessonBooking</string>
     <string name="title_home">Mie prenotazioni</string>
-    <string name="title_Booking">Prenotazioni</string>
-    <string name="title_account">Account</string>
+    <string name="title_Booking">Prenota lezione</string>
+    <string name="title_catalog">Catalogo lezioni</string>
     <string name="string_login_credentials">Hai un account?</string>
     <string name="string_login_nome_utente">Nome utente</string>
     <string name="string_login_password">Password</string>
