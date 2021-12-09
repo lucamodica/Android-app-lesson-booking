@@ -25,4 +25,8 @@
     <string name="title_activity_selectparams">Selectparams</string>
     <string name="docenti">Docenti</string>
     <string name="corsi" />
+    <string name="select_button">Prenota</string>
+    <string name="select_corso_text">Conferma</string>
+    <string name="select_docente_text">Conferma</string>
+    <string name="button_login_ospite">Accedi come ospite</string>
 </resources>

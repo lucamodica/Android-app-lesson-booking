@@ -9,10 +9,11 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="179dp"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="37dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:gravity="center"
         android:text="@string/header_login"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,6 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
 
+        android:backgroundTint="@color/blue_200"
         android:focusableInTouchMode="false"
         android:text="@string/button_login"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,5 +84,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_account_foreground" />
+
+    <Button
+        android:id="@+id/login_as_utente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/blue_200"
+        android:text="@string/button_login_ospite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
