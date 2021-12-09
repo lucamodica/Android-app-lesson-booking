@@ -5,16 +5,19 @@
     <string name="title_home">Mie prenotazioni</string>
     <string name="title_Booking">Prenota lezione</string>
     <string name="title_catalog">Catalogo lezioni</string>
+    <string name="title_selecting_params">Prenotazione lezioni</string>
     <string name="string_welcome"><font size="1">Benvenuto!</font></string>
     <string name="servlet_url">http://10.0.2.2:8080/tweb/</string>
 
     <!-- Login activity strings -->
     <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login_desctiption_image">Icona di una persona</string>
     <string name="header_login">Hai un account?</string>
     <string name="prompt_account">Nome utente</string>
     <string name="prompt_password">Password</string>
     <string name="insert_account">Inserisci il tuo nome utente</string>
     <string name="button_login">Accedi</string>
+    <string name="button_login_ospite">Accedi come ospite</string>
     <string name="invalid_account">Nome utente non valido</string>
     <string name="invalid_password">Password non valida</string>
     <string name="login_failed">"Login fallito"</string>
@@ -24,5 +27,5 @@
     <string name="welcome">"Welcome!"</string>
     <string name="title_activity_selectparams">Selectparams</string>
     <string name="docenti">Docenti</string>
-    <string name="corsi" />
+    <string name="corsi">Corsi</string>
 </resources>

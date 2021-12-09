@@ -1,6 +1,7 @@
 package com.example.lessonbooking.view.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController,
                 appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+        /*login part*/
+        startActivity(new Intent(this, LoginActivity.class));
 
     }
 

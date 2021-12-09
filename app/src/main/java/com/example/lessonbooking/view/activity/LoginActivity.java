@@ -40,10 +40,6 @@ public class LoginActivity extends AppCompatActivity {
         //Password textfield
         pw_field = findViewById(R.id.pw);
 
-        //Login button
-        Button login_button = findViewById(R.id.login);
-        login_button.setOnClickListener(this::login);
-
         //CheckBox to show password in textfield
         CheckBox ch = findViewById(R.id.showPsw);
         ch.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -56,6 +52,15 @@ public class LoginActivity extends AppCompatActivity {
                         PasswordTransformationMethod.getInstance());
             }
         });
+
+        //Login button
+        Button login_button = findViewById(R.id.login);
+        login_button.setOnClickListener(this::login);
+
+        /*TODO**********************************/
+        //Login ospite button
+        Button login_user_button = findViewById(R.id.login_ospite);
+        login_user_button.setOnClickListener(this::login);
     }
 
     private void handleResponse(JSONObject jsonResult)
@@ -129,6 +134,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(ctx, "Inserire username e password",
                     Toast.LENGTH_LONG).show();
         }
+        finish();
     }
 
 }

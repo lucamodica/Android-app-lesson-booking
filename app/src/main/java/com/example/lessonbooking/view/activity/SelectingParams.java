@@ -1,11 +1,11 @@
 package com.example.lessonbooking.view.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -42,7 +42,8 @@ public class SelectingParams extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selectingparams);
+        setContentView(R.layout.fragment_booking);
+
         course = new JSONObject();
         teacher = new JSONObject();
 
@@ -131,14 +132,14 @@ public class SelectingParams extends AppCompatActivity implements
                         teacherlist.add(ta);
                     }
                     //inizializzo dropdown
-                    Spinner corsi =  findViewById(R.id.corsi);
+                    Spinner corsi =  findViewById(R.id.sp_corsi);
                     corsi.setOnItemSelectedListener(this);
                     ArrayAdapter<Course> adapter = new ArrayAdapter<>(this,
                             android.R.layout.simple_spinner_dropdown_item,
                             courseslist);
                     corsi.setAdapter(adapter);
 
-                    Spinner teacher = findViewById(R.id.docenti);
+                    Spinner teacher = findViewById(R.id.sp_docenti);
                     teacher.setOnItemSelectedListener(this);
                     ArrayAdapter<Teacher> adaptert = new ArrayAdapter<>(this,
                             android.R.layout.simple_spinner_dropdown_item,
