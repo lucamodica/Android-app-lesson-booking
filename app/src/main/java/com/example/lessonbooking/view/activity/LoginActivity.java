@@ -22,6 +22,9 @@ import org.json.JSONObject;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.connectivity.NetworkSingleton;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+
 public class LoginActivity extends AppCompatActivity {
     private EditText account_field, pw_field;
     private Context ctx;
@@ -39,6 +42,10 @@ public class LoginActivity extends AppCompatActivity {
 
         //Password textfield
         pw_field = findViewById(R.id.pw);
+
+        //Setting cookie
+        CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
 
         //Login button
         Button login_button = findViewById(R.id.login);
