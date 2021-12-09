@@ -16,12 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.lessonbooking.R;
-import com.example.lessonbooking.connectivity.NetworkData;
-import com.example.lessonbooking.connectivity.NetworkSingleton;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.example.lessonbooking.R;
+import com.example.lessonbooking.connectivity.NetworkSingleton;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText account_field, pw_field;
