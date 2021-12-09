@@ -7,6 +7,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import android.webkit.CookieManager;
+import java.util.HashMap;
+import java.util.Map;
+
 public class NetworkSingleton {
     @SuppressLint("StaticFieldLeak")
     private static NetworkSingleton instance;
@@ -41,5 +45,6 @@ public class NetworkSingleton {
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
     }
+
 
 }

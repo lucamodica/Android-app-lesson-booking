@@ -51,11 +51,9 @@ public class SelectingParams extends AppCompatActivity implements
         url = getString(R.string.servlet_url) + "selectTable?objType=";
         Bundle b = getIntent().getExtras();
 
-        if (b.containsKey("account") && b.containsKey("role") &&
-            b.containsKey("jsessionid")){
+        if (b.containsKey("account") && b.containsKey("role")){
             account = getIntent().getStringExtra("account");
             role = getIntent().getStringExtra("role");
-            jsessionid = getIntent().getStringExtra("jsessionid");
         }
         else {
             finish();
@@ -172,16 +170,8 @@ public class SelectingParams extends AppCompatActivity implements
         return course;
     }
 
-    public void setCourse(JSONObject course) {
-        this.course = course;
-    }
-
     public JSONObject getTeacher() {
         return teacher;
-    }
-
-    public void setTeacher(JSONObject teacher) {
-        this.teacher = teacher;
     }
 
 }

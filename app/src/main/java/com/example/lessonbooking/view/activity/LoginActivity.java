@@ -17,13 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.lessonbooking.R;
+import com.example.lessonbooking.connectivity.NetworkData;
 import com.example.lessonbooking.connectivity.NetworkSingleton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
-    private JSONObject result;
     private EditText account_field, pw_field;
     private Context ctx;
 
@@ -31,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        result = new JSONObject();
 
         //Context
         ctx = getApplicationContext();
@@ -67,15 +66,21 @@ public class LoginActivity extends AppCompatActivity {
             case ("success"):
                 Toast.makeText(ctx, "login avvenuto con successo",
                         Toast.LENGTH_LONG).show();
-                JSONObject userLogged = result.getJSONObject("user");
-                System.out.println("User logged: " +
-                        userLogged.getString("account"));
-                System.out.println("(role: " +
-                        userLogged.getString("role") + ")");
-                Intent inte = new Intent(this, SelectingParams.class);
+
+                JSONObject userLogged = jsonResult.getJSONObject("user");
+                String account = userLogged.getString("account");
+                String role = userLogged.getString("role");
+                String jsessionid = jsonResult.getString("id");
+
+                System.out.println("User logged: " + account);
+                System.out.println("(role: " + role + ")");
+                Intent inte = new Intent(ctx, SelectingParams.class);
 
                 // aggiungo stringa in piu (es risultato)
                 setResult(LoginActivity.RESULT_OK, inte);
+                inte.putExtra("account", account);
+                inte.putExtra("role", role);
+                inte.putExtra("jsessionid", jsessionid);
                 startActivity(inte);
                 break;
 
@@ -113,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     },
                     error -> {
-                        Toast.makeText(ctx, error.getMessage(),
+                        Toast.makeText(ctx, "Nessuna connessione trovata",
                                 Toast.LENGTH_LONG).show();
                         System.err.println(error.getMessage() + ", url= " + url);
                     }
