@@ -42,7 +42,7 @@ public class SelectingParams extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_booking);
+        setContentView(R.layout.activity_selectingparams);
 
         course = new JSONObject();
         teacher = new JSONObject();

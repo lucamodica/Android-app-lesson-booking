@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
                 appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        /*login part*/
-        startActivity(new Intent(this, LoginActivity.class));
 
     }
 
