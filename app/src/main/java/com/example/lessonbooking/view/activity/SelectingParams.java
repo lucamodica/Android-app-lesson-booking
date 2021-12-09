@@ -1,6 +1,7 @@
 package com.example.lessonbooking.view.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,10 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.webkit.CookieManager;
-
 import java.util.ArrayList;
-
 
 public class SelectingParams extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener{
@@ -34,10 +32,6 @@ public class SelectingParams extends AppCompatActivity implements
     private static JSONObject course, teacher;
     Context ctx;
     private String url;
-    private String account;
-    private String role;
-    private String jsessionid;
-    final private String[] params = {"corso", "docente"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,110 +47,23 @@ public class SelectingParams extends AppCompatActivity implements
         Bundle b = getIntent().getExtras();
 
         if (b.containsKey("account") && b.containsKey("role")){
-            account = getIntent().getStringExtra("account");
-            role = getIntent().getStringExtra("role");
+            String account = getIntent().getStringExtra("account");
+            String role = getIntent().getStringExtra("role");
+            Toast.makeText(ctx, "Hello, " + account + "!, role: " + role,
+                    Toast.LENGTH_LONG).show();
         }
         else {
             finish();
         }
     }
 
-
-    private void fetchData(String objType){
-        String urlReq = url + objType;
-        JsonObjectRequest jsonReq = new JsonObjectRequest(
-                Request.Method.GET,
-                urlReq,
-                null,
-                response -> {
-                    if (objType.equals("corso")){
-                        course = response;
-                    }
-                    else if (objType.equals("docente")) {
-                        teacher = response;
-                    }
-                },
-                error -> {
-                    Toast.makeText(ctx, error.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                    System.err.println(error.getMessage() + ", url= " + url);
-                }
-        );
-
-        NetworkSingleton.getInstance(ctx).addToRequestQueue(jsonReq);
-        if (objType.equals("corso")) {
-            fetchData("docente");
-        }
-    }
-
     protected void onStart() {
         super.onStart();
-
-        CookieManager manager = CookieManager.getInstance();
-        manager.setCookie("JSESSIONID", jsessionid);
-        //CookieHandler.getDefault().put();
-
-        //Arraylist for adapters
-        ArrayList<Course> courseslist = new ArrayList<>();
-        ArrayList<Teacher> teacherlist = new ArrayList<>();
 
         //Fetch data
         fetchData("corso");
 
-        if(getCourse().has( "result")){
-            try {
-                if (getCourse().getString("result").equals("success")) {
-                    JSONArray arr = course.getJSONArray("content");
-                    for (int i = 0; i < arr.length(); i++) {
-                        Course c = new Course(arr.getJSONObject(i).getString("title"),
-                                arr.getJSONObject(i).getString("desc"));
-                        courseslist.add(c);
-                    }
-                    System.out.println(courseslist.toString());
-                }
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            //riempio arraylist con i campi che mi servono
-            try {
-                if (teacher.getString("result").equals("success")) {
-                    JSONArray arr1= course.getJSONArray("content");
-                    for (int i = 0; i < arr1.length(); i++) {
-                        Teacher ta = new Teacher(
-                                arr1.getJSONObject(i).getString("name"),
-                                arr1.getJSONObject(i).getString("surname"),
-                                arr1.getJSONObject(i).getString("id_number")
-                        );
-                        teacherlist.add(ta);
-                    }
-                    //inizializzo dropdown
-                    Spinner corsi =  findViewById(R.id.sp_corsi);
-                    corsi.setOnItemSelectedListener(this);
-                    ArrayAdapter<Course> adapter = new ArrayAdapter<>(this,
-                            android.R.layout.simple_spinner_dropdown_item,
-                            courseslist);
-                    corsi.setAdapter(adapter);
-
-                    Spinner teacher = findViewById(R.id.sp_docenti);
-                    teacher.setOnItemSelectedListener(this);
-                    ArrayAdapter<Teacher> adaptert = new ArrayAdapter<>(this,
-                            android.R.layout.simple_spinner_dropdown_item,
-                            teacherlist);
-                    teacher.setAdapter(adaptert);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-        else {
-            System.out.println("richiesta fallita");
-        }
-
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -167,12 +74,84 @@ public class SelectingParams extends AppCompatActivity implements
 
     }
 
-    public JSONObject getCourse() {
-        return course;
+    private void fetchData(String objType){
+        String urlReq = url + objType;
+        JsonObjectRequest jsonReq = new JsonObjectRequest(
+                Request.Method.GET,
+                urlReq,
+                null,
+                response -> {
+                    System.out.println(response);
+                    if (objType.equals("corso")){
+                        course = response;
+                        fetchData("docente");
+                    }
+                    else if (objType.equals("docente")) {
+                        teacher = response;
+                        createDropdowns();
+                    }
+                },
+                error -> {
+                    Toast.makeText(ctx, error.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                    System.err.println(error.getMessage() + ", url= " + url);
+                }
+        );
+
+        NetworkSingleton.getInstance(ctx).addToRequestQueue(jsonReq);
     }
 
-    public JSONObject getTeacher() {
-        return teacher;
+    private void createDropdowns(){
+        //Arraylist for adapters
+        ArrayList<String> courseslist = new ArrayList<>();
+        ArrayList<String> teacherlist = new ArrayList<>();
+        JSONArray arr;
+
+        try {
+            if (course.getString("result").equals("success")) {
+                arr = course.getJSONArray("content");
+                for (int i = 0; i < arr.length(); i++) {
+                    courseslist.add(arr.getJSONObject(i).getString("title"));
+                }
+                System.out.println(courseslist.toString());
+
+                //Init dropdown
+                Spinner corsi = findViewById(R.id.courses);
+                corsi.setOnItemSelectedListener(this);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        courseslist);
+                corsi.setAdapter(adapter);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (teacher.getString("result").equals("success")) {
+                arr = teacher.getJSONArray("content");
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject teacher = arr.getJSONObject(i);
+                    String teacherStr = teacher.getString("name") + " " +
+                            teacher.getString("surname") + " (" +
+                            teacher.getString("id_number") + ")";
+                    teacherlist.add(teacherStr);
+                }
+                System.out.println(teacherlist.toString());
+
+                Spinner teacher = findViewById(R.id.teachers);
+                teacher.setOnItemSelectedListener(this);
+                ArrayAdapter<String> adaptert = new ArrayAdapter<>(this,
+                        android.R.layout.simple_spinner_dropdown_item,
+                        teacherlist);
+                teacher.setAdapter(adaptert);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }
