@@ -41,7 +41,6 @@ public class SelectingParams extends AppCompatActivity implements
 
         course = new JSONObject();
         teacher = new JSONObject();
-
         ctx = getApplicationContext();
 
         url = getString(R.string.servlet_url) + "selectTable?objType=";

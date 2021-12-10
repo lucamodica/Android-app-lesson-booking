@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -48,11 +47,11 @@ public class LoginActivity extends AppCompatActivity {
 
         //Login button
         Button loginBtn = findViewById(R.id.login);
-        loginBtn.setOnClickListener(v -> login(v, "auth"));
+        loginBtn.setOnClickListener(v -> login("auth"));
 
         //Guest login button
         Button guestLoginBtn = findViewById(R.id.guestLogin);
-        guestLoginBtn.setOnClickListener(v -> login(v, "guest"));
+        guestLoginBtn.setOnClickListener(v -> login("guest"));
 
         //CheckBox to show password in textfield
         CheckBox ch = findViewById(R.id.showPsw);
@@ -116,13 +115,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void handleError(VolleyError error, String url){
-        Toast.makeText(ctx, "Nessuna connessione trovata",
-                Toast.LENGTH_LONG).show();
-        System.err.println(error.getMessage() + ", url= " + url);
-    }
-
-    public void login(View v, String action) {
+    public void login(String action) {
 
         String url = getString(R.string.servlet_url) +
                 "login?action=" + action;
@@ -144,8 +137,7 @@ public class LoginActivity extends AppCompatActivity {
         String urlReq = url;
         RequestManager.getInstance(ctx).makeRequest(Request.Method.POST,
                 urlReq,
-                this::handleResponse,
-                error -> handleError(error, urlReq)
+                this::handleResponse
         );
 
     }
