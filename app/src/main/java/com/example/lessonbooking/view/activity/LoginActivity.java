@@ -48,12 +48,11 @@ public class LoginActivity extends AppCompatActivity {
 
         //Login button
         Button loginBtn = findViewById(R.id.login);
-        loginBtn.setOnClickListener(this::login);
+        loginBtn.setOnClickListener(v -> login(v, "auth"));
 
-        /*TODO**********************************/
         //Guest login button
         Button guestLoginBtn = findViewById(R.id.guestLogin);
-        guestLoginBtn.setOnClickListener();
+        guestLoginBtn.setOnClickListener(v -> login(v, "guest"));
 
         //CheckBox to show password in textfield
         CheckBox ch = findViewById(R.id.showPsw);
@@ -69,28 +68,35 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
     private void handleResponse(JSONObject jsonResult){
         try {
             String status = jsonResult.getString("result");
             switch (status) {
                 case ("success"):
-                    Toast.makeText(ctx, "login avvenuto con successo",
-                            Toast.LENGTH_LONG).show();
+                    String toastText = "Login avvenuto con successo! ";
 
+                    //Intent to take the user to the MainActivity
+                    Intent inte = new Intent(ctx, MainActivity.class);
+
+                    //Retrieve the json user info and its role,
+                    //to distinguish a guest from user login
                     JSONObject userLogged = jsonResult.getJSONObject("user");
-                    String account = userLogged.getString("account");
                     String role = userLogged.getString("role");
-                    String jsessionid = jsonResult.getString("id");
 
-                    System.out.println("User logged: " + account);
-                    System.out.println("(role: " + role + ")");
-                    Intent inte = new Intent(ctx, SelectingParams.class);
-
-                    // aggiungo stringa in piu (es risultato)
-                    setResult(LoginActivity.RESULT_OK, inte);
-                    inte.putExtra("account", account);
+                    if (!role.equals("ospite")){
+                        String account = userLogged.getString("account");
+                        toastText += "(accesso con l'account " + account + ")";
+                        System.out.println("User logged: " + account);
+                        inte.putExtra("account", account);
+                    }
+                    else{
+                        toastText += "(accesso come ospite)";
+                        System.out.println("Guest login");
+                    }
+                    System.out.println("Role: " + role);
                     inte.putExtra("role", role);
+
+                    Toast.makeText(ctx, toastText, Toast.LENGTH_LONG).show();
                     startActivity(inte);
                     finish();
                     break;
@@ -128,22 +134,20 @@ public class LoginActivity extends AppCompatActivity {
             if (!(TextUtils.isEmpty(account) || TextUtils.isEmpty(pw))) {
                 url += "&account=" + account +
                         "&password=" + pw;
-            }
-            else {
+            } else {
                 Toast.makeText(ctx, "Inserire username e password",
                         Toast.LENGTH_LONG).show();
                 return;
-
             }
-
-            String urlReq = url;
-            RequestManager.getInstance(ctx).makeRequest(Request.Method.POST,
-                    urlReq,
-                    this::handleResponse,
-                    error -> handleError(error, urlReq)
-            );
-
         }
+
+        String urlReq = url;
+        RequestManager.getInstance(ctx).makeRequest(Request.Method.POST,
+                urlReq,
+                this::handleResponse,
+                error -> handleError(error, urlReq)
+        );
+
     }
 
 }
