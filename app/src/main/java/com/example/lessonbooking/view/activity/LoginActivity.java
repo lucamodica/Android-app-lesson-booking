@@ -47,12 +47,13 @@ public class LoginActivity extends AppCompatActivity {
         CookieHandler.setDefault(cookieManager);
 
         //Login button
-        Button login_button = findViewById(R.id.login);
-        login_button.setOnClickListener(this::login);
+        Button loginBtn = findViewById(R.id.login);
+        loginBtn.setOnClickListener(this::login);
 
         /*TODO**********************************/
-        //Login ospite button
-        Button guest_login_button = findViewById(R.id.login_ospite);
+        //Guest login button
+        Button guestLoginBtn = findViewById(R.id.guestLogin);
+        guestLoginBtn.setOnClickListener();
 
         //CheckBox to show password in textfield
         CheckBox ch = findViewById(R.id.showPsw);
@@ -90,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                     setResult(LoginActivity.RESULT_OK, inte);
                     inte.putExtra("account", account);
                     inte.putExtra("role", role);
-                    inte.putExtra("jsessionid", jsessionid);
                     startActivity(inte);
                     finish();
                     break;
@@ -116,24 +116,33 @@ public class LoginActivity extends AppCompatActivity {
         System.err.println(error.getMessage() + ", url= " + url);
     }
 
-    public void login(View v) {
+    public void login(View v, String action) {
 
-        String account = account_field.getText().toString();
-        String pw = pw_field.getText().toString();
+        String url = getString(R.string.servlet_url) +
+                "login?action=" + action;
 
-        if ( !(TextUtils.isEmpty(account) || TextUtils.isEmpty(pw)) ) {
-            String url = getString(R.string.servlet_url) +
-                    "login?action=auth&account=" + account + "&password=" + pw;
+        if (action.equals("auth")) {
+            String account = account_field.getText().toString();
+            String pw = pw_field.getText().toString();
 
+            if (!(TextUtils.isEmpty(account) || TextUtils.isEmpty(pw))) {
+                url += "&account=" + account +
+                        "&password=" + pw;
+            }
+            else {
+                Toast.makeText(ctx, "Inserire username e password",
+                        Toast.LENGTH_LONG).show();
+                return;
+
+            }
+
+            String urlReq = url;
             RequestManager.getInstance(ctx).makeRequest(Request.Method.POST,
-                    url,
+                    urlReq,
                     this::handleResponse,
-                    error -> handleError(error, url)
-                    );
-        }
-        else {
-            Toast.makeText(ctx, "Inserire username e password",
-                    Toast.LENGTH_LONG).show();
+                    error -> handleError(error, urlReq)
+            );
+
         }
     }
 
