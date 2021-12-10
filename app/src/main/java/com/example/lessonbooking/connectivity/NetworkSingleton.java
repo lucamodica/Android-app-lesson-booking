@@ -11,13 +11,14 @@ public class NetworkSingleton {
     private RequestQueue requestQueue;
     private final Context ctx;
 
-    private NetworkSingleton(Context context) {
-        ctx = context;
+    private NetworkSingleton(Context ctx) {
+        this.ctx = ctx;
         requestQueue = getRequestQueue();
     }
 
     public static synchronized NetworkSingleton getInstance(Context context) {
-        Log.d("in getInstance", "New instance was called");
+        Log.d("in getInstance", "New NetworkSingleton " +
+                "instance was called");
         return new NetworkSingleton(context);
     }
 
@@ -31,6 +32,5 @@ public class NetworkSingleton {
     public <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
     }
-
 
 }

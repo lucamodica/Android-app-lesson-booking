@@ -17,6 +17,7 @@ import com.example.lessonbooking.R;
 
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.lessonbooking.connectivity.NetworkSingleton;
+import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.model.Course;
 import com.example.lessonbooking.model.Teacher;
 
@@ -67,6 +68,7 @@ public class SelectingParams extends AppCompatActivity implements
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
     }
 
     @Override
@@ -76,10 +78,9 @@ public class SelectingParams extends AppCompatActivity implements
 
     private void fetchData(String objType){
         String urlReq = url + objType;
-        JsonObjectRequest jsonReq = new JsonObjectRequest(
-                Request.Method.GET,
-                urlReq,
-                null,
+
+        RequestManager.getInstance(ctx).makeRequest(
+                Request.Method.GET, urlReq,
                 response -> {
                     System.out.println(response);
                     if (objType.equals("corso")){
@@ -96,9 +97,7 @@ public class SelectingParams extends AppCompatActivity implements
                             Toast.LENGTH_LONG).show();
                     System.err.println(error.getMessage() + ", url= " + url);
                 }
-        );
-
-        NetworkSingleton.getInstance(ctx).addToRequestQueue(jsonReq);
+                );
     }
 
     private void createDropdowns(){

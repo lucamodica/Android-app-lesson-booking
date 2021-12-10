@@ -11,19 +11,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.example.lessonbooking.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.example.lessonbooking.R;
-import com.example.lessonbooking.connectivity.NetworkSingleton;
-
+import com.example.lessonbooking.connectivity.RequestManager;
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import com.android.volley.VolleyError;
+
 
 public class LoginActivity extends AppCompatActivity {
     private EditText account_field, pw_field;
@@ -69,43 +68,52 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void handleResponse(JSONObject jsonResult)
-            throws JSONException {
-        String status = jsonResult.getString("result");
-        switch (status) {
-            case ("success"):
-                Toast.makeText(ctx, "login avvenuto con successo",
-                        Toast.LENGTH_LONG).show();
 
-                JSONObject userLogged = jsonResult.getJSONObject("user");
-                String account = userLogged.getString("account");
-                String role = userLogged.getString("role");
-                String jsessionid = jsonResult.getString("id");
+    private void handleResponse(JSONObject jsonResult){
+        try {
+            String status = jsonResult.getString("result");
+            switch (status) {
+                case ("success"):
+                    Toast.makeText(ctx, "login avvenuto con successo",
+                            Toast.LENGTH_LONG).show();
 
-                System.out.println("User logged: " + account);
-                System.out.println("(role: " + role + ")");
-                Intent inte = new Intent(ctx, SelectingParams.class);
+                    JSONObject userLogged = jsonResult.getJSONObject("user");
+                    String account = userLogged.getString("account");
+                    String role = userLogged.getString("role");
+                    String jsessionid = jsonResult.getString("id");
 
-                // aggiungo stringa in piu (es risultato)
-                setResult(LoginActivity.RESULT_OK, inte);
-                inte.putExtra("account", account);
-                inte.putExtra("role", role);
-                inte.putExtra("jsessionid", jsessionid);
-                startActivity(inte);
-                finish();
-                break;
+                    System.out.println("User logged: " + account);
+                    System.out.println("(role: " + role + ")");
+                    Intent inte = new Intent(ctx, SelectingParams.class);
 
-            case ("invalid_credentials"):
-                Toast.makeText(ctx, "username o password errati!",
-                        Toast.LENGTH_LONG).show();
-                break;
+                    // aggiungo stringa in piu (es risultato)
+                    setResult(LoginActivity.RESULT_OK, inte);
+                    inte.putExtra("account", account);
+                    inte.putExtra("role", role);
+                    inte.putExtra("jsessionid", jsessionid);
+                    startActivity(inte);
+                    finish();
+                    break;
 
-            case ("illegal_credentials"):
-                Toast.makeText(ctx, "Nessun account trovato!",
-                        Toast.LENGTH_LONG).show();
-                break;
+                case ("invalid_credentials"):
+                    Toast.makeText(ctx, "username o password errati!",
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case ("illegal_credentials"):
+                    Toast.makeText(ctx, "Nessun account trovato!",
+                            Toast.LENGTH_LONG).show();
+                    break;
+            }
+        } catch (JSONException ed) {
+            ed.printStackTrace();
         }
+    }
 
+    private void handleError(VolleyError error, String url){
+        Toast.makeText(ctx, "Nessuna connessione trovata",
+                Toast.LENGTH_LONG).show();
+        System.err.println(error.getMessage() + ", url= " + url);
     }
 
     public void login(View v) {
@@ -117,25 +125,11 @@ public class LoginActivity extends AppCompatActivity {
             String url = getString(R.string.servlet_url) +
                     "login?action=auth&account=" + account + "&password=" + pw;
 
-            JsonObjectRequest jsonReq = new JsonObjectRequest(
-                    Request.Method.POST,
+            RequestManager.getInstance(ctx).makeRequest(Request.Method.POST,
                     url,
-                    null,
-                    response -> {
-                        try {
-                            handleResponse(response);
-                        } catch (JSONException ed) {
-                            ed.printStackTrace();
-                        }
-                    },
-                    error -> {
-                        Toast.makeText(ctx, "Nessuna connessione trovata",
-                                Toast.LENGTH_LONG).show();
-                        System.err.println(error.getMessage() + ", url= " + url);
-                    }
-            );
-
-            NetworkSingleton.getInstance(ctx).addToRequestQueue(jsonReq);
+                    this::handleResponse,
+                    error -> handleError(error, url)
+                    );
         }
         else {
             Toast.makeText(ctx, "Inserire username e password",
