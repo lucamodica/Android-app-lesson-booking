@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         try {
             String status = jsonResult.getString("result");
             switch (status) {
-                case ("success"):
+                case "success":
                     String toastText = "Login avvenuto con successo! ";
 
                     //Intent to take the user to the MainActivity
@@ -100,12 +100,17 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                     break;
 
-                case ("invalid_credentials"):
+                case "invalid_action":
+                    Toast.makeText(ctx, "Azione di login non valida!",
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "invalid_credentials":
                     Toast.makeText(ctx, "username o password errati!",
                             Toast.LENGTH_LONG).show();
                     break;
 
-                case ("illegal_credentials"):
+                case "illegal_credentials":
                     Toast.makeText(ctx, "Nessun account trovato!",
                             Toast.LENGTH_LONG).show();
                     break;
