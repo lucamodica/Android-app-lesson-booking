@@ -7,20 +7,22 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LessonBooking"
-        android:fullBackupContent="true"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".view.activity.BookingActivity"
+            android:exported="true" />
         <activity
             android:name=".view.activity.SelectingParams"
             android:exported="true" />
         <activity
             android:name=".view.activity.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,9 +32,7 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:exported="true"
-            android:label="@string/app_name" >
-        </activity>
-
+            android:label="@string/app_name"></activity>
     </application>
 
 </manifest>
