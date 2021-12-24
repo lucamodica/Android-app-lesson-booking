@@ -17,7 +17,7 @@ public class BookingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bookings);
 
     }
-    public void replace (Fragment fragment){
+    public void replace (Fragment fragment){//deprecato
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = manager.beginTransaction();
         fragmentTransaction.replace(R.id.framelayout,fragment);

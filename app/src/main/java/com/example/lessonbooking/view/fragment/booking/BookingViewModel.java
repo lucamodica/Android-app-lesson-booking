@@ -8,12 +8,5 @@ public class BookingViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public BookingViewModel() {
-        mText = new MutableLiveData<>();
 
-    }
-
-    public LiveData<String> getText() {
-        return mText;
-    }
 }
