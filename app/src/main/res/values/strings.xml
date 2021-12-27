@@ -16,8 +16,8 @@
     <string name="prompt_account">Nome utente</string>
     <string name="prompt_password">Password</string>
     <string name="insert_account">Inserisci il tuo nome utente</string>
-    <string name="loginBtn">Accedi</string>
-    <string name="guestLoginBtn">Accedi come ospite</string>
+    <string name="login_btn">Accedi</string>
+    <string name="guest_login_btn">Accedi come ospite</string>
     <string name="invalid_account">Nome utente non valido</string>
     <string name="invalid_password">Password non valida</string>
     <string name="login_failed">"Login fallito"</string>
@@ -33,4 +33,7 @@
     <string name="teacher_string">Seleziona il docente</string>
     <string name="label_course">seleziona il corso :</string>
     <string name="finall">Seleziona la tua prenotazione</string>
+    <string name="select_course_text">Seleziona il corso</string>
+    <string name="next_btn">avanti</string>
+    <string name="select_teacher_text">Seleziona il docente</string>
 </resources>

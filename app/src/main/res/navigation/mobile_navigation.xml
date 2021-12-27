@@ -15,7 +15,7 @@
         android:id="@+id/navigation_booking"
         android:name="com.example.lessonbooking.view.fragment.booking.BookingFragment"
         android:label="@string/title_Booking"
-        tools:layout="@layout/fragment_course" />
+        tools:layout="@layout/select_course" />
 
     <fragment
         android:id="@+id/navigation_catalog"

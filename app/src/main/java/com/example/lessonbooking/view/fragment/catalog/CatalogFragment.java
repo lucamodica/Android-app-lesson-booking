@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.example.lessonbooking.databinding.FragmentCatalogBinding;
 
 public class CatalogFragment extends Fragment {
@@ -25,8 +24,9 @@ public class CatalogFragment extends Fragment {
         binding = FragmentCatalogBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textNotifications;
+        final TextView textView = binding.textCatalog;
         catalogViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
         return root;
     }
 
