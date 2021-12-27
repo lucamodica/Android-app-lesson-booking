@@ -1,8 +1,10 @@
 package com.example.lessonbooking.model;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
-public class Lessons implements Serializable {
+public class Lesson implements Serializable {
     private  String teacher;
     private String course;
     private String t_slot;
@@ -10,7 +12,7 @@ public class Lessons implements Serializable {
     private String user;
     private String status;
 
-    public Lessons(String teacher, String course, String t_slot, String day, String user, String status) {
+    public Lesson(String teacher, String course, String t_slot, String day, String user, String status) {
         this.teacher = teacher;
         this.course = course;
         this.t_slot = t_slot;
@@ -19,7 +21,7 @@ public class Lessons implements Serializable {
         this.status = status;
     }
 
-    public Lessons() {
+    public Lesson() {
         this.teacher = "";
         this.course = "";
         this.t_slot = "";
@@ -76,6 +78,7 @@ public class Lessons implements Serializable {
         this.status = status;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Lessons{" +

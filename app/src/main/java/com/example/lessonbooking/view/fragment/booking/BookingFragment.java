@@ -37,7 +37,7 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
                              ViewGroup container, Bundle savedInstanceState) {
 
         //Setting up ViewModel (and refered layout) of bookable lesson slots
-        // (TO BE MOVED)
+        //(TO BE MOVED)
         bookingViewModel =
                 new ViewModelProvider(this).get(BookingViewModel.class);
         binding = FragmentBookingBinding.inflate(inflater, container, false);

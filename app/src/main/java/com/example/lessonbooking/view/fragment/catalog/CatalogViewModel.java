@@ -4,16 +4,25 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.lessonbooking.model.Slot;
+
+import java.util.HashMap;
+import java.util.List;
+
 public class CatalogViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private final MutableLiveData<HashMap<String, List<Slot>>> slotsCatalog;
 
     public CatalogViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is catalog fragment");
+        slotsCatalog = new MutableLiveData<>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<HashMap<String, List<Slot>>>
+        getSlotsCatalog (){
+        return slotsCatalog;
+    }
+
+    public void setSlotsCatalog(HashMap<String, List<Slot>> slots){
+        slotsCatalog.setValue(slots);
     }
 }
