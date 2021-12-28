@@ -17,6 +17,7 @@
     <string name="prompt_password">Password</string>
     <string name="insert_account">Inserisci il tuo nome utente</string>
     <string name="login_btn">Accedi</string>
+    <string name="logout_btn">Esci</string>
     <string name="guest_login_btn">Accedi come ospite</string>
     <string name="invalid_account">Nome utente non valido</string>
     <string name="invalid_password">Password non valida</string>
@@ -28,7 +29,6 @@
     <string name="title_activity_selectparams">Selectparams</string>
     <string name="docenti">Docenti</string>
     <string name="corsi">Corsi</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="teacher_string">Seleziona il docente</string>
     <string name="label_course">seleziona il corso :</string>

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lessonbooking.R;
+import com.example.lessonbooking.model.Lesson;
 import com.example.lessonbooking.model.Slot;
 import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.utilities.PostDiffCallback;
@@ -18,11 +19,11 @@ import com.example.lessonbooking.utilities.PostDiffCallback;
 import java.util.List;
 
 
-public class SlotsRecyclerViewAdapter extends
-        RecyclerView.Adapter<SlotsRecyclerViewAdapter.ViewHolder> {
+public class LessonRecyclerViewAdapter extends
+        RecyclerView.Adapter<LessonRecyclerViewAdapter.ViewHolder> {
 
-    //Stores and recycles views as they are scrolled off screen
-    public static class ViewHolder extends RecyclerView.ViewHolder implements
+     //Stores and recycles views as they are scrolled off screen
+     public static class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener {
         TextView t_slot;
         TextView teacher;
@@ -46,7 +47,7 @@ public class SlotsRecyclerViewAdapter extends
     private final LayoutInflater sInflater;
 
     //Data is passed into the constructor
-    public SlotsRecyclerViewAdapter(Context context, List<Slot> data) {
+    public LessonRecyclerViewAdapter(Context context, List<Slot> data) {
         this.sInflater = LayoutInflater.from(context);
         this.sData = data;
     }
@@ -77,10 +78,10 @@ public class SlotsRecyclerViewAdapter extends
         return sData.size();
     }
 
-    public void setData(List<Slot> newData) {
+    public void setData(List<Lesson> newData) {
 
         if (sData != null) {
-            PostDiffCallback<Slot> postDiffCallback = new PostDiffCallback<>(sData, newData);
+            PostDiffCallback<Lesson> postDiffCallback = new PostDiffCallback<>(sData, newData);
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(postDiffCallback);
             sData.clear();
             sData.addAll(newData);

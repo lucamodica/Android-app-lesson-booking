@@ -20,7 +20,7 @@ public class CatalogViewModel extends ViewModel {
         return slotsCatalog;
     }
 
-    public void setSlotsCatalog(List<Slot> slots){
-        slotsCatalog.setValue(slots);
+    public void setSlotsCatalog(List<Slot> newSlotsCatalog){
+        slotsCatalog.setValue(newSlotsCatalog);
     }
 }
