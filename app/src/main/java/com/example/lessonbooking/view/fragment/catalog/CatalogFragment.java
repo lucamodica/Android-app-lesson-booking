@@ -1,13 +1,16 @@
 package com.example.lessonbooking.view.fragment.catalog;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,29 +30,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class CatalogFragment extends Fragment {
+public class CatalogFragment extends Fragment implements View.OnClickListener{
 
+    //Vars for the fragment and the ViewModel
     private CatalogViewModel catalogViewModel;
     private FragmentCatalogBinding binding;
     Context ctx;
+    HashMap<String, List<Slot>> catalog;
+
+    //Vars for the button group
+    private final int[] btns_id = {R.id.Lunedi, R.id.Martedi,
+            R.id.Mercoledi, R.id.Giovedi, R.id.Venerdi};
+    private Button btn_unfocus;
+    Resources.Theme theme;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+        //Context and ViewModel setup
         catalogViewModel =
                 new ViewModelProvider(this).get(CatalogViewModel.class);
-
         binding = FragmentCatalogBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         ctx = root.getContext();
+        theme = ctx.getTheme();
 
+        //ViewModel binding setup
         final TextView textSlotsCatalog = binding.textSlotsCatalog;
         catalogViewModel.getSlotsCatalog().observe(getViewLifecycleOwner(),
-                slotsChanged -> {
-                    // Update the UI, in this case, a TextView.
-                    textSlotsCatalog.setText(Objects.requireNonNull(slotsChanged).
-                            toString());
-                });
+                slotsChanged -> textSlotsCatalog.setText(Objects.requireNonNull(slotsChanged).
+                        toString()));
 
+        //Fetching the available slots catalog
         fetchCatalog();
         return root;
     }
@@ -59,6 +72,23 @@ public class CatalogFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
+    @Override
+    public void onClick(View v) {
+        setFocus(btn_unfocus, requireView().findViewById(v.getId()));
+        catalogViewModel.setSlotsCatalog(catalog.get(v.getResources().
+                getResourceEntryName(v.getId())));
+    }
+
+    private void setFocus(Button btn_unfocus, Button btn_focus){
+        btn_unfocus.setTextColor(getResources().getColor(R.color.purple_500, theme));
+        btn_unfocus.setBackgroundColor(getResources().getColor(R.color.white, theme));
+        btn_focus.setTextColor(getResources().getColor(R.color.white, theme));
+        btn_focus.setBackgroundColor(getResources().getColor(R.color.purple_500, theme));
+        this.btn_unfocus = btn_focus;
+    }
+
 
     public void fetchCatalog(){
         String url = getString(R.string.servlet_url) +
@@ -70,9 +100,24 @@ public class CatalogFragment extends Fragment {
         );
     }
 
+    public void setupButtonsGroup(){
+        Button[] btns = new Button[5];
+        for(int i = 0; i < btns.length; i++){
+            btns[i] = requireView().findViewById(btns_id[i]);
+            btns[i].setOnClickListener(this);
+        }
+        btn_unfocus = btns[0];
+        btns[0].setTextColor(getResources().getColor(R.color.white, theme));
+        btns[0].setBackgroundColor(getResources().getColor(R.color.purple_500, theme));
+    }
+
     public void setupCatalog(JSONObject obj){
+
+        //Button group setup
+        setupButtonsGroup();
+
         //Setting up the hashmap for the fetched catalog
-        HashMap<String, List<Slot>> catalog = new HashMap<>();
+        catalog = new HashMap<>();
         for (String day: GenericUtils.getLessonDays()) {
             catalog.put(day, new ArrayList<>());
         }
@@ -93,7 +138,7 @@ public class CatalogFragment extends Fragment {
                 }
             }
 
-            catalogViewModel.setSlotsCatalog(catalog);
+            catalogViewModel.setSlotsCatalog(catalog.get("Lunedi"));
         }
         catch (JSONException e) {
             e.printStackTrace();

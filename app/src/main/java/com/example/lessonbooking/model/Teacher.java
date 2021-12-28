@@ -1,11 +1,14 @@
 package com.example.lessonbooking.model;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Teacher  implements Serializable {
+
     private String name;
     private String surname;
- private String id_number;
+    private String id_number;
 
     public Teacher(String name, String surname, String id_number) {
         this.name = name;
@@ -37,12 +40,10 @@ public class Teacher  implements Serializable {
         this.id_number = id_number;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return "Teacher{" +
-                "name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", id_number='" + id_number + '\'' +
-                '}';
+        return name + " " + surname + " (" +
+                id_number + ")";
     }
 }

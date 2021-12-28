@@ -11,18 +11,18 @@ import java.util.List;
 
 public class CatalogViewModel extends ViewModel {
 
-    private final MutableLiveData<HashMap<String, List<Slot>>> slotsCatalog;
+    private final MutableLiveData<List<Slot>> slotsCatalog;
 
     public CatalogViewModel() {
         slotsCatalog = new MutableLiveData<>();
     }
 
-    public LiveData<HashMap<String, List<Slot>>>
+    public LiveData<List<Slot>>
         getSlotsCatalog (){
         return slotsCatalog;
     }
 
-    public void setSlotsCatalog(HashMap<String, List<Slot>> slots){
+    public void setSlotsCatalog(List<Slot> slots){
         slotsCatalog.setValue(slots);
     }
 }

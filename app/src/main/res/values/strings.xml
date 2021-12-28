@@ -36,4 +36,10 @@
     <string name="select_course_text">Seleziona il corso</string>
     <string name="next_btn">avanti</string>
     <string name="select_teacher_text">Seleziona il docente</string>
+    <string name="catalog_fragment_title">Ecco a te tutti gli slot liberi</string>
+    <string name="Monday">Lun</string>
+    <string name="Tuesday">Mar</string>
+    <string name="Wednesday">Mer</string>
+    <string name="Thursday">Gio</string>
+    <string name="Friday">Ven</string>
 </resources>
