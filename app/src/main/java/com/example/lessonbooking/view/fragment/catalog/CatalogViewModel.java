@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.lessonbooking.model.Slot;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class CatalogViewModel extends ViewModel {
@@ -17,8 +16,7 @@ public class CatalogViewModel extends ViewModel {
         slotsCatalog = new MutableLiveData<>();
     }
 
-    public LiveData<List<Slot>>
-        getSlotsCatalog (){
+    public LiveData<List<Slot>> getSlotsCatalog(){
         return slotsCatalog;
     }
 

@@ -36,12 +36,12 @@
 
             <Button
                 android:id="@+id/Lunedi"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.10"
-                android:text="@string/Monday"
-                style="?android:attr/buttonBarButtonStyle" />
+                android:text="@string/Monday" />
 
             <Button
                 android:id="@+id/Martedi"
@@ -54,43 +54,44 @@
 
             <Button
                 android:id="@+id/Mercoledi"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.10"
-                android:text="@string/Wednesday"
-                style="?android:attr/buttonBarButtonStyle" />
+                android:text="@string/Wednesday" />
 
             <Button
                 android:id="@+id/Giovedi"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.10"
-                android:text="@string/Thursday"
-                style="?android:attr/buttonBarButtonStyle" />
+                android:text="@string/Thursday" />
 
             <Button
                 android:id="@+id/Venerdi"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.10"
-                android:text="@string/Friday"
-                style="?android:attr/buttonBarButtonStyle" />
+                android:text="@string/Friday" />
 
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/textSlotsCatalog"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RecyclerSlotsCatalog"
         android:layout_width="366dp"
         android:layout_height="439dp"
-        android:text=""
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        android:scrollbars="vertical" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

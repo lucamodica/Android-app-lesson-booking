@@ -7,15 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.example.lessonbooking.R;
+import com.example.lessonbooking.adapter.SlotsRecyclerViewAdapter;
 import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.databinding.FragmentCatalogBinding;
 import com.example.lessonbooking.model.Slot;
@@ -37,12 +39,14 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
     private FragmentCatalogBinding binding;
     Context ctx;
     HashMap<String, List<Slot>> catalog;
+    Resources.Theme theme;
+    SlotsRecyclerViewAdapter adapter;
+
 
     //Vars for the button group
     private final int[] btns_id = {R.id.Lunedi, R.id.Martedi,
             R.id.Mercoledi, R.id.Giovedi, R.id.Venerdi};
     private Button btn_unfocus;
-    Resources.Theme theme;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -56,15 +60,25 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         ctx = root.getContext();
         theme = ctx.getTheme();
 
-        //ViewModel binding setup
-        final TextView textSlotsCatalog = binding.textSlotsCatalog;
-        catalogViewModel.getSlotsCatalog().observe(getViewLifecycleOwner(),
-                slotsChanged -> textSlotsCatalog.setText(Objects.requireNonNull(slotsChanged).
-                        toString()));
-
         //Fetching the available slots catalog
         fetchCatalog();
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //RecyclerView and adapter setup
+        RecyclerView recyclerView = requireView().findViewById(R.id.RecyclerSlotsCatalog);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ctx));
+        adapter = new SlotsRecyclerViewAdapter(ctx, new ArrayList<>());
+        recyclerView.setAdapter(adapter);
+
+        //ViewModel binding setup
+        catalogViewModel.getSlotsCatalog().observe(getViewLifecycleOwner(),
+                slotsChanged -> adapter.setData(slotsChanged)
+        );
     }
 
     @Override

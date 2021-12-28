@@ -7,17 +7,17 @@
     android:padding="5dp">
 
     <TextView
-        android:id="@+id/t_slot"
+        android:id="@+id/t_slot_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"/>
     <TextView
-        android:id="@+id/teacher"
+        android:id="@+id/teacher_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"/>
     <TextView
-        android:id="@+id/phone"
+        android:id="@+id/course_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"/>

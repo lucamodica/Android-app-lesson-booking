@@ -2,6 +2,8 @@ package com.example.lessonbooking.model;
 
 import androidx.annotation.NonNull;
 
+import java.util.Objects;
+
 public class Slot{
     String time_slot;
     String id_number;
@@ -55,6 +57,20 @@ public class Slot{
 
     public void setId_number(String id_number) {
         this.id_number = id_number;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Slot slot = (Slot) o;
+        return time_slot.equals(slot.time_slot) && id_number.equals(slot.id_number)
+                && course.equals(slot.course);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(time_slot, id_number, course);
     }
 
     @NonNull

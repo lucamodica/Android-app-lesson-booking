@@ -10,10 +10,10 @@ public class Teacher  implements Serializable {
     private String surname;
     private String id_number;
 
-    public Teacher(String name, String surname, String id_number) {
+    public Teacher(String id_number, String name, String surname) {
+        this.id_number = id_number;
         this.name = name;
         this.surname = surname;
-        this.id_number = id_number;
     }
 
     public String getName() {
