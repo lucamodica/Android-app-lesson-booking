@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="app_theme">#3F51B5</color>
     <color name="login_guest">#FF4CAF50</color>
+    <color name="logout_btn">#CC1F2E</color>
 </resources>

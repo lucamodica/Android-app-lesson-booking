@@ -62,7 +62,18 @@ public class HomeFragment extends Fragment {
                     setText("Nome utente: " + account);
         }
 
+        //Setting the logout button
         root.findViewById(R.id.logout_btn).setOnClickListener(v -> logout());
+
+        //If the user logged is a guest, the login suggest
+        //will be showed
+        if (role.equals("ospite")){
+            root.findViewById(R.id.suggest_login_home_layout).
+                    setVisibility(View.VISIBLE);
+
+            root.findViewById(R.id.suggest_login_home_btn).
+                    setOnClickListener(v -> logout());
+        }
 
         return root;
     }
@@ -121,16 +132,17 @@ public class HomeFragment extends Fragment {
                     //Intent to take the user back to LoginActivity
                     Toast.makeText(ctx, toastText + " avvenuto " +
                             "con successo", Toast.LENGTH_LONG).show();
-                    requireActivity().startActivity(new Intent(ctx,
-                            LoginActivity.class));
-                    requireActivity().finish();
                     break;
 
                 case "no_user":
-                    Toast.makeText(ctx, "Nessun utente loggato per " +
+                    Toast.makeText(ctx, "Sessione scaduta per " +
                                     "effettuare logout", Toast.LENGTH_LONG).show();
                     break;
             }
+
+            requireActivity().startActivity(new Intent(ctx,
+                    LoginActivity.class));
+            requireActivity().finish();
         }
         catch (JSONException ed) {
             ed.printStackTrace();

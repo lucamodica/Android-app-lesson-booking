@@ -43,4 +43,8 @@
     <string name="Thursday">Gio</string>
     <string name="Friday">Ven</string>
     <string name="info_lesson_btn_text">Info</string>
+    <string name="suggest_login">Per visualizzare le tue lezioni, effettua
+        \nl\'accesso qui sotto</string>
+    <string name="suggest_login_btn">Torna al Login</string>
+
 </resources>
