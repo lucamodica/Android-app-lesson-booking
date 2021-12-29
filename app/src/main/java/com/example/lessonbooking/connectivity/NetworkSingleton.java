@@ -19,6 +19,7 @@ public class NetworkSingleton {
     public static synchronized NetworkSingleton getInstance(Context context) {
         Log.d("in getInstance", "New NetworkSingleton " +
                 "instance was called");
+
         return new NetworkSingleton(context);
     }
 

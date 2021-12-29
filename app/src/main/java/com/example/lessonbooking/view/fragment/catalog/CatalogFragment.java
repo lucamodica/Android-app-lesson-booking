@@ -34,7 +34,6 @@ import java.util.Objects;
 
 public class CatalogFragment extends Fragment implements View.OnClickListener{
 
-    //Vars for the fragment and the ViewModel
     private CatalogViewModel catalogViewModel;
     private FragmentCatalogBinding binding;
     Context ctx;
@@ -52,6 +51,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+
         //Context and ViewModel setup
         catalogViewModel =
                 new ViewModelProvider(this).get(CatalogViewModel.class);
@@ -60,8 +60,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         ctx = root.getContext();
         theme = ctx.getTheme();
 
-        //Fetching the available slots catalog
-        fetchCatalog();
         return root;
     }
 
@@ -69,6 +67,9 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //Fetching the available slots catalog
+        fetchCatalog();
 
         //RecyclerView and adapter setup
         RecyclerView recyclerView = requireView().findViewById(R.id.RecyclerSlotsCatalog);
@@ -86,6 +87,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        catalog = null;
     }
 
 
@@ -109,9 +111,10 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         String url = getString(R.string.servlet_url) +
                 "availableSlots?objType=slots";
 
+        RequestManager.getInstance(ctx).cancelAllRequests();
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.GET, url,
-                this::setupCatalog
+                this::setupCatalogView
         );
     }
 
@@ -126,17 +129,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         btns[0].setBackgroundColor(getResources().getColor(R.color.purple_500, theme));
     }
 
-    public void setupCatalog(JSONObject obj){
-
-        //Button group setup
-        setupButtonsGroup();
-
-        //Setting up the hashmap for the fetched catalog
-        catalog = new HashMap<>();
-        for (String day: GenericUtils.getLessonDays()) {
-            catalog.put(day, new ArrayList<>());
-        }
-
+    public void createCatalog(JSONObject obj){
         try {
             JSONObject arrSlots = obj.getJSONObject("slots");
             for (String day: GenericUtils.getLessonDays()) {
@@ -144,11 +137,11 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
                 for (int i = 0; i < daySlots.length(); i++) {
                     JSONObject slot = daySlots.getJSONObject(i);
                     Objects.requireNonNull(catalog.get(day)).add(new Slot(
-                        slot.getString("time_slot"),
-                        slot.getString("id_number"),
-                        slot.getString("teacher_name"),
-                        slot.getString("teacher_surname"),
-                        slot.getString("course")
+                            slot.getString("time_slot"),
+                            slot.getString("id_number"),
+                            slot.getString("teacher_name"),
+                            slot.getString("teacher_surname"),
+                            slot.getString("course")
                     ));
                 }
             }
@@ -158,6 +151,27 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setupCatalogView(JSONObject obj){
+
+        //Setting up the hashmap for the fetched catalog
+        catalog = new HashMap<>();
+        for (String day: GenericUtils.getLessonDays()) {
+            catalog.put(day, new ArrayList<>());
+        }
+
+
+        try {
+            //Button group setup
+            setupButtonsGroup();
+            //Fill the HashMap with the fetched slots
+            createCatalog(obj);
+        }
+        catch (IllegalStateException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
 }

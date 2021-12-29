@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -36,25 +35,19 @@ public class LoginActivity extends AppCompatActivity {
 
         //Account textfield
         account_field = findViewById(R.id.account);
-
         //Password textfield
         pw_field = findViewById(R.id.pw);
 
         //Setting cookie
-        CookieManager cookieManager = new CookieManager();
-        CookieHandler.setDefault(cookieManager);
+        CookieHandler.setDefault(new CookieManager());
 
         //Login button
-        Button loginBtn = findViewById(R.id.login);
-        loginBtn.setOnClickListener(v -> login("auth"));
-
+        findViewById(R.id.login).setOnClickListener(v -> login("auth"));
         //Guest login button
-        Button guestLoginBtn = findViewById(R.id.guestLogin);
-        guestLoginBtn.setOnClickListener(v -> login("guest"));
-
+        findViewById(R.id.guestLogin).setOnClickListener(v -> login("guest"));
         //CheckBox to show password in textfield
-        CheckBox ch = findViewById(R.id.showPsw);
-        ch.setOnCheckedChangeListener((compoundButton, b) -> {
+        ((CheckBox) findViewById(R.id.showPsw)).
+                setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 pw_field.setTransformationMethod(
                         HideReturnsTransformationMethod.getInstance());
@@ -66,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void handleResponse(JSONObject jsonResult){
+    private void handleLoginResponse(JSONObject jsonResult){
         try {
             String status = jsonResult.getString("result");
             switch (status) {
@@ -115,7 +108,8 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.LENGTH_LONG).show();
                     break;
             }
-        } catch (JSONException ed) {
+        }
+        catch (JSONException ed) {
             ed.printStackTrace();
         }
     }
@@ -142,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
         String urlReq = url;
         RequestManager.getInstance(ctx).makeRequest(Request.Method.POST,
                 urlReq,
-                this::handleResponse
+                this::handleLoginResponse
         );
 
     }

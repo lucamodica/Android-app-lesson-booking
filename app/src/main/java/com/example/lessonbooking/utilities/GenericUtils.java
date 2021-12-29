@@ -26,4 +26,8 @@ public class GenericUtils {
         return Arrays.asList("utente", "amministratore");
     }
 
+    public static String getNetworkTag(){
+        return "DEMAND";
+    }
+
 }
