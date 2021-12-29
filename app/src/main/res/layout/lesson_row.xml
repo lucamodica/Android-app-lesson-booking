@@ -21,14 +21,12 @@
                 android:id="@+id/t_slot_lesson_field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ruolo"
                 android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/day_lesson_field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ruolo"
                 android:textSize="15sp" />
         </LinearLayout>
 
@@ -42,7 +40,6 @@
             android:id="@+id/status_lesson_field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ruolo"
             android:textStyle="bold"
             android:textSize="15sp" />
 
@@ -55,6 +52,7 @@
             android:id="@+id/info_lesson_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/app_theme"
             android:text="@string/info_lesson_btn_text" />
 
     </LinearLayout>

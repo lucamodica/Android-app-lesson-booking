@@ -46,5 +46,6 @@
     <string name="suggest_login">Per visualizzare le tue lezioni, effettua
         \nl\'accesso qui sotto</string>
     <string name="suggest_login_btn">Torna al Login</string>
+    <string name="waiting">Attendere…</string>
 
 </resources>

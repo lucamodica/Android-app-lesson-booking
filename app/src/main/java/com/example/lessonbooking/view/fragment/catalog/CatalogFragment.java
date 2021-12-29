@@ -129,28 +129,23 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         btns[0].setBackgroundColor(getResources().getColor(R.color.purple_500, theme));
     }
 
-    public void createCatalog(JSONObject obj){
-        try {
-            JSONObject arrSlots = obj.getJSONObject("slots");
-            for (String day: GenericUtils.getLessonDays()) {
-                JSONArray daySlots = arrSlots.getJSONArray(day);
-                for (int i = 0; i < daySlots.length(); i++) {
-                    JSONObject slot = daySlots.getJSONObject(i);
-                    Objects.requireNonNull(catalog.get(day)).add(new Slot(
-                            slot.getString("time_slot"),
-                            slot.getString("id_number"),
-                            slot.getString("teacher_name"),
-                            slot.getString("teacher_surname"),
-                            slot.getString("course")
-                    ));
-                }
+    public void createCatalog(JSONObject obj) throws JSONException {
+        JSONObject arrSlots = obj.getJSONObject("slots");
+        for (String day: GenericUtils.getLessonDays()) {
+            JSONArray daySlots = arrSlots.getJSONArray(day);
+            for (int i = 0; i < daySlots.length(); i++) {
+                JSONObject slot = daySlots.getJSONObject(i);
+                Objects.requireNonNull(catalog.get(day)).add(new Slot(
+                        slot.getString("time_slot"),
+                        slot.getString("id_number"),
+                        slot.getString("teacher_name"),
+                        slot.getString("teacher_surname"),
+                        slot.getString("course")
+                ));
             }
+        }
 
-            catalogViewModel.setSlotsCatalog(catalog.get("Lunedi"));
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
+        catalogViewModel.setSlotsCatalog(catalog.get("Lunedi"));
     }
 
     public void setupCatalogView(JSONObject obj){
@@ -161,14 +156,13 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
             catalog.put(day, new ArrayList<>());
         }
 
-
         try {
             //Button group setup
             setupButtonsGroup();
             //Fill the HashMap with the fetched slots
             createCatalog(obj);
         }
-        catch (IllegalStateException e){
+        catch (IllegalStateException | JSONException e){
             System.out.println(e.getMessage());
         }
 

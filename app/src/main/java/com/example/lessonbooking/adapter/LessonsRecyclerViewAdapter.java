@@ -57,7 +57,7 @@ public class LessonsRecyclerViewAdapter extends
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = sInflater.inflate(R.layout.slot_row, parent, false);
+        View view = sInflater.inflate(R.layout.lesson_row, parent, false);
         return new ViewHolder(view);
     }
 

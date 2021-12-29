@@ -3,7 +3,6 @@ package com.example.lessonbooking.view.fragment.home;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,23 +22,30 @@ import com.example.lessonbooking.R;
 import com.example.lessonbooking.adapter.LessonsRecyclerViewAdapter;
 import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.databinding.FragmentHomeBinding;
+import com.example.lessonbooking.model.Lesson;
 import com.example.lessonbooking.view.activity.LoginActivity;
 import com.example.lessonbooking.view.activity.MainActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment {
 
+    //ViewModel and main fragment vars
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     Context ctx;
-    Resources.Theme theme;
+    View root;
+
+    //Recycler, user info
     LessonsRecyclerViewAdapter adapter;
     String account, role;
+    List<Lesson> lessons;
 
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -49,9 +55,8 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container,
                 false);
-        View root = binding.getRoot();
+        root = binding.getRoot();
         ctx = root.getContext();
-        theme = ctx.getTheme();
 
         //Get params from Intent and setting it
         role = ((MainActivity) requireActivity()).getRole();
@@ -68,6 +73,10 @@ public class HomeFragment extends Fragment {
         //If the user logged is a guest, the login suggest
         //will be showed
         if (role.equals("ospite")){
+
+            ((TextView) root.findViewById(R.id.waiting_home)).
+                    setText("");
+
             root.findViewById(R.id.suggest_login_home_layout).
                     setVisibility(View.VISIBLE);
 
@@ -83,16 +92,24 @@ public class HomeFragment extends Fragment {
             Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //RecyclerView and adapter setup
-        RecyclerView recyclerView = requireView().findViewById(R.id.RecyclerLessons);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ctx));
-        adapter = new LessonsRecyclerViewAdapter(ctx, new ArrayList<>());
-        recyclerView.setAdapter(adapter);
+        if (role.equals("utente") || role.equals("amministratore")){
 
-        //ViewModel binding setup
-        homeViewModel.getLessons().observe(getViewLifecycleOwner(),
-                System.out::println
-        );
+            //Fetch lessons
+            fetchLessons();
+
+            //RecyclerView and adapter setup
+            RecyclerView recyclerView = requireView().findViewById(R.id.RecyclerLessons);
+            recyclerView.setLayoutManager(new LinearLayoutManager(ctx));
+            adapter = new LessonsRecyclerViewAdapter(ctx, new ArrayList<>());
+            recyclerView.setAdapter(adapter);
+
+            //ViewModel binding setup
+            homeViewModel.getLessons().observe(getViewLifecycleOwner(),
+                    lessonsChanged -> adapter.setData(lessonsChanged)
+            );
+
+        }
+
     }
 
     @Override
@@ -151,7 +168,48 @@ public class HomeFragment extends Fragment {
 
 
     public void fetchLessons(){
-        String url = getString(R.string.servlet_url) +
-                "selectElems?objType=ripetizione&user=" ;
+        String url = getString(R.string.servlet_url) + "selectElems?" +
+                "objType=ripetizione&user=" + account;
+
+        RequestManager.getInstance(ctx).cancelAllRequests();
+        RequestManager.getInstance(ctx).makeRequest(
+                Request.Method.GET, url,
+                this::setupCatalogView
+        );
+    }
+
+    public void setupCatalogView(JSONObject obj){
+
+        //Setting up the hashmap for the fetched catalog
+        lessons = new ArrayList<>();
+
+        try {
+
+            //Remove the waiting warning
+            ((TextView) root.findViewById(R.id.waiting_home)).
+                    setText("");
+
+            //Fill the HashMap with the fetched slots
+            JSONArray arrLessons = obj.getJSONArray("content");
+            for (int i = 0; i < arrLessons.length(); i++) {
+                JSONObject lesson = arrLessons.getJSONObject(i);
+                lessons.add(new Lesson(
+                        lesson.getString("teacher"),
+                        lesson.getString("course"),
+                        lesson.getString("t_slot"),
+                        lesson.getString("day"),
+                        lesson.getString("user"),
+                        lesson.getString("status"),
+                        lesson.getString("name"),
+                        lesson.getString("surname")
+                ));
+            }
+
+            homeViewModel.setLessons(lessons);
+        }
+        catch (IllegalStateException | JSONException e){
+            System.out.println(e.getMessage());
+        }
+
     }
 }
