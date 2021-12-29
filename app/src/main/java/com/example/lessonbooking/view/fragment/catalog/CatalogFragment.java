@@ -1,12 +1,14 @@
 package com.example.lessonbooking.view.fragment.catalog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +24,7 @@ import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.databinding.FragmentCatalogBinding;
 import com.example.lessonbooking.model.Slot;
 import com.example.lessonbooking.utilities.GenericUtils;
+import com.example.lessonbooking.view.activity.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -114,7 +117,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         RequestManager.getInstance(ctx).cancelAllRequests();
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.GET, url,
-                this::setupCatalogView
+                this::handleCatalogResponse
         );
     }
 
@@ -148,7 +151,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         catalogViewModel.setSlotsCatalog(catalog.get("Lunedi"));
     }
 
-    public void setupCatalogView(JSONObject obj){
+    public void setupCatalogView(JSONObject obj) throws JSONException{
 
         //Setting up the hashmap for the fetched catalog
         catalog = new HashMap<>();
@@ -156,14 +159,51 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
             catalog.put(day, new ArrayList<>());
         }
 
+        //Button group setup
+        setupButtonsGroup();
+
+        //Fill the HashMap with the fetched slots
+        createCatalog(obj);
+    }
+
+    public void handleCatalogResponse(JSONObject obj){
         try {
-            //Button group setup
-            setupButtonsGroup();
-            //Fill the HashMap with the fetched slots
-            createCatalog(obj);
-        }
-        catch (IllegalStateException | JSONException e){
-            System.out.println(e.getMessage());
+
+            String status = obj.getString("result");
+            switch (status) {
+                case "success":
+                    setupCatalogView(obj);
+                    break;
+
+                case "no_user":
+                    Toast.makeText(ctx, "Nessun account trovato!",
+                            Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(ctx, LoginActivity.class);
+                    startActivity(i);
+                    break;
+
+                case "invalid_object":
+                    Toast.makeText(ctx, "Tabella non riconosciuta",
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "not_allowed":
+                    Toast.makeText(ctx, "Richiesta non consentita",
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "params_null":
+                    Toast.makeText(ctx, "Parametri null",
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "query_failed":
+                    Toast.makeText(ctx, "Richiesta fallita",
+                            Toast.LENGTH_LONG).show();
+                    break;
+            }
+        } catch (IllegalStateException | JSONException ed) {
+            ed.printStackTrace();
         }
 
     }
