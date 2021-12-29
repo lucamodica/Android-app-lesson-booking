@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,28 +13,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.model.Lesson;
-import com.example.lessonbooking.model.Slot;
-import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.utilities.PostDiffCallback;
 
 import java.util.List;
 
 
-public class LessonRecyclerViewAdapter extends
-        RecyclerView.Adapter<LessonRecyclerViewAdapter.ViewHolder> {
+public class LessonsRecyclerViewAdapter extends
+        RecyclerView.Adapter<LessonsRecyclerViewAdapter.ViewHolder> {
 
      //Stores and recycles views as they are scrolled off screen
      public static class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener {
         TextView t_slot;
-        TextView teacher;
-        TextView course;
+        TextView day;
+        TextView status;
+        Button info_btn;
 
         ViewHolder(View itemView) {
             super(itemView);
-            t_slot = itemView.findViewById(R.id.t_slot_field);
-            teacher = itemView.findViewById(R.id.teacher_field);
-            course = itemView.findViewById(R.id.course_field);
+            t_slot = itemView.findViewById(R.id.t_slot_lesson_field);
+            day = itemView.findViewById(R.id.day_lesson_field);
+            status = itemView.findViewById(R.id.status_lesson_field);
+            info_btn = itemView.findViewById(R.id.info_lesson_btn);
             //itemView.setOnClickListener(this);
         }
 
@@ -43,13 +44,13 @@ public class LessonRecyclerViewAdapter extends
     }
 
 
-    private List<Slot> sData;
+    private List<Lesson> lData;
     private final LayoutInflater sInflater;
 
     //Data is passed into the constructor
-    public LessonRecyclerViewAdapter(Context context, List<Slot> data) {
+    public LessonsRecyclerViewAdapter(Context context, List<Lesson> data) {
         this.sInflater = LayoutInflater.from(context);
-        this.sData = data;
+        this.lData = data;
     }
 
     //Inflates the row layout from xml when needed
@@ -63,32 +64,30 @@ public class LessonRecyclerViewAdapter extends
     //Binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Slot slot = sData.get(position);
-        Teacher teacher = new Teacher(slot.getId_number(),
-                slot.getTeacher_name(), slot.getTeacher_surname());
+        Lesson lesson = lData.get(position);
 
-        holder.t_slot.setText(slot.getTime_slot());
-        holder.course.setText(teacher.toString());
-        holder.teacher.setText(slot.getCourse());
+        holder.t_slot.setText(lesson.getT_slot());
+        holder.day.setText(lesson.getDay());
+        holder.status.setText(lesson.getStatus());
     }
 
     //Total number of rows
     @Override
     public int getItemCount() {
-        return sData.size();
+        return lData.size();
     }
 
     public void setData(List<Lesson> newData) {
 
-        if (sData != null) {
-            PostDiffCallback<Lesson> postDiffCallback = new PostDiffCallback<>(sData, newData);
+        if (lData != null) {
+            PostDiffCallback<Lesson> postDiffCallback = new PostDiffCallback<>(lData, newData);
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(postDiffCallback);
-            sData.clear();
-            sData.addAll(newData);
+            lData.clear();
+            lData.addAll(newData);
             diffResult.dispatchUpdatesTo(this);
         }
         else {
-            sData = newData;
+            lData = newData;
         }
     }
     

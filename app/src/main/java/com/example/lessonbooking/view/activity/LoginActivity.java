@@ -20,7 +20,6 @@ import org.json.JSONObject;
 import com.example.lessonbooking.connectivity.RequestManager;
 import java.net.CookieHandler;
 import java.net.CookieManager;
-import com.android.volley.VolleyError;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -73,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
             switch (status) {
                 case "success":
                     String toastText = "Login avvenuto con successo! ";
+                    String account = "";
 
                     //Intent to take the user to the MainActivity
                     Intent inte = new Intent(ctx, MainActivity.class);
@@ -83,10 +83,9 @@ public class LoginActivity extends AppCompatActivity {
                     String role = userLogged.getString("role");
 
                     if (!role.equals("ospite")){
-                        String account = userLogged.getString("account");
+                        account = userLogged.getString("account");
                         toastText += "(accesso con l'account " + account + ")";
                         System.out.println("User logged: " + account);
-                        inte.putExtra("account", account);
                     }
                     else{
                         toastText += "(accesso come ospite)";
@@ -94,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     System.out.println("Role: " + role);
                     inte.putExtra("role", role);
+                    inte.putExtra("account", account);
 
                     Toast.makeText(ctx, toastText, Toast.LENGTH_LONG).show();
                     startActivity(inte);

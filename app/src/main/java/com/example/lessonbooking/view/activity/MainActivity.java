@@ -1,6 +1,7 @@
 package com.example.lessonbooking.view.activity;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -14,12 +15,26 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
+    private String account, role;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        //Get params from Intent
+        Bundle b = getIntent().getExtras();
+        if (b.containsKey("account") && b.containsKey("role")){
+            account = getIntent().getStringExtra("account");
+            role = getIntent().getStringExtra("role");
+        }
+        else {
+            Toast.makeText(getApplicationContext(),
+                    "Parametri mancanti nell'Intent!",
+                    Toast.LENGTH_LONG).show();
+            finish();
+        }
+
+        com.example.lessonbooking.databinding.ActivityMainBinding binding =
+                ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -34,8 +49,14 @@ public class MainActivity extends AppCompatActivity {
                 appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-
     }
 
+    public String getAccount() {
+        return account;
+    }
+
+    public String getRole() {
+        return role;
+    }
 }
 

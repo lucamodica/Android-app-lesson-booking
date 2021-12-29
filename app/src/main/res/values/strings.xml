@@ -42,4 +42,5 @@
     <string name="Wednesday">Mer</string>
     <string name="Thursday">Gio</string>
     <string name="Friday">Ven</string>
+    <string name="info_lesson_btn_text">Info</string>
 </resources>
