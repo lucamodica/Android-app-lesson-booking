@@ -32,6 +32,6 @@ public class LessonActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_lesson);
 
-        ((TextView) findViewById(R.id.textView3)).setText(lesson.toString());
+        //((TextView) findViewById(R.id.textView3)).setText(lesson.toString());
     }
 }

@@ -21,13 +21,13 @@
                 android:id="@+id/t_slot_lesson_field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/day_lesson_field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
 
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
         <Space
             android:layout_width="wrap_content"

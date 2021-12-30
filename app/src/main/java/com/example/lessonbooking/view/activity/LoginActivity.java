@@ -42,11 +42,11 @@ public class LoginActivity extends AppCompatActivity {
         CookieHandler.setDefault(new CookieManager());
 
         //Login button
-        findViewById(R.id.login).setOnClickListener(v -> login("auth"));
+        findViewById(R.id.login_btn).setOnClickListener(v -> login("auth"));
         //Guest login button
-        findViewById(R.id.guestLogin).setOnClickListener(v -> login("guest"));
+        findViewById(R.id.guest_login_btn).setOnClickListener(v -> login("guest"));
         //CheckBox to show password in textfield
-        ((CheckBox) findViewById(R.id.showPsw)).
+        ((CheckBox) findViewById(R.id.show_psw)).
                 setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 pw_field.setTransformationMethod(

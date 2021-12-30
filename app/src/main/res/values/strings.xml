@@ -44,8 +44,18 @@
     <string name="Friday">Ven</string>
     <string name="info_lesson_btn_text">Info</string>
     <string name="suggest_login">Per visualizzare le tue lezioni, effettua
-        \nl\'accesso qui sotto</string>
+        \nl\'accesso qui</string>
     <string name="suggest_login_btn">Torna al Login</string>
     <string name="waiting">Attendere…</string>
+
+    <string name="lesson_info_title">Info lezione</string>
+    <string name="t_slot_title_info_lesson">Ora:</string>
+    <string name="teacher_title_info_lesson">Docente:</string>
+    <string name="day_title_info_lesson">Giorno:</string>
+    <string name="course_title_info_lesson">Corso:</string>
+    <string name="status_title_info_lesson">Stato:</string>
+    <string name="lesson_confirm_btn_text">Fatto</string>
+    <string name="lesson_cancel_btn_text">Disdici</string>
+    <string name="back_info_lesson_btn">Indietro</string>
 
 </resources>
