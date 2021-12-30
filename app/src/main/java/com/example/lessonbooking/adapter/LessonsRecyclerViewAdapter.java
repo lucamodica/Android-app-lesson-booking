@@ -1,6 +1,8 @@
 package com.example.lessonbooking.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +40,6 @@ public class LessonsRecyclerViewAdapter extends
             //itemView.setOnClickListener(this);
         }
 
-
         @Override
         public void onClick(View view) { }
     }
@@ -46,10 +47,15 @@ public class LessonsRecyclerViewAdapter extends
 
     private List<Lesson> lData;
     private final LayoutInflater sInflater;
+    private final Resources res;
+    Resources.Theme theme;
+
 
     //Data is passed into the constructor
     public LessonsRecyclerViewAdapter(Context context, List<Lesson> data) {
         this.sInflater = LayoutInflater.from(context);
+        this.res = context.getResources();
+        this.theme = context.getTheme();
         this.lData = data;
     }
 
@@ -69,6 +75,32 @@ public class LessonsRecyclerViewAdapter extends
         holder.t_slot.setText(lesson.getT_slot());
         holder.day.setText(lesson.getDay());
         holder.status.setText(lesson.getStatus());
+
+        setStatusColor(holder.status);
+    }
+
+    //Set the textColor to the status
+    @SuppressLint("ResourceAsColor")
+    void setStatusColor(TextView statusText){
+        int color;
+        switch (statusText.getText().toString()){
+            case "attiva":
+                color = res.getColor(R.color.primary, theme);
+                break;
+
+            case "effettuata":
+                color = res.getColor(R.color.success, theme);
+                break;
+
+            case "disdetta":
+                color = res.getColor(R.color.danger, theme);
+                break;
+
+            default:
+                color = res.getColor(R.color.black, theme);
+        }
+
+        statusText.setTextColor(color);
     }
 
     //Total number of rows
@@ -90,6 +122,5 @@ public class LessonsRecyclerViewAdapter extends
             lData = newData;
         }
     }
-    
-    
+
 }

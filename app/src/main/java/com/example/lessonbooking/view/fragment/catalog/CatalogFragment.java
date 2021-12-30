@@ -37,13 +37,13 @@ import java.util.Objects;
 
 public class CatalogFragment extends Fragment implements View.OnClickListener{
 
+    //Main vars
     private CatalogViewModel catalogViewModel;
     private FragmentCatalogBinding binding;
     Context ctx;
     HashMap<String, List<Slot>> catalog;
     Resources.Theme theme;
     SlotsRecyclerViewAdapter adapter;
-
 
     //Vars for the button group
     private final int[] btns_id = {R.id.Lunedi, R.id.Martedi,
@@ -65,7 +65,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
 
         return root;
     }
-
     @Override
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState) {
@@ -85,7 +84,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
                 slotsChanged -> adapter.setData(slotsChanged)
         );
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -100,13 +98,22 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         catalogViewModel.setSlotsCatalog(catalog.get(v.getResources().
                 getResourceEntryName(v.getId())));
     }
-
     private void setFocus(Button btn_unfocus, Button btn_focus){
         btn_unfocus.setTextColor(getResources().getColor(R.color.purple_500, theme));
         btn_unfocus.setBackgroundColor(getResources().getColor(R.color.white, theme));
         btn_focus.setTextColor(getResources().getColor(R.color.white, theme));
         btn_focus.setBackgroundColor(getResources().getColor(R.color.purple_500, theme));
         this.btn_unfocus = btn_focus;
+    }
+    public void setupButtonsGroup(){
+        Button[] btns = new Button[5];
+        for(int i = 0; i < btns.length; i++){
+            btns[i] = requireView().findViewById(btns_id[i]);
+            btns[i].setOnClickListener(this);
+        }
+        btn_unfocus = btns[0];
+        btns[0].setTextColor(getResources().getColor(R.color.white, theme));
+        btns[0].setBackgroundColor(getResources().getColor(R.color.purple_500, theme));
     }
 
 
@@ -120,18 +127,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
                 this::handleCatalogResponse
         );
     }
-
-    public void setupButtonsGroup(){
-        Button[] btns = new Button[5];
-        for(int i = 0; i < btns.length; i++){
-            btns[i] = requireView().findViewById(btns_id[i]);
-            btns[i].setOnClickListener(this);
-        }
-        btn_unfocus = btns[0];
-        btns[0].setTextColor(getResources().getColor(R.color.white, theme));
-        btns[0].setBackgroundColor(getResources().getColor(R.color.purple_500, theme));
-    }
-
     public void createCatalog(JSONObject obj) throws JSONException {
         JSONObject arrSlots = obj.getJSONObject("slots");
         for (String day: GenericUtils.getLessonDays()) {
@@ -150,7 +145,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
 
         catalogViewModel.setSlotsCatalog(catalog.get("Lunedi"));
     }
-
     public void setupCatalogView(JSONObject obj) throws JSONException{
 
         //Setting up the hashmap for the fetched catalog
@@ -165,7 +159,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         //Fill the HashMap with the fetched slots
         createCatalog(obj);
     }
-
     public void handleCatalogResponse(JSONObject obj){
         try {
 

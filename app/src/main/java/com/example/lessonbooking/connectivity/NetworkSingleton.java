@@ -40,5 +40,4 @@ public class NetworkSingleton {
         getRequestQueue().stop();
         getRequestQueue().start();
     }
-
 }

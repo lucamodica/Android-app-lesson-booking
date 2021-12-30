@@ -2,7 +2,6 @@ package com.example.lessonbooking.utilities;
 
 import androidx.recyclerview.widget.DiffUtil;
 
-import com.example.lessonbooking.model.Slot;
 
 import java.util.List;
 

@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment {
     String account, role;
     List<Lesson> lessons;
 
+
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -86,7 +87,6 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable
             Bundle savedInstanceState) {
@@ -111,7 +111,6 @@ public class HomeFragment extends Fragment {
         }
 
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -127,7 +126,6 @@ public class HomeFragment extends Fragment {
                 url, this::handleLogoutResponse
         );
     }
-
     public void handleLogoutResponse(JSONObject jsonResult){
         try {
             String status = jsonResult.getString("result");
@@ -177,7 +175,6 @@ public class HomeFragment extends Fragment {
                 this::setupCatalogView
         );
     }
-
     public void setupCatalogView(JSONObject obj){
 
         //Setting up the hashmap for the fetched catalog
