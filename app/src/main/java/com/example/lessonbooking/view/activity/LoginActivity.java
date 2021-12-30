@@ -113,7 +113,6 @@ public class LoginActivity extends AppCompatActivity {
             ed.printStackTrace();
         }
     }
-
     public void login(String action) {
 
         String url = getString(R.string.servlet_url) +

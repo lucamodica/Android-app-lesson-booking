@@ -2,6 +2,7 @@ package com.example.lessonbooking.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.model.Lesson;
 import com.example.lessonbooking.utilities.PostDiffCallback;
+import com.example.lessonbooking.view.activity.LessonActivity;
+import com.example.lessonbooking.view.activity.MainActivity;
 
 import java.util.List;
 
@@ -76,7 +79,14 @@ public class LessonsRecyclerViewAdapter extends
     }
 
     private void openInfoLesson(View v, Lesson lesson) {
-        Toast.makeText(v.getContext(), lesson.toString(), Toast.LENGTH_SHORT).show();
+
+        Context ctx = v.getContext();
+        Toast.makeText(ctx, lesson.toString(), Toast.LENGTH_SHORT).show();
+
+        //Intent to take the user to the LessonActivity
+        Intent inte = new Intent(ctx, LessonActivity.class);
+        inte.putExtra("lesson", lesson);
+        ctx.startActivity(inte);
     }
 
     //Set the textColor to the status

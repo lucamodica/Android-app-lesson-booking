@@ -2,9 +2,10 @@ package com.example.lessonbooking.model;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Slot{
+public class Slot implements Serializable {
     String time_slot;
     String id_number;
     String teacher_name;
