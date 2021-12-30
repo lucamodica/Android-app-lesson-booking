@@ -15,6 +15,9 @@
         android:theme="@style/Theme.LessonBooking"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.activity.LessonActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.LoginActivity"
             android:exported="true">
             <intent-filter>

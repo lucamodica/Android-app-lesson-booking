@@ -65,7 +65,6 @@ public class RequestManager {
         Log.d("in RequestManager.cancelAllRequests", "Incoming " +
                 "RequestQueue reset");
 
-        NetworkSingleton.getInstance(ctx).getRequestQueue().
-                cancelAll(GenericUtils.getNetworkTag());
+        NetworkSingleton.getInstance(ctx).cancelAll();
     }
 }

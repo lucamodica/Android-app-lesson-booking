@@ -5,6 +5,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.lessonbooking.utilities.GenericUtils;
 
 public class NetworkSingleton {
 
@@ -16,22 +17,28 @@ public class NetworkSingleton {
         requestQueue = getRequestQueue();
     }
 
-    public static synchronized NetworkSingleton getInstance(Context context) {
+    static synchronized NetworkSingleton getInstance(Context context) {
         Log.d("in getInstance", "New NetworkSingleton " +
                 "instance was called");
 
         return new NetworkSingleton(context);
     }
 
-    public RequestQueue getRequestQueue() {
+    RequestQueue getRequestQueue() {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
         }
         return requestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
+    <T> void addToRequestQueue(Request<T> req) {
         getRequestQueue().add(req);
+    }
+
+    void cancelAll(){
+        getRequestQueue().cancelAll(GenericUtils.getNetworkTag());
+        getRequestQueue().stop();
+        getRequestQueue().start();
     }
 
 }
