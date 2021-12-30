@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -24,8 +25,7 @@ public class LessonsRecyclerViewAdapter extends
         RecyclerView.Adapter<LessonsRecyclerViewAdapter.ViewHolder> {
 
      //Stores and recycles views as they are scrolled off screen
-     public static class ViewHolder extends RecyclerView.ViewHolder implements
-            View.OnClickListener {
+     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView t_slot;
         TextView day;
         TextView status;
@@ -37,11 +37,7 @@ public class LessonsRecyclerViewAdapter extends
             day = itemView.findViewById(R.id.day_lesson_field);
             status = itemView.findViewById(R.id.status_lesson_field);
             info_btn = itemView.findViewById(R.id.info_lesson_btn);
-            //itemView.setOnClickListener(this);
         }
-
-        @Override
-        public void onClick(View view) { }
     }
 
 
@@ -49,7 +45,6 @@ public class LessonsRecyclerViewAdapter extends
     private final LayoutInflater sInflater;
     private final Resources res;
     Resources.Theme theme;
-
 
     //Data is passed into the constructor
     public LessonsRecyclerViewAdapter(Context context, List<Lesson> data) {
@@ -77,6 +72,11 @@ public class LessonsRecyclerViewAdapter extends
         holder.status.setText(lesson.getStatus());
 
         setStatusColor(holder.status);
+        holder.info_btn.setOnClickListener(v -> openInfoLesson(v, lesson));
+    }
+
+    private void openInfoLesson(View v, Lesson lesson) {
+        Toast.makeText(v.getContext(), lesson.toString(), Toast.LENGTH_SHORT).show();
     }
 
     //Set the textColor to the status
