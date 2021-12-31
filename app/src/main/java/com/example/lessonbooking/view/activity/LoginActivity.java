@@ -22,6 +22,7 @@ import java.net.CookieManager;
 
 
 public class LoginActivity extends AppCompatActivity {
+
     private EditText account_field, pw_field;
     private Context ctx;
 
@@ -113,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
             ed.printStackTrace();
         }
     }
-    public void login(String action) {
+    private void login(String action) {
 
         String url = getString(R.string.servlet_url) +
                 "login?action=" + action;
@@ -139,5 +140,4 @@ public class LoginActivity extends AppCompatActivity {
         );
 
     }
-
 }

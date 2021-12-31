@@ -1,15 +1,12 @@
 package com.example.lessonbooking.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -17,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.model.Lesson;
+import com.example.lessonbooking.utilities.GenericUtils;
 import com.example.lessonbooking.utilities.PostDiffCallback;
 import com.example.lessonbooking.view.activity.LessonActivity;
-import com.example.lessonbooking.view.activity.MainActivity;
 
 import java.util.List;
 
@@ -29,6 +26,7 @@ public class LessonsRecyclerViewAdapter extends
 
      //Stores and recycles views as they are scrolled off screen
      public static class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView t_slot;
         TextView day;
         TextView status;
@@ -46,14 +44,12 @@ public class LessonsRecyclerViewAdapter extends
 
     private List<Lesson> lData;
     private final LayoutInflater sInflater;
-    private final Resources res;
-    Resources.Theme theme;
+    Context ctx;
 
     //Data is passed into the constructor
-    public LessonsRecyclerViewAdapter(Context context, List<Lesson> data) {
-        this.sInflater = LayoutInflater.from(context);
-        this.res = context.getResources();
-        this.theme = context.getTheme();
+    public LessonsRecyclerViewAdapter(Context ctx, List<Lesson> data) {
+        this.sInflater = LayoutInflater.from(ctx);
+        this.ctx = ctx;
         this.lData = data;
     }
 
@@ -74,43 +70,19 @@ public class LessonsRecyclerViewAdapter extends
         holder.day.setText(lesson.getDay());
         holder.status.setText(lesson.getStatus());
 
-        setStatusColor(holder.status);
+        GenericUtils.setStatusColor(ctx, holder.status);
+        //setStatusColor(holder.status);
         holder.info_btn.setOnClickListener(v -> openInfoLesson(v, lesson));
     }
 
     private void openInfoLesson(View v, Lesson lesson) {
 
         Context ctx = v.getContext();
-        Toast.makeText(ctx, lesson.toString(), Toast.LENGTH_SHORT).show();
 
         //Intent to take the user to the LessonActivity
-        Intent inte = new Intent(ctx, LessonActivity.class);
+        Intent inte = new Intent(v.getContext(), LessonActivity.class);
         inte.putExtra("lesson", lesson);
         ctx.startActivity(inte);
-    }
-
-    //Set the textColor to the status
-    @SuppressLint("ResourceAsColor")
-    void setStatusColor(TextView statusText){
-        int color;
-        switch (statusText.getText().toString()){
-            case "attiva":
-                color = res.getColor(R.color.primary, theme);
-                break;
-
-            case "effettuata":
-                color = res.getColor(R.color.success, theme);
-                break;
-
-            case "disdetta":
-                color = res.getColor(R.color.danger, theme);
-                break;
-
-            default:
-                color = res.getColor(R.color.black, theme);
-        }
-
-        statusText.setTextColor(color);
     }
 
     //Total number of rows

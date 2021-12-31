@@ -25,9 +25,9 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="256dp"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/border_lesson_info"
         android:gravity="center"
         android:orientation="vertical"
@@ -44,7 +44,7 @@
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="0.5" />
 
             <!-- Column for t_slot and teacher -->
             <LinearLayout
@@ -66,7 +66,7 @@
                     android:id="@+id/t_slot_info_lesson"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -85,9 +85,10 @@
 
                 <TextView
                     android:id="@+id/teacher_info_lesson"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150sp"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp" />
+                    android:gravity="center"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -116,7 +117,7 @@
                     android:id="@+id/day_info_lesson"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -135,16 +136,17 @@
 
                 <TextView
                     android:id="@+id/course_info_lesson"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150sp"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp" />
+                    android:gravity="center"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_weight="0.5" />
 
         </LinearLayout>
 
@@ -171,7 +173,7 @@
                 android:id="@+id/status_info_lesson"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -202,11 +204,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/success"
+                android:drawableLeft="@drawable/ic_baseline_done_24"
                 android:paddingLeft="10dip"
                 android:paddingRight="10dip"
-                android:drawableLeft="@drawable/ic_baseline_done_24"
                 android:text="@string/lesson_confirm_btn_text"
-                tools:ignore="RtlHardcoded" />
+                tools:ignore="RtlHardcoded,TextContrastCheck" />
 
             <Space
                 android:layout_width="8dp"

@@ -44,12 +44,10 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
     HashMap<String, List<Slot>> catalog;
     Resources.Theme theme;
     SlotsRecyclerViewAdapter adapter;
-
     //Vars for the button group
     private final int[] btns_id = {R.id.Lunedi, R.id.Martedi,
             R.id.Mercoledi, R.id.Giovedi, R.id.Venerdi};
     private Button btn_unfocus;
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -91,7 +89,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         catalog = null;
     }
 
-
     @Override
     public void onClick(View v) {
         setFocus(btn_unfocus, requireView().findViewById(v.getId()));
@@ -105,7 +102,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         btn_focus.setBackgroundColor(getResources().getColor(R.color.purple_500, theme));
         this.btn_unfocus = btn_focus;
     }
-    public void setupButtonsGroup(){
+    private void setupButtonsGroup(){
         Button[] btns = new Button[5];
         for(int i = 0; i < btns.length; i++){
             btns[i] = requireView().findViewById(btns_id[i]);
@@ -116,8 +113,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         btns[0].setBackgroundColor(getResources().getColor(R.color.purple_500, theme));
     }
 
-
-    public void fetchCatalog(){
+    private void fetchCatalog(){
         String url = getString(R.string.servlet_url) +
                 "availableSlots?objType=slots";
 
@@ -127,7 +123,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
                 this::handleCatalogResponse
         );
     }
-    public void createCatalog(JSONObject obj) throws JSONException {
+    private void createCatalog(JSONObject obj) throws JSONException {
         JSONObject arrSlots = obj.getJSONObject("slots");
         for (String day: GenericUtils.getLessonDays()) {
             JSONArray daySlots = arrSlots.getJSONArray(day);
@@ -145,7 +141,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
 
         catalogViewModel.setSlotsCatalog(catalog.get("Lunedi"));
     }
-    public void setupCatalogView(JSONObject obj) throws JSONException{
+    private void setupCatalogView(JSONObject obj) throws JSONException{
 
         //Setting up the hashmap for the fetched catalog
         catalog = new HashMap<>();
@@ -159,7 +155,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         //Fill the HashMap with the fetched slots
         createCatalog(obj);
     }
-    public void handleCatalogResponse(JSONObject obj){
+    private void handleCatalogResponse(JSONObject obj){
         try {
 
             String status = obj.getString("result");

@@ -74,15 +74,7 @@ public class HomeFragment extends Fragment {
         //If the user logged is a guest, the login suggest
         //will be showed
         if (role.equals("ospite")){
-
-            ((TextView) root.findViewById(R.id.waiting_home)).
-                    setText("");
-
-            root.findViewById(R.id.suggest_login_home_layout).
-                    setVisibility(View.VISIBLE);
-
-            root.findViewById(R.id.suggest_login_home_btn).
-                    setOnClickListener(v -> logout());
+            showLoginSuggest();
         }
 
         return root;
@@ -116,9 +108,19 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+    private void showLoginSuggest(){
 
+        ((TextView) root.findViewById(R.id.waiting_home)).
+                setText("");
 
-    public void logout(){
+        root.findViewById(R.id.suggest_login_home_layout).
+                setVisibility(View.VISIBLE);
+
+        root.findViewById(R.id.suggest_login_home_btn).
+                setOnClickListener(v -> logout());
+    }
+
+    private void logout(){
         String url = getString(R.string.servlet_url) +
                 "logout";
 
@@ -126,7 +128,7 @@ public class HomeFragment extends Fragment {
                 url, this::handleLogoutResponse
         );
     }
-    public void handleLogoutResponse(JSONObject jsonResult){
+    private void handleLogoutResponse(JSONObject jsonResult){
         try {
             String status = jsonResult.getString("result");
             switch (status) {
@@ -164,8 +166,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-
-    public void fetchLessons(){
+    private void fetchLessons(){
         String url = getString(R.string.servlet_url) + "selectElems?" +
                 "objType=ripetizione&user=" + account;
 
@@ -175,7 +176,7 @@ public class HomeFragment extends Fragment {
                 this::setupCatalogView
         );
     }
-    public void setupCatalogView(JSONObject obj){
+    private void setupCatalogView(JSONObject obj){
 
         //Setting up the hashmap for the fetched catalog
         lessons = new ArrayList<>();
@@ -207,6 +208,10 @@ public class HomeFragment extends Fragment {
         catch (IllegalStateException | JSONException e){
             System.out.println(e.getMessage());
         }
+
+    }
+    //TODO the handle for fetch lessons response
+    private void handleFetchLessonResponse(JSONObject jsonResult){
 
     }
 }

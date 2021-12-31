@@ -53,7 +53,6 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
         return view;
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
