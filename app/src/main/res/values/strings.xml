@@ -8,6 +8,7 @@
     <string name="title_selecting_params">Prenotazione lezioni</string>
     <string name="string_welcome"><font size="1">Benvenuto!</font></string>
     <string name="servlet_url">http://10.0.2.2:8080/tweb/</string>
+    <string name="network_tag">DEMAND</string>
 
     <!-- Login activity strings -->
     <string name="title_activity_login">LoginActivity</string>

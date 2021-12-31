@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -46,7 +48,6 @@ public class HomeFragment extends Fragment {
     LessonsRecyclerViewAdapter adapter;
     String account, role;
     List<Lesson> lessons;
-
 
     @SuppressLint("SetTextI18n")
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -85,23 +86,46 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (role.equals("utente") || role.equals("amministratore")){
-
             //Fetch lessons
             fetchLessons();
+
+            ActivityResultLauncher<Intent> lessonInfoLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+
+                        Intent data = result.getData();
+
+                        if (data != null && data.hasExtra("lessonStatus") &&
+                                data.hasExtra("lessonIndex")){
+                            homeViewModel.setNewLessonStatus(
+                                    data.getIntExtra("lessonIndex", -1),
+                                    data.getStringExtra("lessonStatus")
+                            );
+                            Toast.makeText(ctx,
+                                    data.getStringExtra("lessonStatus"),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(ctx,
+                                    "Parametri mancanti nell'Intent!",
+                                    Toast.LENGTH_LONG).show();
+                            requireActivity().finish();
+                        }
+                    }
+            );
 
             //RecyclerView and adapter setup
             RecyclerView recyclerView = requireView().findViewById(R.id.RecyclerLessons);
             recyclerView.setLayoutManager(new LinearLayoutManager(ctx));
-            adapter = new LessonsRecyclerViewAdapter(ctx, new ArrayList<>());
+            adapter = new LessonsRecyclerViewAdapter(ctx, new ArrayList<>(),
+                    lessonInfoLauncher);
             recyclerView.setAdapter(adapter);
 
             //ViewModel binding setup
             homeViewModel.getLessons().observe(getViewLifecycleOwner(),
                     lessonsChanged -> adapter.setData(lessonsChanged)
             );
-
         }
-
     }
     @Override
     public void onDestroyView() {
@@ -214,4 +238,5 @@ public class HomeFragment extends Fragment {
     private void handleFetchLessonResponse(JSONObject jsonResult){
 
     }
+
 }

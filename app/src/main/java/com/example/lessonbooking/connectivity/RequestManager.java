@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.lessonbooking.utilities.GenericUtils;
+import com.example.lessonbooking.R;
 
 import org.json.JSONObject;
 
@@ -44,7 +44,7 @@ public class RequestManager {
 
         JsonObjectRequest objReq = new JsonObjectRequest(method,
                 url, null, listener, errorListener);
-        objReq.setTag(GenericUtils.getNetworkTag());
+        objReq.setTag(R.string.network_tag);
 
         NetworkSingleton.getInstance(ctx).addToRequestQueue(objReq);
     }

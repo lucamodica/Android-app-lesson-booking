@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class LessonActivity extends AppCompatActivity {
 
 
     private Lesson lesson;
+    private int lessonIndex;
     private StatusViewModel statusViewModel;
     private Context ctx;
     private TextView statusField;
@@ -43,9 +45,11 @@ public class LessonActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Get params from Intent
-        Bundle b = getIntent().getExtras();
-        if (b.containsKey("lesson")){
-            lesson = (Lesson) getIntent().getSerializableExtra("lesson");
+        Intent data = getIntent();
+        if (data != null && data.hasExtra("lesson") &&
+                data.hasExtra("lessonIndex")){
+            lesson = (Lesson) data.getSerializableExtra("lesson");
+            lessonIndex = data.getIntExtra("lessonIndex", -1);
         }
         else {
             Toast.makeText(getApplicationContext(),
@@ -69,6 +73,14 @@ public class LessonActivity extends AppCompatActivity {
 
         //Setting the lesson content in the layout
         setContentLesson();
+
+        //Setting the clickListener
+        findViewById(R.id.lesson_confirm_btn).setOnClickListener(
+                v -> updateLessonStatus("effettuata"));
+        findViewById(R.id.lesson_cancel_btn).setOnClickListener(
+                v -> updateLessonStatus("disdetta"));
+        findViewById(R.id.back_info_lesson_btn).setOnClickListener(
+                v -> closeInfoLesson());
     }
     private void setContentLesson(){
 
@@ -88,7 +100,15 @@ public class LessonActivity extends AppCompatActivity {
     }
     private void updateStatusInLayout(String statusChanged){
         lesson.setStatus(statusChanged);
+        statusField.setText(statusChanged);
         GenericUtils.setStatusColor(ctx, statusField);
+    }
+    private void closeInfoLesson(){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("lessonStatus", lesson.getStatus());
+        intent.putExtra("lessonIndex", lessonIndex);
+        setResult(69420, intent);
+        finish();
     }
 
     private void updateLessonStatus(String status){

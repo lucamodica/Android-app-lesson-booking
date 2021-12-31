@@ -5,7 +5,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.example.lessonbooking.utilities.GenericUtils;
+import com.example.lessonbooking.R;
 
 public class NetworkSingleton {
 
@@ -36,7 +36,7 @@ public class NetworkSingleton {
     }
 
     void cancelAll(){
-        getRequestQueue().cancelAll(GenericUtils.getNetworkTag());
+        getRequestQueue().cancelAll(R.string.network_tag);
         getRequestQueue().stop();
         getRequestQueue().start();
     }

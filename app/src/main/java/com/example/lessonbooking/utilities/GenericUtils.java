@@ -32,11 +32,6 @@ public class GenericUtils {
         return Arrays.asList("utente", "amministratore");
     }
 
-    //Default tag in the requestQueue
-    public static String getNetworkTag(){
-        return "DEMAND";
-    }
-
     //Set the textColor to the status
     public static void setStatusColor(Context ctx, TextView statusText){
         int color;

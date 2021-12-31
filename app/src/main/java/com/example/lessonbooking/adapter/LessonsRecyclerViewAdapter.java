@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,12 +46,15 @@ public class LessonsRecyclerViewAdapter extends
     private List<Lesson> lData;
     private final LayoutInflater sInflater;
     Context ctx;
+    ActivityResultLauncher<Intent> lessonInfoLauncher;
 
     //Data is passed into the constructor
-    public LessonsRecyclerViewAdapter(Context ctx, List<Lesson> data) {
+    public LessonsRecyclerViewAdapter(Context ctx, List<Lesson> data,
+                                      ActivityResultLauncher<Intent> lessonInfoLauncher) {
         this.sInflater = LayoutInflater.from(ctx);
         this.ctx = ctx;
         this.lData = data;
+        this.lessonInfoLauncher = lessonInfoLauncher;
     }
 
     //Inflates the row layout from xml when needed
@@ -71,18 +75,17 @@ public class LessonsRecyclerViewAdapter extends
         holder.status.setText(lesson.getStatus());
 
         GenericUtils.setStatusColor(ctx, holder.status);
-        //setStatusColor(holder.status);
-        holder.info_btn.setOnClickListener(v -> openInfoLesson(v, lesson));
+        holder.info_btn.setOnClickListener(
+                v -> openInfoLesson(v, lesson, position));
     }
 
-    private void openInfoLesson(View v, Lesson lesson) {
-
-        Context ctx = v.getContext();
+    private void openInfoLesson(View v, Lesson lesson, int position) {
 
         //Intent to take the user to the LessonActivity
         Intent inte = new Intent(v.getContext(), LessonActivity.class);
         inte.putExtra("lesson", lesson);
-        ctx.startActivity(inte);
+        inte.putExtra("lessonIndex", position);
+        lessonInfoLauncher.launch(inte);
     }
 
     //Total number of rows

@@ -26,7 +26,7 @@ public class HomeViewModel extends ViewModel {
         lessons.setValue(newLessons);
     }
 
-    public void setNewStatus(int lessonIndex, String newStatus){
+    public void setNewLessonStatus(int lessonIndex, String newStatus){
         Objects.requireNonNull(getLessons().getValue()).
                 get(lessonIndex).setStatus(newStatus);
     }
