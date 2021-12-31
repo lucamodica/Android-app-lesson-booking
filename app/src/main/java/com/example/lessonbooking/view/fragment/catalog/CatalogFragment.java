@@ -49,6 +49,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
             R.id.Mercoledi, R.id.Giovedi, R.id.Venerdi};
     private Button btn_unfocus;
 
+    //TODO the waiting TextView screen to show before the catalog fetch
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -157,44 +158,42 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
     }
     private void handleCatalogResponse(JSONObject obj){
         try {
-
-            String status = obj.getString("result");
-            switch (status) {
+            String result = obj.getString("result");
+            switch (result) {
                 case "success":
                     setupCatalogView(obj);
                     break;
 
                 case "no_user":
-                    Toast.makeText(ctx, "Nessun account trovato!",
+                    Toast.makeText(ctx, R.string.no_user_result,
                             Toast.LENGTH_LONG).show();
                     Intent i = new Intent(ctx, LoginActivity.class);
                     startActivity(i);
                     break;
 
                 case "invalid_object":
-                    Toast.makeText(ctx, "Tabella non riconosciuta",
+                    Toast.makeText(ctx, R.string.invalid_object_result,
                             Toast.LENGTH_LONG).show();
                     break;
 
                 case "not_allowed":
-                    Toast.makeText(ctx, "Richiesta non consentita",
+                    Toast.makeText(ctx, R.string.not_allowed_result,
                             Toast.LENGTH_LONG).show();
                     break;
 
                 case "params_null":
-                    Toast.makeText(ctx, "Parametri null",
+                    Toast.makeText(ctx, R.string.params_null_result,
                             Toast.LENGTH_LONG).show();
                     break;
 
                 case "query_failed":
-                    Toast.makeText(ctx, "Richiesta fallita",
+                    Toast.makeText(ctx, R.string.query_failed_result,
                             Toast.LENGTH_LONG).show();
                     break;
             }
-        } catch (IllegalStateException | JSONException ed) {
-            ed.printStackTrace();
+        } catch (IllegalStateException | JSONException e) {
+            e.printStackTrace();
         }
 
     }
-
 }

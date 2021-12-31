@@ -80,6 +80,7 @@ public class HomeFragment extends Fragment {
 
         return root;
     }
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable
             Bundle savedInstanceState) {
@@ -94,16 +95,12 @@ public class HomeFragment extends Fragment {
                     result -> {
 
                         Intent data = result.getData();
-
                         if (data != null && data.hasExtra("lessonStatus") &&
                                 data.hasExtra("lessonIndex")){
-                            homeViewModel.setNewLessonStatus(
-                                    data.getIntExtra("lessonIndex", -1),
-                                    data.getStringExtra("lessonStatus")
-                            );
-                            Toast.makeText(ctx,
-                                    data.getStringExtra("lessonStatus"),
-                                    Toast.LENGTH_SHORT).show();
+
+                            lessons.get(data.getIntExtra("lessonIndex", -1)).
+                                    setStatus(data.getStringExtra("lessonStatus"));
+                            homeViewModel.setLessons(lessons);
                         }
                         else {
                             Toast.makeText(ctx,
@@ -123,7 +120,10 @@ public class HomeFragment extends Fragment {
 
             //ViewModel binding setup
             homeViewModel.getLessons().observe(getViewLifecycleOwner(),
-                    lessonsChanged -> adapter.setData(lessonsChanged)
+                    lessonsChanged -> {
+                        adapter.notifyDataSetChanged();
+                        adapter.setData(lessonsChanged);
+                    }
             );
         }
     }
@@ -176,7 +176,7 @@ public class HomeFragment extends Fragment {
                     break;
 
                 case "no_user":
-                    Toast.makeText(ctx, "Sessione scaduta per " +
+                    Toast.makeText(ctx, getString(R.string.no_user_result) + " per " +
                                     "effettuare logout", Toast.LENGTH_LONG).show();
                     break;
             }

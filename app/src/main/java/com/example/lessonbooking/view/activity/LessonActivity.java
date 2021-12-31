@@ -9,13 +9,20 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.example.lessonbooking.R;
+import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.model.Lesson;
 import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.utilities.GenericUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class LessonActivity extends AppCompatActivity {
@@ -31,6 +38,10 @@ public class LessonActivity extends AppCompatActivity {
         public LiveData<String> getStatus() {
             return status;
         }
+
+        public void setStatus(String newStatus){
+            status.setValue(newStatus);
+        }
     }
 
 
@@ -39,6 +50,9 @@ public class LessonActivity extends AppCompatActivity {
     private StatusViewModel statusViewModel;
     private Context ctx;
     private TextView statusField;
+    private Button lessonConfirmBtn;
+    private Button lessonCancelBtn;
+    private Button backInfoLessonBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +76,9 @@ public class LessonActivity extends AppCompatActivity {
         ctx = getApplicationContext();
         setContentView(R.layout.activity_lesson);
         statusField = findViewById(R.id.status_info_lesson);
+        lessonConfirmBtn = findViewById(R.id.lesson_confirm_btn);
+        lessonCancelBtn = findViewById(R.id.lesson_cancel_btn);
+        backInfoLessonBtn = findViewById(R.id.back_info_lesson_btn);
 
         //Set the bind for the status field. This to dynamically
         //update the new status and its own color if the user
@@ -75,11 +92,21 @@ public class LessonActivity extends AppCompatActivity {
         setContentLesson();
 
         //Setting the clickListener
-        findViewById(R.id.lesson_confirm_btn).setOnClickListener(
-                v -> updateLessonStatus("effettuata"));
-        findViewById(R.id.lesson_cancel_btn).setOnClickListener(
-                v -> updateLessonStatus("disdetta"));
-        findViewById(R.id.back_info_lesson_btn).setOnClickListener(
+        setButtonClickListener();
+    }
+    @Override
+    public void onBackPressed() {
+        closeInfoLesson();
+    }
+    private void setButtonClickListener(){
+        if (lesson.getStatus().equals("attiva")){
+            findViewById(R.id.update_status_btns).setVisibility(View.VISIBLE);
+            lessonConfirmBtn.setOnClickListener(
+                    v -> updateLessonStatus("effettuata"));
+            lessonCancelBtn.setOnClickListener(
+                    v -> updateLessonStatus("disdetta"));
+        }
+        backInfoLessonBtn.setOnClickListener(
                 v -> closeInfoLesson());
     }
     private void setContentLesson(){
@@ -107,14 +134,53 @@ public class LessonActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("lessonStatus", lesson.getStatus());
         intent.putExtra("lessonIndex", lessonIndex);
+
         setResult(69420, intent);
         finish();
     }
 
     private void updateLessonStatus(String status){
+        String url = getString(R.string.servlet_url) + "updateLessonStatus?" +
+                "objType=ripetizione" +
+                "&teacher=" + lesson.getTeacher() +
+                "&t_slot=" + lesson.getT_slot() +
+                "&day=" + lesson.getDay() +
+                "&user=" + lesson.getUser() +
+                "&newStatus=" + status;
 
+        lessonConfirmBtn.setOnClickListener(null);
+        lessonCancelBtn.setOnClickListener(null);
+        backInfoLessonBtn.setOnClickListener(null);
+
+        RequestManager.getInstance(ctx).cancelAllRequests();
+        RequestManager.getInstance(ctx).makeRequest(
+                Request.Method.POST, url,
+                this::handleupdateLessonStatusResponse
+        );
     }
-    private void handleupdateLessonStatusResponse(){
+    //TODO the handle for update lesson response
+    private void handleupdateLessonStatusResponse(JSONObject obj){
+        try {
+            String result = obj.getString("result");
+            switch (result){
+                case "success":
+                    String newStatus = obj.getString("newStatus");
+                    statusViewModel.setStatus(newStatus);
+                    Toast.makeText(ctx, newStatus.equals("effettuata") ?
+                            "Lezione segnata come effettuata!" :
+                            "Lezione disdetta!", Toast.LENGTH_SHORT).show();
 
+                    setButtonClickListener();
+                    break;
+
+                case "no_user":
+                    break;
+
+                default:
+                    Toast.makeText(ctx, "tao", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IllegalStateException | JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

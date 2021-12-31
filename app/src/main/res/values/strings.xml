@@ -49,6 +49,7 @@
     <string name="suggest_login_btn">Torna al Login</string>
     <string name="waiting">Attendere…</string>
 
+    <!-- Values for LessonActivity -->
     <string name="lesson_info_title">Info lezione</string>
     <string name="t_slot_title_info_lesson">Ora:</string>
     <string name="teacher_title_info_lesson">Docente:</string>
@@ -59,4 +60,10 @@
     <string name="lesson_cancel_btn_text">Disdici</string>
     <string name="back_info_lesson_btn">Indietro</string>
 
+    <!-- Default strings in handle responses -->
+    <string name="no_user_result">Sessione scaduta</string>
+    <string name="invalid_object_result">Tabella non riconosciuta</string>
+    <string name="not_allowed_result">Richiesta non consentita</string>
+    <string name="params_null_result">Parametri nulli o mancanti</string>
+    <string name="query_failed_result">Richiesta fallita</string>
 </resources>
