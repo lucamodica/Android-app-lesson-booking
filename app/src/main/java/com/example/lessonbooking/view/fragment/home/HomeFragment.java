@@ -197,7 +197,7 @@ public class HomeFragment extends Fragment {
         RequestManager.getInstance(ctx).cancelAllRequests();
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.GET, url,
-                this::setupCatalogView
+                this::handleFetchLessonResponse
         );
     }
     private void setupCatalogView(JSONObject obj){
@@ -236,6 +236,40 @@ public class HomeFragment extends Fragment {
     }
     //TODO the handle for fetch lessons response
     private void handleFetchLessonResponse(JSONObject jsonResult){
+
+        try {
+            String result = jsonResult.getString("result");
+            switch (result) {
+                case "success":
+                    setupCatalogView(jsonResult);
+                    break;
+
+                case "no_user":
+                    Toast.makeText(ctx, R.string.no_user_result,
+                            Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(ctx, LoginActivity.class);
+                    startActivity(i);
+                    break;
+
+                case "invalid_object":
+                    Toast.makeText(ctx, R.string.invalid_object_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "not_allowed":
+                    Toast.makeText(ctx, R.string.not_allowed_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+
+                case "query_failed":
+                    Toast.makeText(ctx, R.string.query_failed_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+            }
+        } catch (IllegalStateException | JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 

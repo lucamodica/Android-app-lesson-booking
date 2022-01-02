@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +42,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
     private CatalogViewModel catalogViewModel;
     private FragmentCatalogBinding binding;
     Context ctx;
+    View root;
     HashMap<String, List<Slot>> catalog;
     Resources.Theme theme;
     SlotsRecyclerViewAdapter adapter;
@@ -58,7 +60,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         catalogViewModel =
                 new ViewModelProvider(this).get(CatalogViewModel.class);
         binding = FragmentCatalogBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+       root = binding.getRoot();
         ctx = root.getContext();
         theme = ctx.getTheme();
 
@@ -125,7 +127,10 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         );
     }
     private void createCatalog(JSONObject obj) throws JSONException {
+        ((TextView) root.findViewById(R.id.waiting_catalog)).
+                setText("");
         JSONObject arrSlots = obj.getJSONObject("slots");
+
         for (String day: GenericUtils.getLessonDays()) {
             JSONArray daySlots = arrSlots.getJSONArray(day);
             for (int i = 0; i < daySlots.length(); i++) {

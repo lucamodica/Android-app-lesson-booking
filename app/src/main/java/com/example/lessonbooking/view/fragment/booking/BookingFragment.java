@@ -1,6 +1,7 @@
 package com.example.lessonbooking.view.fragment.booking;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +20,7 @@ import com.android.volley.Request;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.databinding.FragmentBookingBinding;
+import com.example.lessonbooking.view.activity.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -134,5 +137,46 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
     }
 
      */
+    /*TODO ELIMINARE*/void createDropdowns(){}
+    private void handleCatalogResponse(JSONObject obj){
+        try {
+            String result = obj.getString("result");
+            switch (result) {
+                case "success":
+                    createDropdowns();
+                    break;
+
+                case "no_user":
+                    Toast.makeText(ctx, R.string.no_user_result,
+                            Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(ctx, LoginActivity.class);
+                    startActivity(i);
+                    break;
+
+                case "invalid_object":
+                    Toast.makeText(ctx, R.string.invalid_object_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "not_allowed":
+                    Toast.makeText(ctx, R.string.not_allowed_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "params_null":
+                    Toast.makeText(ctx, R.string.params_null_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "query_failed":
+                    Toast.makeText(ctx, R.string.query_failed_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+            }
+        } catch (IllegalStateException | JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

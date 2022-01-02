@@ -172,12 +172,34 @@ public class LessonActivity extends AppCompatActivity {
 
                     setButtonClickListener();
                     break;
-
                 case "no_user":
+                    Toast.makeText(ctx, R.string.no_user_result,
+                            Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(ctx, LoginActivity.class);
+                    startActivity(i);
                     break;
 
-                default:
-                    Toast.makeText(ctx, "tao", Toast.LENGTH_SHORT).show();
+                case "invalid_object":
+                    Toast.makeText(ctx, R.string.invalid_object_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "not_allowed":
+                    Toast.makeText(ctx, R.string.not_allowed_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "params_null":
+                    Toast.makeText(ctx, R.string.params_null_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+                case "query_failed":
+                    Toast.makeText(ctx, R.string.query_failed_result,
+                            Toast.LENGTH_LONG).show();
+                    break;
+
+
             }
         } catch (IllegalStateException | JSONException e) {
             e.printStackTrace();
