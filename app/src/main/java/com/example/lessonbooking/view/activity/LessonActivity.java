@@ -99,13 +99,20 @@ public class LessonActivity extends AppCompatActivity {
         closeInfoLesson();
     }
     private void setButtonClickListener(){
+
+        int visibility;
         if (lesson.getStatus().equals("attiva")){
-            findViewById(R.id.update_status_btns).setVisibility(View.VISIBLE);
+            visibility = View.VISIBLE;
             lessonConfirmBtn.setOnClickListener(
                     v -> updateLessonStatus("effettuata"));
             lessonCancelBtn.setOnClickListener(
                     v -> updateLessonStatus("disdetta"));
         }
+        else {
+            visibility = View.GONE;
+        }
+
+        findViewById(R.id.update_status_btns).setVisibility(visibility);
         backInfoLessonBtn.setOnClickListener(
                 v -> closeInfoLesson());
     }
