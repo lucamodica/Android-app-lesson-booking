@@ -15,6 +15,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
@@ -35,7 +38,19 @@ import java.util.Objects;
 
 
 public class BookingFragment extends Fragment implements AdapterView.OnItemSelectedListener{
+    public static class BookingViewModel extends ViewModel {
 
+        private MutableLiveData<String> mText;
+
+        public BookingViewModel() {
+            mText = new MutableLiveData<>();
+            mText.setValue("This is booking fragment");
+        }
+
+        public LiveData<String> getText() {
+            return mText;
+        }
+    }
     private BookingViewModel bookingViewModel;
     private SelectCourseTeacherBinding binding;
     private View root;

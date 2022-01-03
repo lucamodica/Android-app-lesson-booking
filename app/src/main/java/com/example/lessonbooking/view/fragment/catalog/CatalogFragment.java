@@ -14,6 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +40,22 @@ import java.util.List;
 import java.util.Objects;
 
 public class CatalogFragment extends Fragment implements View.OnClickListener{
+    public static class CatalogViewModel extends ViewModel {
 
+        private final MutableLiveData<List<Slot>> slotsCatalog;
+
+        public CatalogViewModel() {
+            slotsCatalog = new MutableLiveData<>();
+        }
+
+        public LiveData<List<Slot>> getSlotsCatalog(){
+            return slotsCatalog;
+        }
+
+        public void setSlotsCatalog(List<Slot> newSlotsCatalog){
+            slotsCatalog.setValue(newSlotsCatalog);
+        }
+    }
     //Main vars
     private CatalogViewModel catalogViewModel;
     private FragmentCatalogBinding binding;

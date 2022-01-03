@@ -15,6 +15,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,10 +37,32 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class HomeFragment extends Fragment {
+    public static class HomeViewModel extends ViewModel {
 
+        private final MutableLiveData<List<Lesson>> lessons;
+
+        public HomeViewModel() {
+            lessons = new MutableLiveData<>();
+        }
+
+        public LiveData<List<Lesson>> getLessons() {
+            return lessons;
+        }
+
+        public void setLessons(List<Lesson> newLessons){
+            lessons.setValue(newLessons);
+        }
+
+        public void setNewLessonStatus(int lessonIndex, String newStatus){
+            Objects.requireNonNull(getLessons().getValue()).
+                    get(lessonIndex).setStatus(newStatus);
+        }
+
+    }
     //ViewModel and main fragment vars
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
