@@ -234,7 +234,6 @@ public class HomeFragment extends Fragment {
         }
 
     }
-    //TODO the handle for fetch lessons response
     private void handleFetchLessonResponse(JSONObject jsonResult){
 
         try {

@@ -244,7 +244,7 @@
             android:paddingLeft="10dip"
             android:paddingRight="10dip"
             android:drawableLeft="@drawable/ic_baseline_arrow_back_24"
-            android:text="@string/back_info_lesson_btn"
+            android:text="@string/back_btn"
             tools:ignore="RtlHardcoded" />
 
     </LinearLayout>

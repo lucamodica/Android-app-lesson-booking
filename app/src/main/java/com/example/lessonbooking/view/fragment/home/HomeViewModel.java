@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.lessonbooking.model.Lesson;
-import com.example.lessonbooking.model.Slot;
 
 import java.util.List;
 import java.util.Objects;

@@ -51,7 +51,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
             R.id.Mercoledi, R.id.Giovedi, R.id.Venerdi};
     private Button btn_unfocus;
 
-    //TODO the waiting TextView screen to show before the catalog fetch
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 

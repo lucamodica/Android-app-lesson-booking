@@ -12,7 +12,7 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,8 +20,8 @@
             android:id="@+id/role_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
             android:textColor="@color/black"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,12 +70,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/account_layout" />
 
-    <!-- Linear layout for the login suggest for a guest -->
+    <!-- Login suggest for a guest -->
     <LinearLayout
         android:id="@+id/suggest_login_home_layout"
-        android:layout_width="366dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="160dp"
+        android:layout_marginEnd="16dp"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/suggest_login"
+            android:text="@string/suggest_login_home"
             android:textSize="18sp" />
 
         <Button
@@ -112,6 +114,5 @@
         app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/account_layout"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

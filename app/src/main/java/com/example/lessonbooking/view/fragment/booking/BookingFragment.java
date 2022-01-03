@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,47 +17,114 @@ import androidx.lifecycle.ViewModelProvider;
 import com.android.volley.Request;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.connectivity.RequestManager;
-import com.example.lessonbooking.databinding.FragmentBookingBinding;
+import com.example.lessonbooking.databinding.SelectCourseTeacherBinding;
 import com.example.lessonbooking.view.activity.LoginActivity;
+import com.example.lessonbooking.view.activity.MainActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.ArrayList;
 
 
 public class BookingFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private BookingViewModel bookingViewModel;
-    private FragmentBookingBinding binding;
+    private SelectCourseTeacherBinding binding;
+    private View root;
+    private Context ctx;
+
     private JSONObject JSONcourse, JSONteacher;
-    Context ctx;
-    private String url;
+    private String url, account, role;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        //Setting up ViewModel (and refered layout) of bookable lesson slots
-        //(TO BE MOVED)
+        //Context and ViewModel setup
         bookingViewModel =
                 new ViewModelProvider(this).get(BookingViewModel.class);
-        binding = FragmentBookingBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        //Init setting
-        View view = inflater.inflate(R.layout.select_course, container,
+        binding = SelectCourseTeacherBinding.inflate(inflater, container,
                 false);
-        ctx = view.getContext();
-        JSONcourse = new JSONObject();
-        JSONteacher = new JSONObject();
-        url = getString(R.string.servlet_url) + "selectTable?objType=";
+        root = binding.getRoot();
+        ctx = root.getContext();
 
-        return view;
+
+        //Get params from Intent and setting it
+        role = ((MainActivity) requireActivity()).getRole();
+        if (role.equals("utente") || role.equals("amministratore")){
+            account = ((MainActivity) requireActivity()).getAccount();
+        }
+
+        //If the user logged is a guest, the login suggest
+        //will be showed
+        if (role.equals("ospite")){
+            showLoginSuggest();
+        }
+
+        return root;
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+    private void showLoginSuggest(){
+
+        root.findViewById(R.id.select_course_layout).
+                setVisibility(View.GONE);
+        root.findViewById(R.id.select_teacher_layout).
+                setVisibility(View.GONE);
+        root.findViewById(R.id.next_back_btns).
+                setVisibility(View.GONE);
+
+        root.findViewById(R.id.suggest_login_booking_layout).
+                setVisibility(View.VISIBLE);
+        root.findViewById(R.id.suggest_login_booking_btn).
+                setOnClickListener(v -> logout());
+    }
+
+    private void logout(){
+        String url = getString(R.string.servlet_url) +
+                "logout";
+
+        RequestManager.getInstance(ctx).makeRequest(Request.Method.GET,
+                url, this::handleLogoutResponse
+        );
+    }
+    private void handleLogoutResponse(JSONObject jsonResult){
+        try {
+            String status = jsonResult.getString("result");
+            switch (status) {
+                case "success":
+
+                    String toastText = "";
+
+                    if (!role.equals("ospite")){
+                        toastText += "Logout di " + account;
+                        System.out.println("User logout: " + account +
+                                ", with role '" + role + "'");
+                    }
+                    else{
+                        toastText += "Logout dell'ospite";
+                        System.out.println("Guest logout");
+                    }
+
+                    //Intent to take the user back to LoginActivity
+                    Toast.makeText(ctx, toastText + " avvenuto " +
+                            "con successo", Toast.LENGTH_LONG).show();
+                    break;
+
+                case "no_user":
+                    Toast.makeText(ctx, getString(R.string.no_user_result) + " per " +
+                            "effettuare logout", Toast.LENGTH_LONG).show();
+                    break;
+            }
+
+            requireActivity().startActivity(new Intent(ctx,
+                    LoginActivity.class));
+            requireActivity().finish();
+        }
+        catch (JSONException ed) {
+            ed.printStackTrace();
+        }
     }
 
 
