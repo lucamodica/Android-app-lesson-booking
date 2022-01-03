@@ -2,6 +2,9 @@ package com.example.lessonbooking.model;
 
 import androidx.annotation.NonNull;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 public class Teacher  implements Serializable {
@@ -14,6 +17,12 @@ public class Teacher  implements Serializable {
         this.id_number = id_number;
         this.name = name;
         this.surname = surname;
+    }
+
+    public Teacher(JSONObject obj) throws JSONException {
+        this.id_number = obj.getString("id_number");
+        this.name = obj.getString("name");
+        this.surname = obj.getString("surname");
     }
 
     public String getName() {

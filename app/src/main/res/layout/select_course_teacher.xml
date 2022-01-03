@@ -8,7 +8,7 @@
     tools:context=".view.activity.MainActivity">
 
 
-    <!-- Selct course -->
+    <!-- Select course -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/select_course_layout"
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Selct teacher -->
+    <!-- Select teacher -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/select_teacher_layout"
         android:layout_width="match_parent"
@@ -109,6 +109,7 @@
             android:paddingLeft="10dip"
             android:paddingRight="10dip"
             android:text="@string/back_btn"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"

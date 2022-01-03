@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -18,11 +21,17 @@ import com.android.volley.Request;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.databinding.SelectCourseTeacherBinding;
+import com.example.lessonbooking.model.Course;
+import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.view.activity.LoginActivity;
 import com.example.lessonbooking.view.activity.MainActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class BookingFragment extends Fragment implements AdapterView.OnItemSelectedListener{
@@ -31,9 +40,7 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
     private SelectCourseTeacherBinding binding;
     private View root;
     private Context ctx;
-
-    private JSONObject JSONcourse, JSONteacher;
-    private String url, account, role;
+    private String account, role;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +68,15 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
         return root;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        root.findViewById(R.id.spinner_courses).
+                setVisibility(View.GONE);
+        fetchData("corso");
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -79,6 +95,12 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
                 setVisibility(View.VISIBLE);
         root.findViewById(R.id.suggest_login_booking_btn).
                 setOnClickListener(v -> logout());
+    }
+    private void onBackPressed(){
+
+    }
+    private void onNextPressed(){
+
     }
 
     private void logout(){
@@ -137,78 +159,52 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
     }
 
-
     private void fetchData(String objType){
-        String urlReq = url + objType;
+        String urlReq = getString(R.string.servlet_url) + "selectTable?objType=" +
+                objType;
 
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.GET, urlReq,
-                response -> Log.d("JSONResponse",
-                        String.valueOf(response))
+                success -> handleResponse(success, objType)
         );
     }
+    private void createDropdown(JSONArray arr, String objType)
+            throws JSONException {
 
-    /*
-    private void createDropdowns(){
-        //Arraylist for adapters
-        JSONArray arr;
+        ArrayList<String> list = new ArrayList<>();
+        Object elem;
 
-        try {
-            if (JSONcourse.getString("result").equals("success")) {
-                ArrayList<String> courseslist = new ArrayList<>();
-                arr = JSONcourse.getJSONArray("content");
-                for (int i = 0; i < arr.length(); i++) {
-                    courseslist.add(arr.getJSONObject(i).getString("title"));
-                }
-                System.out.println(courseslist.toString());
-
-                //Init dropdown
-                Spinner courses = requireView().findViewById(R.id.courses);
-                courses.setOnItemSelectedListener(this);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(ctx,
-                        android.R.layout.simple_spinner_dropdown_item, courseslist);
-                courses.setAdapter(adapter);
-            }
+        for (int i = 0; i < arr.length(); i++) {
+            elem = (objType.equals("corso")) ? new Course(arr.getJSONObject(i))
+                    : new Teacher(arr.getJSONObject(i));
+            list.add(elem.toString());
         }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
+        System.out.println(list.toString());
 
-        try {
-            if (JSONteacher.getString("result").equals("success")) {
-                ArrayList<String> teacherlist = new ArrayList<>();
-                arr = JSONteacher.getJSONArray("content");
-                for (int i = 0; i < arr.length(); i++) {
-                    JSONObject teacher = arr.getJSONObject(i);
-                    String teacherStr = teacher.getString("name") + " " +
-                            teacher.getString("surname") + " (" +
-                            teacher.getString("id_number") + ")";
-                    teacherlist.add(teacherStr);
-                }
-                System.out.println(teacherlist.toString());
-
-                Spinner teacher = requireView().findViewById(R.id.teachers);
-                teacher.setOnItemSelectedListener(this);
-                ArrayAdapter<String> adaptert = new ArrayAdapter<>(ctx,
-                        android.R.layout.simple_spinner_dropdown_item,
-                        teacherlist);
-                teacher.setAdapter(adaptert);
-            }
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(ctx,
+                android.R.layout.simple_spinner_dropdown_item, list);
+        Spinner spinner = requireView().findViewById(
+                (objType.equals("corso")) ? R.id.spinner_courses
+                        : R.id.spinner_teachers
+        );
+        spinner.setOnItemSelectedListener(this);
+        spinner.setAdapter(adapter);
     }
+    private void handleResponse(JSONObject obj, String objType){
 
-     */
-    /*TODO ELIMINARE*/void createDropdowns(){}
-    private void handleCatalogResponse(JSONObject obj){
         try {
             String result = obj.getString("result");
             switch (result) {
                 case "success":
-                    createDropdowns();
+                    if (objType.equals("docente") || objType.equals("corso")){
+                        createDropdown(obj.getJSONArray("content"), objType);
+                        root.findViewById((objType.equals("corso")) ? R.id.spinner_courses
+                                : R.id.spinner_teachers).
+                                setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        System.out.println("Bookable slots case (to be done)");
+                    }
                     break;
 
                 case "no_user":
@@ -241,7 +237,6 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         } catch (IllegalStateException | JSONException e) {
             e.printStackTrace();
         }
-
     }
 
 }
