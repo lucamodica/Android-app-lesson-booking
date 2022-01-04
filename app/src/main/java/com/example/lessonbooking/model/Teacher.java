@@ -20,7 +20,7 @@ public class Teacher  implements Model, Serializable {
     }
 
     public Teacher(JSONObject obj) throws JSONException {
-        this.id_number = obj.getString("id_number");
+        this.id_number = obj.getString("teacher_id");
         this.name = obj.getString("name");
         this.surname = obj.getString("surname");
     }

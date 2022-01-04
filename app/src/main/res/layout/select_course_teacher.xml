@@ -21,18 +21,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Title -->
         <TextView
             android:id="@+id/select_course_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/select_course_text"
-            android:textSize="24sp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Dropdown -->
         <Spinner
             android:id="@+id/spinner_courses"
             android:layout_width="match_parent"
@@ -50,21 +52,23 @@
             app:layout_constraintTop_toBottomOf="@+id/select_course_title"
             tools:ignore="SpeakableTextPresentCheck" />
 
+        <!-- Waiting for select course text -->
+        <TextView
+            android:id="@+id/waiting_course_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/waiting"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/select_course_title" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <!-- Waiting for select course -->
-    <TextView
-        android:id="@+id/waiting_course_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="180dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/waiting"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <!-- Select teacher -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,26 +76,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_course_layout">
 
+        <!-- Title -->
         <TextView
             android:id="@+id/select_teacher_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/select_teacher_text"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Dropdown -->
         <Spinner
             android:id="@+id/spinner_teachers"
             android:layout_width="match_parent"
@@ -107,22 +113,24 @@
             app:layout_constraintTop_toBottomOf="@+id/select_teacher_title"
             tools:ignore="SpeakableTextPresentCheck" />
 
+        <!-- Waiting for select course text -->
+        <TextView
+            android:id="@+id/waiting_teacher_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/waiting"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/select_teacher_title" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <!-- Waiting for select teacher -->
-    <TextView
-        android:id="@+id/waiting_teacher_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="340dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/waiting"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
     <!-- Next/back buttons -->
     <LinearLayout
@@ -130,7 +138,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:orientation="horizontal"

@@ -3,16 +3,13 @@ package com.example.lessonbooking.view.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +43,7 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
     public static class BookingViewModel extends ViewModel {
 
-        private MutableLiveData<String> mText;
+        private final MutableLiveData<String> mText;
 
         public BookingViewModel() {
             mText = new MutableLiveData<>();
@@ -64,8 +61,8 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
     private View root;
     private Context ctx;
 
-    Button next_btn;
-    Button back_btn;
+    Button nextBtn;
+    Button backBtn;
     TextView teacherTitle;
     TextView waitingCourseText;
     TextView waitingTeacherText;
@@ -74,7 +71,7 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
     private String account, role;
     private ArrayList<String> listIds;
-    private String selected_course, selected_teacher;
+    private String selectedCourse, selected_teacher;
     private boolean selecting; //false = course, true = teacher
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -139,8 +136,8 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
     private void initCompnent(){
 
         //Next/back buttons
-        next_btn = root.findViewById(R.id.button_next);
-        back_btn = root.findViewById(R.id.button_back);
+        nextBtn = root.findViewById(R.id.button_next);
+        backBtn = root.findViewById(R.id.button_back);
 
         //Spinners
         coursesSpinner = root.findViewById(R.id.spinner_courses);
@@ -152,30 +149,33 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         waitingTeacherText = root.findViewById(R.id.waiting_teacher_text);
     }
     private void onBackPressed(View v){
+        if (selecting){
+            teacherTitle.setVisibility(View.GONE);
+            teachersSpinner.setVisibility(View.GONE);
+            waitingTeacherText.setVisibility(View.GONE);
+            waitingTeacherText.setText(getString(R.string.waiting));
 
+            selecting = false;
+            selectedCourse = null;
+            waitingCourseText.setVisibility(View.VISIBLE);
+            coursesSpinner.setVisibility(View.GONE);
+            backBtn.setVisibility(View.GONE);
+            nextBtn.setVisibility(View.GONE);
+            coursesSpinner.setEnabled(true);
+            fetchData("corso");
+        }
     }
     private void onNextPressed(View v){
         if (selecting){
             System.out.println("Bookable slots case (to be done)");
         }
         else {
-            Resources r = ctx.getResources();
-            int px = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    64,
-                    r.getDisplayMetrics()
-            );
-            LinearLayout courseLayout = root.findViewById(R.id.select_course_layout);
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
-                    courseLayout.getLayoutParams();
-            //TODO To be continues
-
             selecting = true;
             waitingTeacherText.setVisibility(View.VISIBLE);
             teacherTitle.setVisibility(View.VISIBLE);
             coursesSpinner.setEnabled(false);
 
-            fetchData("docente");
+            fetchData("affiliazione");
         }
     }
 
@@ -194,7 +194,6 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
                 case "success":
 
                     String toastText = "";
-
                     if (!role.equals("ospite")){
                         toastText += "Logout di " + account;
                         System.out.println("User logout: " + account +
@@ -225,14 +224,13 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         }
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (selecting){
             selected_teacher = listIds.get(i);
         }
         else {
-            selected_course = listIds.get(i);
+            selectedCourse = listIds.get(i);
         }
         System.out.println(listIds.get(i));
     }
@@ -244,12 +242,14 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
     private void fetchData(String objType){
 
         //Request url
-        String url = getString(R.string.servlet_url) + "selectTable?objType=" +
-                objType;
+        String action = objType.equals("corso") ?
+                "selectTable?objType=" + objType :
+                "selectElems?objType=" + objType + "&course_title=" + selectedCourse;
+        String url = getString(R.string.servlet_url) + action;
 
         //Prevent button event
-        next_btn.setOnClickListener(null);
-        back_btn.setOnClickListener(null);
+        nextBtn.setOnClickListener(null);
+        backBtn.setOnClickListener(null);
 
         //Make request
         RequestManager.getInstance(ctx).makeRequest(
@@ -286,7 +286,7 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
             String result = obj.getString("result");
             switch (result) {
                 case "success":
-                    if (objType.equals("docente") || objType.equals("corso")){
+                    if (objType.equals("affiliazione") || objType.equals("corso")){
                         JSONArray arr = obj.getJSONArray("content");
                         createDropdown(arr, objType);
                         setContentLayout(objType, arr.length());
@@ -336,11 +336,11 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         spinner.setVisibility(View.VISIBLE);
 
         //Buttons handle
-        next_btn.setVisibility(View.VISIBLE);
-        next_btn.setOnClickListener(this::onNextPressed);
-        back_btn.setVisibility((objType.equals("corso")) ? View.GONE
+        nextBtn.setVisibility(View.VISIBLE);
+        nextBtn.setOnClickListener(this::onNextPressed);
+        backBtn.setVisibility((objType.equals("corso")) ? View.GONE
                 : View.VISIBLE);
-        back_btn.setOnClickListener(this::onBackPressed);
+        backBtn.setOnClickListener(this::onBackPressed);
 
         //Waiting text handle
         TextView waitingText = (objType.equals("corso")) ? waitingCourseText
@@ -349,11 +349,12 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
         //Case in which none of the teacher teach the couse
         //previously selected
-        if (objType.equals("docente") && result_length == 0){
-            next_btn.setVisibility(View.GONE);
+        if (objType.equals("affiliazione") && result_length == 0){
+            nextBtn.setVisibility(View.GONE);
+            teachersSpinner.setVisibility(View.GONE);
             waitingText.setVisibility(View.VISIBLE);
             waitingText.setText(
-                    "Nessun docente disponibile per la materia: " + selected_course
+                    "Nessun docente disponibile per la materia: " + selectedCourse
             );
         }
     }
