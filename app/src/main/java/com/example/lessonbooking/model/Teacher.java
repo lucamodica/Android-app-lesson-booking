@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class Teacher  implements Serializable {
+public class Teacher  implements Model, Serializable {
 
     private String name;
     private String surname;
@@ -54,5 +54,10 @@ public class Teacher  implements Serializable {
     public String toString() {
         return name + " " + surname + " (" +
                 id_number + ")";
+    }
+
+    @Override
+    public String getModelId() {
+        return id_number;
     }
 }

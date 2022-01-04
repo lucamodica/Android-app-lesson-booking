@@ -1,4 +1,4 @@
-package com.example.lessonbooking.view.fragment.catalog;
+package com.example.lessonbooking.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class CatalogFragment extends Fragment implements View.OnClickListener{
+
     public static class CatalogViewModel extends ViewModel {
 
         private final MutableLiveData<List<Slot>> slotsCatalog;
@@ -56,6 +57,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
             slotsCatalog.setValue(newSlotsCatalog);
         }
     }
+
     //Main vars
     private CatalogViewModel catalogViewModel;
     private FragmentCatalogBinding binding;
@@ -106,7 +108,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        catalog = null;
     }
 
     @Override
@@ -137,7 +138,6 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
         String url = getString(R.string.servlet_url) +
                 "availableSlots?objType=slots";
 
-        RequestManager.getInstance(ctx).cancelAllRequests();
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.GET, url,
                 this::handleCatalogResponse

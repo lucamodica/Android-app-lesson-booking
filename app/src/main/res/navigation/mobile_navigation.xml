@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.lessonbooking.view.fragment.home.HomeFragment"
+        android:name="com.example.lessonbooking.view.fragment.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_booking"
-        android:name="com.example.lessonbooking.view.fragment.booking.BookingFragment"
+        android:name="com.example.lessonbooking.view.fragment.BookingFragment"
         android:label="@string/title_Booking"
         tools:layout="@layout/select_course_teacher" />
 
     <fragment
         android:id="@+id/navigation_catalog"
-        android:name="com.example.lessonbooking.view.fragment.catalog.CatalogFragment"
+        android:name="com.example.lessonbooking.view.fragment.CatalogFragment"
         android:label="@string/title_catalog"
         tools:layout="@layout/fragment_catalog" />
 </navigation>

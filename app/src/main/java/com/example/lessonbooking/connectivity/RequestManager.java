@@ -46,6 +46,7 @@ public class RequestManager {
                 url, null, listener, errorListener);
         objReq.setTag(R.string.network_tag);
 
+        cancelAllRequests();
         NetworkSingleton.getInstance(ctx).addToRequestQueue(objReq);
     }
 

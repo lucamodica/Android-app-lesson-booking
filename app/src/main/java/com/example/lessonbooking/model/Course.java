@@ -7,14 +7,9 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class Course implements Serializable {
+public class Course implements Model, Serializable {
     private String course_title;
     private String desc;
-
-    public Course() {
-        course_title = "";
-        desc = "";
-    }
 
     public Course(String course_title, String desc) {
         this.course_title = course_title;
@@ -38,6 +33,9 @@ public class Course implements Serializable {
         return desc;
     }
 
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
 
     @NonNull
     @Override
@@ -45,9 +43,8 @@ public class Course implements Serializable {
         return course_title;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    @Override
+    public String getModelId() {
+        return course_title;
     }
-
-
 }

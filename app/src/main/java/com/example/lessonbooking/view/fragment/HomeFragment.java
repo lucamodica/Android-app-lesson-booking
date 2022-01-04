@@ -1,4 +1,4 @@
-package com.example.lessonbooking.view.fragment.home;
+package com.example.lessonbooking.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -41,6 +41,7 @@ import java.util.Objects;
 
 
 public class HomeFragment extends Fragment {
+
     public static class HomeViewModel extends ViewModel {
 
         private final MutableLiveData<List<Lesson>> lessons;
@@ -56,19 +57,14 @@ public class HomeFragment extends Fragment {
         public void setLessons(List<Lesson> newLessons){
             lessons.setValue(newLessons);
         }
-
-        public void setNewLessonStatus(int lessonIndex, String newStatus){
-            Objects.requireNonNull(getLessons().getValue()).
-                    get(lessonIndex).setStatus(newStatus);
-        }
-
     }
+
+
     //ViewModel and main fragment vars
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     Context ctx;
     View root;
-
     //Recycler, user info
     LessonsRecyclerViewAdapter adapter;
     String account, role;
@@ -296,5 +292,4 @@ public class HomeFragment extends Fragment {
         }
 
     }
-
 }
