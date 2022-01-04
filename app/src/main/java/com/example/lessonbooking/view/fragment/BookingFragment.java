@@ -3,13 +3,16 @@ package com.example.lessonbooking.view.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,11 +66,11 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
     Button next_btn;
     Button back_btn;
-    TextView teacher_title;
+    TextView teacherTitle;
     TextView waitingCourseText;
     TextView waitingTeacherText;
-    Spinner courses_spinner;
-    Spinner teachers_spinner;
+    Spinner coursesSpinner;
+    Spinner teachersSpinner;
 
     private String account, role;
     private ArrayList<String> listIds;
@@ -140,11 +143,11 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         back_btn = root.findViewById(R.id.button_back);
 
         //Spinners
-        courses_spinner = root.findViewById(R.id.spinner_courses);
-        teachers_spinner = root.findViewById(R.id.spinner_teachers);
+        coursesSpinner = root.findViewById(R.id.spinner_courses);
+        teachersSpinner = root.findViewById(R.id.spinner_teachers);
 
         //TextViews
-        teacher_title = root.findViewById(R.id.select_teacher_title);
+        teacherTitle = root.findViewById(R.id.select_teacher_title);
         waitingCourseText = root.findViewById(R.id.waiting_course_text);
         waitingTeacherText = root.findViewById(R.id.waiting_teacher_text);
     }
@@ -156,7 +159,23 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
             System.out.println("Bookable slots case (to be done)");
         }
         else {
+            Resources r = ctx.getResources();
+            int px = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    64,
+                    r.getDisplayMetrics()
+            );
+            LinearLayout courseLayout = root.findViewById(R.id.select_course_layout);
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
+                    courseLayout.getLayoutParams();
+            //TODO To be continues
 
+            selecting = true;
+            waitingTeacherText.setVisibility(View.VISIBLE);
+            teacherTitle.setVisibility(View.VISIBLE);
+            coursesSpinner.setEnabled(false);
+
+            fetchData("docente");
         }
     }
 
@@ -256,8 +275,8 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(ctx,
                 android.R.layout.simple_spinner_dropdown_item, list);
-        Spinner spinner = objType.equals("corso") ? courses_spinner
-                        : teachers_spinner;
+        Spinner spinner = objType.equals("corso") ? coursesSpinner
+                        : teachersSpinner;
         spinner.setOnItemSelectedListener(this);
         spinner.setAdapter(adapter);
     }
@@ -312,8 +331,8 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
     private void setContentLayout(String objType, int result_length){
 
         //Show spinner
-        Spinner spinner = objType.equals("corso") ? courses_spinner
-                : teachers_spinner;
+        Spinner spinner = objType.equals("corso") ? coursesSpinner
+                : teachersSpinner;
         spinner.setVisibility(View.VISIBLE);
 
         //Buttons handle
