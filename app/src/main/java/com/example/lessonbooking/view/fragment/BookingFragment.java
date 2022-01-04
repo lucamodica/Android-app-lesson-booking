@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class BookingFragment extends Fragment implements AdapterView.OnItemSelectedListener{
@@ -168,6 +169,7 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
     private void onNextPressed(View v){
         if (selecting){
             System.out.println("Bookable slots case (to be done)");
+            setViewLayout(R.layout.fragment_booking);
         }
         else {
             selecting = true;
@@ -177,6 +179,14 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
             fetchData("affiliazione");
         }
+    }
+    private void setViewLayout(int id){
+        LayoutInflater inflater = (LayoutInflater) requireActivity().
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        root = inflater.inflate(id, null);
+        ViewGroup rootView = (ViewGroup) getView();
+        Objects.requireNonNull(rootView).removeAllViews();
+        rootView.addView(root);
     }
 
     private void logout(){
@@ -232,7 +242,7 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         else {
             selectedCourse = listIds.get(i);
         }
-        System.out.println(listIds.get(i));
+        System.out.println("Item selected: " + listIds.get(i));
     }
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
@@ -289,7 +299,7 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
                     if (objType.equals("affiliazione") || objType.equals("corso")){
                         JSONArray arr = obj.getJSONArray("content");
                         createDropdown(arr, objType);
-                        setContentLayout(objType, arr.length());
+                        setContentDropdowns(objType, arr.length());
                     }
                     else{
                         System.out.println("Bookable slots case (to be done)");
@@ -328,7 +338,7 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         }
     }
     @SuppressLint("SetTextI18n")
-    private void setContentLayout(String objType, int result_length){
+    private void setContentDropdowns(String objType, int result_length){
 
         //Show spinner
         Spinner spinner = objType.equals("corso") ? coursesSpinner
@@ -358,4 +368,6 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
             );
         }
     }
+
+
 }

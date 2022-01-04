@@ -108,6 +108,7 @@ public class CatalogFragment extends Fragment implements View.OnClickListener{
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        catalogViewModel = null;
     }
 
     @Override

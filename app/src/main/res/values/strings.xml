@@ -50,6 +50,7 @@
         \nl\'accesso qui</string>
     <string name="suggest_login_btn">Torna al Login</string>
     <string name="waiting">Attendere…</string>
+    <string name="booking_fragment_title">Ecco a te tutti gli slot prenotabili</string>
 
     <!-- Values for LessonActivity -->
     <string name="lesson_info_title">Info lezione</string>
@@ -68,4 +69,5 @@
     <string name="not_allowed_result">Richiesta non consentita</string>
     <string name="params_null_result">Parametri nulli o mancanti</string>
     <string name="query_failed_result">Richiesta fallita</string>
+    <string name="book_btn_text">Prenota</string>
 </resources>

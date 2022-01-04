@@ -67,8 +67,8 @@ public class SlotsRecyclerViewAdapter extends
                 slot.getTeacher_name(), slot.getTeacher_surname());
 
         holder.t_slot.setText(slot.getTime_slot());
-        holder.course.setText(teacher.toString());
-        holder.teacher.setText(slot.getCourse());
+        holder.course.setText(slot.getCourse());
+        holder.teacher.setText(teacher.toString());
     }
 
     //Total number of rows
