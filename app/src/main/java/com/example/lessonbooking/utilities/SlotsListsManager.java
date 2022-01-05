@@ -55,15 +55,17 @@ public class SlotsListsManager implements View.OnClickListener{
     private final int[] btns_id = {R.id.Lunedi, R.id.Martedi,
             R.id.Mercoledi, R.id.Giovedi, R.id.Venerdi};
     private Button btn_unfocus;
-    RecyclerView recyclerView;
-    Context ctx;
-    Resources res;
-    Resources.Theme theme;
-    View view;
-    SlotsViewModel model;
-    HashMap<String, List<Slot>> lists;
-    SlotsRecyclerViewAdapter adapter;
-    String account = null, selectedCourse, selectedTeacher;
+    private RecyclerView recyclerView;
+    private TextView waitingText;
+
+    private Context ctx;
+    private Resources res;
+    private Resources.Theme theme;
+    private View view;
+    private SlotsViewModel model;
+    private HashMap<String, List<Slot>> lists;
+    private SlotsRecyclerViewAdapter adapter;
+    private String account = null, selectedCourse, selectedTeacher;
 
     public SlotsListsManager(Fragment fragment, int recyclerViewId) {
         init(fragment, recyclerViewId);
@@ -78,6 +80,7 @@ public class SlotsListsManager implements View.OnClickListener{
     }
 
     private void init(Fragment fragment, int recyclerViewId){
+
         this.ctx = fragment.getContext();
         this.view = fragment.getView();
 
@@ -85,6 +88,7 @@ public class SlotsListsManager implements View.OnClickListener{
         recyclerView.setLayoutManager(new LinearLayoutManager(ctx));
         res = ctx.getResources();
         theme = ctx.getTheme();
+        waitingText = view.findViewById(R.id.waiting);
 
         //Adapter setup
         adapter = new SlotsRecyclerViewAdapter(ctx, new ArrayList<>(), account);
@@ -102,9 +106,17 @@ public class SlotsListsManager implements View.OnClickListener{
     }
     @Override
     public void onClick(View v) {
+
+        waitingText.setText("");
         setFocus(btn_unfocus, view.findViewById(v.getId()));
-        model.setSlotsList(lists.get(v.getResources().
-                getResourceEntryName(v.getId())));
+
+        List<Slot> newList = lists.get(v.getResources().
+                getResourceEntryName(v.getId()));
+        model.setSlotsList(newList);
+
+        if (Objects.requireNonNull(newList).isEmpty()){
+            waitingText.setText(ctx.getString(R.string.empty_slots_list));
+        }
     }
     private void setFocus(Button btn_unfocus, Button btn_focus){
         btn_unfocus.setTextColor(res.getColor(R.color.purple_500, theme));
@@ -137,10 +149,9 @@ public class SlotsListsManager implements View.OnClickListener{
         );
     }
     private void createSlots(JSONObject obj) throws JSONException {
-        ((TextView) view.findViewById(R.id.waiting)).
-                setText("");
-        JSONObject arrSlots = obj.getJSONObject("slots");
 
+        waitingText.setText("");
+        JSONObject arrSlots = obj.getJSONObject("slots");
         for (String day: GenericUtils.getLessonDays()) {
             JSONArray daySlots = arrSlots.getJSONArray(day);
             for (int i = 0; i < daySlots.length(); i++) {
@@ -155,7 +166,12 @@ public class SlotsListsManager implements View.OnClickListener{
             }
         }
 
-        model.setSlotsList(lists.get("Lunedi"));
+        List<Slot> initList = lists.get("Lunedi");
+        model.setSlotsList(initList);
+
+        if (Objects.requireNonNull(initList).isEmpty()){
+            waitingText.setText(ctx.getString(R.string.empty_slots_list));
+        }
     }
     private void setupSlotsView(JSONObject obj) throws JSONException{
 
