@@ -55,7 +55,6 @@ public class SlotsListsManager implements View.OnClickListener{
     private final int[] btns_id = {R.id.Lunedi, R.id.Martedi,
             R.id.Mercoledi, R.id.Giovedi, R.id.Venerdi};
     private Button btn_unfocus;
-    private RecyclerView recyclerView;
     private TextView waitingText;
 
     private Context ctx;
@@ -83,14 +82,14 @@ public class SlotsListsManager implements View.OnClickListener{
         this.ctx = fragment.getContext();
         this.view = fragment.getView();
 
-        recyclerView = Objects.requireNonNull(view).findViewById(recyclerViewId);
+        RecyclerView recyclerView = Objects.requireNonNull(view).findViewById(recyclerViewId);
         recyclerView.setLayoutManager(new LinearLayoutManager(ctx));
         res = ctx.getResources();
         theme = ctx.getTheme();
         waitingText = view.findViewById(R.id.waiting);
 
         //Adapter setup
-        adapter = new SlotsRecyclerViewAdapter(ctx, new ArrayList<>(), account);
+        adapter = new SlotsRecyclerViewAdapter(ctx, new ArrayList<>(), account, waitingText);
         recyclerView.setAdapter(adapter);
 
         //ViewModel binding setup
@@ -109,14 +108,18 @@ public class SlotsListsManager implements View.OnClickListener{
 
         waitingText.setText("");
         setFocus(btn_unfocus, view.findViewById(v.getId()));
-        lists.put(currentDay, adapter.getsData());
+        lists.replace(currentDay, adapter.getAdapterList());
+        System.out.println(currentDay + ": " + lists.get(currentDay));
 
         String newDay = v.getResources().getResourceEntryName(v.getId());
+        System.out.println("New day: " + newDay);
         List<Slot> newList = lists.get(newDay);
+        System.out.println("New list: " + newList);
         currentDay = newDay;
         model.setSlotsList(newList);
 
-        if (Objects.requireNonNull(newList).isEmpty()){
+        if (Objects.requireNonNull(lists.get(newDay)).isEmpty()){
+            System.out.println("empty");
             waitingText.setText(ctx.getString(R.string.empty_slots_list));
         }
     }

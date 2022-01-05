@@ -51,7 +51,8 @@ public class SlotsRecyclerViewAdapter extends
     }
 
 
-    private List<Slot> sData;
+    private List<Slot> sData, originalList;
+    private TextView waiting;
     private final Context ctx;
     private final LayoutInflater sInflater;
     private final String accountForBooking;
@@ -59,15 +60,16 @@ public class SlotsRecyclerViewAdapter extends
 
     //Data is passed into the constructor
     public SlotsRecyclerViewAdapter(Context context, List<Slot> data,
-                                    String accountForBooking) {
+                                    String accountForBooking, TextView waiting) {
         this.sInflater = LayoutInflater.from(context);
         this.ctx = context;
         this.sData = data;
         this.accountForBooking = accountForBooking;
+        this.waiting = waiting;
     }
 
-    public List<Slot> getsData() {
-        return sData;
+    public List<Slot> getAdapterList() {
+        return originalList;
     }
 
     //Inflates the row layout from xml when needed
@@ -106,6 +108,7 @@ public class SlotsRecyclerViewAdapter extends
         lastClickTime = SystemClock.elapsedRealtime();
 
         //Reqeust url
+        System.out.println(sData);
         Slot s = sData.get(slotPosition);
         String url = ctx.getString(R.string.servlet_url) +
                 "insert?objType=ripetizione&" +
@@ -130,7 +133,12 @@ public class SlotsRecyclerViewAdapter extends
                     Toast.makeText(ctx, "Lezione prenotata!",
                             Toast.LENGTH_SHORT).show();
                     sData.remove(slotPosition);
+                    originalList.remove(slotPosition);
                     notifyItemRemoved(slotPosition);
+
+                    if (sData.isEmpty()){
+                        waiting.setText(ctx.getString(R.string.empty_slots_list));
+                    }
                     break;
 
                 case "no_user":
@@ -185,5 +193,6 @@ public class SlotsRecyclerViewAdapter extends
         else {
             sData = newData;
         }
+        originalList = newData;
     }
 }
