@@ -165,7 +165,6 @@ public class LessonActivity extends AppCompatActivity {
                 this::handleupdateLessonStatusResponse
         );
     }
-    //TODO the handle for update lesson response
     private void handleupdateLessonStatusResponse(JSONObject obj){
         try {
             String result = obj.getString("result");

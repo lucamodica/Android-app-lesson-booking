@@ -3,7 +3,9 @@ package com.example.lessonbooking.view.fragment;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +23,21 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.example.lessonbooking.R;
+import com.example.lessonbooking.adapter.SlotsRecyclerViewAdapter;
+import com.example.lessonbooking.connectivity.LogoutManager;
 import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.databinding.SelectCourseTeacherBinding;
 import com.example.lessonbooking.model.Course;
 import com.example.lessonbooking.model.Model;
+import com.example.lessonbooking.model.Slot;
 import com.example.lessonbooking.model.Teacher;
+import com.example.lessonbooking.utilities.GenericUtils;
+import com.example.lessonbooking.utilities.SlotsListsManager;
 import com.example.lessonbooking.view.activity.LoginActivity;
 import com.example.lessonbooking.view.activity.MainActivity;
 
@@ -37,30 +46,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 
 public class BookingFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
-    public static class BookingViewModel extends ViewModel {
 
-        private final MutableLiveData<String> mText;
-
-        public BookingViewModel() {
-            mText = new MutableLiveData<>();
-            mText.setValue("This is booking fragment");
-        }
-
-        public LiveData<String> getText() {
-            return mText;
-        }
-    }
-
-
-    private BookingViewModel bookingViewModel;
     private SelectCourseTeacherBinding binding;
     private View root;
     private Context ctx;
+    private long lastClickTime = 0;
+    SlotsListsManager slotsListsManager;
 
     Button nextBtn;
     Button backBtn;
@@ -72,15 +70,12 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
     private String account, role;
     private ArrayList<String> listIds;
-    private String selectedCourse, selected_teacher;
+    private String selectedCourse, selectedTeacher;
     private boolean selecting; //false = course, true = teacher
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        //Context and ViewModel setup
-        bookingViewModel =
-                new ViewModelProvider(this).get(BookingViewModel.class);
         binding = SelectCourseTeacherBinding.inflate(inflater, container,
                 false);
         root = binding.getRoot();
@@ -132,7 +127,8 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         root.findViewById(R.id.suggest_login_booking_layout).
                 setVisibility(View.VISIBLE);
         root.findViewById(R.id.suggest_login_booking_btn).
-                setOnClickListener(v -> logout());
+                setOnClickListener(v -> LogoutManager.
+                        getInstance(ctx, account, role).makeLogout());
     }
     private void initCompnent(){
 
@@ -168,8 +164,15 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
     }
     private void onNextPressed(View v){
         if (selecting){
-            System.out.println("Bookable slots case (to be done)");
+            if (SystemClock.elapsedRealtime() - lastClickTime < 1000){
+                return;
+            }
+            lastClickTime = SystemClock.elapsedRealtime();
+
             setViewLayout(R.layout.fragment_booking);
+            slotsListsManager = new SlotsListsManager(this,
+                    R.id.recycler_bookable_slots, account, selectedCourse,
+                    selectedTeacher);
         }
         else {
             selecting = true;
@@ -189,55 +192,10 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         rootView.addView(root);
     }
 
-    private void logout(){
-        String url = getString(R.string.servlet_url) +
-                "logout";
-
-        RequestManager.getInstance(ctx).makeRequest(Request.Method.GET,
-                url, this::handleLogoutResponse
-        );
-    }
-    private void handleLogoutResponse(JSONObject jsonResult){
-        try {
-            String status = jsonResult.getString("result");
-            switch (status) {
-                case "success":
-
-                    String toastText = "";
-                    if (!role.equals("ospite")){
-                        toastText += "Logout di " + account;
-                        System.out.println("User logout: " + account +
-                                ", with role '" + role + "'");
-                    }
-                    else{
-                        toastText += "Logout dell'ospite";
-                        System.out.println("Guest logout");
-                    }
-
-                    //Intent to take the user back to LoginActivity
-                    Toast.makeText(ctx, toastText + " avvenuto " +
-                            "con successo", Toast.LENGTH_LONG).show();
-                    break;
-
-                case "no_user":
-                    Toast.makeText(ctx, getString(R.string.no_user_result) + " per " +
-                            "effettuare logout", Toast.LENGTH_LONG).show();
-                    break;
-            }
-
-            requireActivity().startActivity(new Intent(ctx,
-                    LoginActivity.class));
-            requireActivity().finish();
-        }
-        catch (JSONException ed) {
-            ed.printStackTrace();
-        }
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (selecting){
-            selected_teacher = listIds.get(i);
+            selectedTeacher = listIds.get(i);
         }
         else {
             selectedCourse = listIds.get(i);
@@ -267,43 +225,15 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
                 success -> handleResponse(success, objType)
         );
     }
-    private void createDropdown(JSONArray arr, String objType)
-            throws JSONException {
-
-        ArrayList<String> list = new ArrayList<>();
-        Model elem;
-
-        listIds = new ArrayList<>();
-        for (int i = 0; i < arr.length(); i++) {
-            elem = (objType.equals("corso")) ? new Course(arr.getJSONObject(i))
-                    : new Teacher(arr.getJSONObject(i));
-            list.add(elem.toString());
-            listIds.add(elem.getModelId());
-        }
-        System.out.println(list.toString());
-        System.out.println(listIds.toString());
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(ctx,
-                android.R.layout.simple_spinner_dropdown_item, list);
-        Spinner spinner = objType.equals("corso") ? coursesSpinner
-                        : teachersSpinner;
-        spinner.setOnItemSelectedListener(this);
-        spinner.setAdapter(adapter);
-    }
     private void handleResponse(JSONObject obj, String objType){
 
         try {
             String result = obj.getString("result");
             switch (result) {
                 case "success":
-                    if (objType.equals("affiliazione") || objType.equals("corso")){
-                        JSONArray arr = obj.getJSONArray("content");
-                        createDropdown(arr, objType);
-                        setContentDropdowns(objType, arr.length());
-                    }
-                    else{
-                        System.out.println("Bookable slots case (to be done)");
-                    }
+                    JSONArray arr = obj.getJSONArray("content");
+                    createDropdown(arr, objType);
+                    setContentDropdowns(objType, arr.length());
                     break;
 
                 case "no_user":
@@ -337,6 +267,29 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
             e.printStackTrace();
         }
     }
+    private void createDropdown(JSONArray arr, String objType)
+            throws JSONException {
+
+        ArrayList<String> list = new ArrayList<>();
+        Model elem;
+
+        listIds = new ArrayList<>();
+        for (int i = 0; i < arr.length(); i++) {
+            elem = (objType.equals("corso")) ? new Course(arr.getJSONObject(i))
+                    : new Teacher(arr.getJSONObject(i));
+            list.add(elem.toString());
+            listIds.add(elem.getModelId());
+        }
+        System.out.println(list.toString());
+        System.out.println(listIds.toString());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(ctx,
+                android.R.layout.simple_spinner_dropdown_item, list);
+        Spinner spinner = objType.equals("corso") ? coursesSpinner
+                        : teachersSpinner;
+        spinner.setOnItemSelectedListener(this);
+        spinner.setAdapter(adapter);
+    }
     @SuppressLint("SetTextI18n")
     private void setContentDropdowns(String objType, int result_length){
 
@@ -368,6 +321,5 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
             );
         }
     }
-
 
 }

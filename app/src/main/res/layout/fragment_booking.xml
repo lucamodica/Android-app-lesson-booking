@@ -86,7 +86,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_slots_booking"
+        android:id="@+id/recycler_bookable_slots"
         android:layout_width="match_parent"
         android:layout_height="439dp"
         android:layout_marginStart="16dp"
@@ -99,7 +99,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <TextView
-        android:id="@+id/waiting_catalog"
+        android:id="@+id/waiting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/waiting"

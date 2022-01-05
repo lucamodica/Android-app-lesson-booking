@@ -39,14 +39,13 @@ public class RequestManager {
                             Response.Listener<JSONObject> listener,
                             Response.ErrorListener errorListener){
 
-        Log.d("in RequestManager.makeRequest", "New request " +
-                "requested");
-
         JsonObjectRequest objReq = new JsonObjectRequest(method,
                 url, null, listener, errorListener);
         objReq.setTag(R.string.network_tag);
 
         cancelAllRequests();
+        Log.d("in RequestManager.makeRequest", "New request " +
+                "requested");
         NetworkSingleton.getInstance(ctx).addToRequestQueue(objReq);
     }
 

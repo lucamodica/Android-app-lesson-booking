@@ -11,13 +11,25 @@ public class Slot implements Serializable {
     String teacher_name;
     String teacher_surname;
     String course;
+    String day;
 
-    public Slot(String time_slot, String id_number, String t_name, String t_surname, String course) {
+    public Slot(String time_slot, String id_number, String t_name,
+                String t_surname, String course) {
         this.time_slot = time_slot;
         this.id_number = id_number;
         this.teacher_name = t_name;
         this.teacher_surname = t_surname;
         this.course = course;
+    }
+
+    public Slot(String time_slot, String id_number, String t_name,
+                String t_surname, String course, String day) {
+        this.time_slot = time_slot;
+        this.id_number = id_number;
+        this.teacher_name = t_name;
+        this.teacher_surname = t_surname;
+        this.course = course;
+        this.day = day;
     }
 
     public String getTime_slot() {
@@ -26,6 +38,14 @@ public class Slot implements Serializable {
 
     public void setTime_slot(String time_slot) {
         this.time_slot = time_slot;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 
     public String getTeacher_name() {

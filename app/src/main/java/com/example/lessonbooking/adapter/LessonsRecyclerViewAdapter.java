@@ -107,5 +107,4 @@ public class LessonsRecyclerViewAdapter extends
             lData = newData;
         }
     }
-
 }

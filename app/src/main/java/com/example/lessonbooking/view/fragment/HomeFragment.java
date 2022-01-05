@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.adapter.LessonsRecyclerViewAdapter;
+import com.example.lessonbooking.connectivity.LogoutManager;
 import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.databinding.FragmentHomeBinding;
 import com.example.lessonbooking.model.Lesson;
@@ -90,7 +91,8 @@ public class HomeFragment extends Fragment {
         }
 
         //Setting the logout button
-        root.findViewById(R.id.logout_btn).setOnClickListener(v -> logout());
+        root.findViewById(R.id.logout_btn).setOnClickListener(v -> LogoutManager.
+                getInstance(ctx, account, role).makeLogout());
 
         //If the user logged is a guest, the login suggest
         //will be showed
@@ -161,53 +163,8 @@ public class HomeFragment extends Fragment {
                 setVisibility(View.VISIBLE);
 
         root.findViewById(R.id.suggest_login_home_btn).
-                setOnClickListener(v -> logout());
-    }
-
-    private void logout(){
-        String url = getString(R.string.servlet_url) +
-                "logout";
-
-        RequestManager.getInstance(ctx).makeRequest(Request.Method.GET,
-                url, this::handleLogoutResponse
-        );
-    }
-    private void handleLogoutResponse(JSONObject jsonResult){
-        try {
-            String status = jsonResult.getString("result");
-            switch (status) {
-                case "success":
-
-                    String toastText = "";
-
-                    if (!role.equals("ospite")){
-                        toastText += "Logout di " + account;
-                        System.out.println("User logout: " + account +
-                                ", with role '" + role + "'");
-                    }
-                    else{
-                        toastText += "Logout dell'ospite";
-                        System.out.println("Guest logout");
-                    }
-
-                    //Intent to take the user back to LoginActivity
-                    Toast.makeText(ctx, toastText + " avvenuto " +
-                            "con successo", Toast.LENGTH_LONG).show();
-                    break;
-
-                case "no_user":
-                    Toast.makeText(ctx, getString(R.string.no_user_result) + " per " +
-                                    "effettuare logout", Toast.LENGTH_LONG).show();
-                    break;
-            }
-
-            requireActivity().startActivity(new Intent(ctx,
-                    LoginActivity.class));
-            requireActivity().finish();
-        }
-        catch (JSONException ed) {
-            ed.printStackTrace();
-        }
+                setOnClickListener(v -> LogoutManager.
+                        getInstance(ctx, account, role).makeLogout());
     }
 
     private void fetchLessons(){
