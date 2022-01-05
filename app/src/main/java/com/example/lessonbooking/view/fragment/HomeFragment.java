@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     Context ctx;
     View root;
+    TextView waitingText;
     //Recycler, user info
     LessonsRecyclerViewAdapter adapter;
     String account, role;
@@ -80,6 +81,7 @@ public class HomeFragment extends Fragment {
                 false);
         root = binding.getRoot();
         ctx = root.getContext();
+        waitingText = root.findViewById(R.id.waiting_home);
 
         //Get params from Intent and setting it
         role = ((MainActivity) requireActivity()).getRole();
@@ -156,8 +158,7 @@ public class HomeFragment extends Fragment {
     }
     private void showLoginSuggest(){
 
-        ((TextView) root.findViewById(R.id.waiting_home)).
-                setText("");
+        waitingText.setText("");
 
         root.findViewById(R.id.suggest_login_home_layout).
                 setVisibility(View.VISIBLE);
@@ -181,12 +182,10 @@ public class HomeFragment extends Fragment {
 
         //Setting up the hashmap for the fetched catalog
         lessons = new ArrayList<>();
-
         try {
 
             //Remove the waiting warning
-            ((TextView) root.findViewById(R.id.waiting_home)).
-                    setText("");
+            waitingText.setText("");
 
             //Fill the HashMap with the fetched slots
             JSONArray arrLessons = obj.getJSONArray("content");
@@ -205,6 +204,9 @@ public class HomeFragment extends Fragment {
             }
 
             homeViewModel.setLessons(lessons);
+            if (lessons.isEmpty()){
+                waitingText.setText(ctx.getString(R.string.empty_lessons_list));
+            }
         }
         catch (IllegalStateException | JSONException e){
             System.out.println(e.getMessage());

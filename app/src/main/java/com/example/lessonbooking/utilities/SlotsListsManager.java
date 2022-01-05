@@ -65,7 +65,7 @@ public class SlotsListsManager implements View.OnClickListener{
     private SlotsViewModel model;
     private HashMap<String, List<Slot>> lists;
     private SlotsRecyclerViewAdapter adapter;
-    private String account = null, selectedCourse, selectedTeacher;
+    private String currentDay, account = null, selectedCourse, selectedTeacher;
 
     public SlotsListsManager(Fragment fragment, int recyclerViewId) {
         init(fragment, recyclerViewId);
@@ -78,7 +78,6 @@ public class SlotsListsManager implements View.OnClickListener{
         this.account = account;
         init(fragment, recyclerViewId);
     }
-
     private void init(Fragment fragment, int recyclerViewId){
 
         this.ctx = fragment.getContext();
@@ -104,14 +103,17 @@ public class SlotsListsManager implements View.OnClickListener{
         //Start generating the slots lists
         fetchSlots((account == null) ? "slots" : "lessonSlots");
     }
+
     @Override
     public void onClick(View v) {
 
         waitingText.setText("");
         setFocus(btn_unfocus, view.findViewById(v.getId()));
+        lists.put(currentDay, adapter.getsData());
 
-        List<Slot> newList = lists.get(v.getResources().
-                getResourceEntryName(v.getId()));
+        String newDay = v.getResources().getResourceEntryName(v.getId());
+        List<Slot> newList = lists.get(newDay);
+        currentDay = newDay;
         model.setSlotsList(newList);
 
         if (Objects.requireNonNull(newList).isEmpty()){
@@ -167,6 +169,7 @@ public class SlotsListsManager implements View.OnClickListener{
         }
 
         List<Slot> initList = lists.get("Lunedi");
+        currentDay = "Lunedi";
         model.setSlotsList(initList);
 
         if (Objects.requireNonNull(initList).isEmpty()){

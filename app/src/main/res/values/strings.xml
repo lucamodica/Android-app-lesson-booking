@@ -52,6 +52,7 @@
     <string name="waiting">Attendere…</string>
     <string name="booking_fragment_title">Ecco a te tutti gli slot prenotabili</string>
     <string name="empty_slots_list">Nessuno slot disponibile</string>
+    <string name="empty_lessons_list">Nessuna lezione trovata</string>
 
     <!-- Values for LessonActivity -->
     <string name="lesson_info_title">Info lezione</string>

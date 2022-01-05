@@ -17,9 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.connectivity.RequestManager;
+import com.example.lessonbooking.model.Lesson;
 import com.example.lessonbooking.model.Slot;
 import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.utilities.PostDiffCallback;
+import com.example.lessonbooking.utilities.SlotsListsManager;
 import com.example.lessonbooking.view.activity.LoginActivity;
 
 import org.json.JSONArray;
@@ -64,6 +66,10 @@ public class SlotsRecyclerViewAdapter extends
         this.accountForBooking = accountForBooking;
     }
 
+    public List<Slot> getsData() {
+        return sData;
+    }
+
     //Inflates the row layout from xml when needed
     @NonNull
     @Override
@@ -87,16 +93,12 @@ public class SlotsRecyclerViewAdapter extends
 
         if (accountForBooking != null){
             visibility = View.VISIBLE;
-            holder.book.setOnClickListener(v -> bookSlot(
-                    slot.getTime_slot(), slot.getDay(),
-                    slot.getId_number(), slot.getCourse()
-            ));
+            holder.book.setOnClickListener(v -> bookSlot(position));
         }
         holder.book.setVisibility(visibility);
     }
 
-    private void bookSlot(String t_slot, String day,
-                          String teacher, String course){
+    private void bookSlot(int slotPosition){
 
         if (SystemClock.elapsedRealtime() - lastClickTime < 1000){
             return;
@@ -104,20 +106,22 @@ public class SlotsRecyclerViewAdapter extends
         lastClickTime = SystemClock.elapsedRealtime();
 
         //Reqeust url
+        Slot s = sData.get(slotPosition);
         String url = ctx.getString(R.string.servlet_url) +
                 "insert?objType=ripetizione&" +
-                "teacher=" + teacher + "&t_slot=" + t_slot +
-                "&day=" + day + "&status=attiva&user=" + accountForBooking +
-                "&course=" + course;
+                "teacher=" + s.getId_number() + "&t_slot=" + s.getTime_slot() +
+                "&day=" + s.getDay() + "&status=attiva&user=" + accountForBooking +
+                "&course=" + s.getCourse();
 
         //Make request
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.POST, url,
-                this::handleBookSlotResponse
+                response -> handleBookSlotResponse(response,
+                        slotPosition)
         );
     }
     //TODO to be reviewed the switch case
-    private void handleBookSlotResponse(JSONObject obj){
+    private void handleBookSlotResponse(JSONObject obj, int slotPosition){
 
         try{
             String result = obj.getString("result");
@@ -125,6 +129,8 @@ public class SlotsRecyclerViewAdapter extends
                 case "success":
                     Toast.makeText(ctx, "Lezione prenotata!",
                             Toast.LENGTH_SHORT).show();
+                    sData.remove(slotPosition);
+                    notifyItemRemoved(slotPosition);
                     break;
 
                 case "no_user":
@@ -158,7 +164,6 @@ public class SlotsRecyclerViewAdapter extends
             e.printStackTrace();
         }
     }
-
 
     //Total number of rows
     @Override
