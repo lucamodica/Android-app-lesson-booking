@@ -105,7 +105,6 @@ public class SlotsListsManager implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-
         waitingText.setText("");
         setFocus(btn_unfocus, view.findViewById(v.getId()));
         lists.replace(currentDay, adapter.getAdapterList());
@@ -124,10 +123,10 @@ public class SlotsListsManager implements View.OnClickListener{
         }
     }
     private void setFocus(Button btn_unfocus, Button btn_focus){
-        btn_unfocus.setTextColor(res.getColor(R.color.purple_500, theme));
+        btn_unfocus.setTextColor(res.getColor(R.color.app_theme, theme));
         btn_unfocus.setBackgroundColor(res.getColor(R.color.white, theme));
         btn_focus.setTextColor(res.getColor(R.color.white, theme));
-        btn_focus.setBackgroundColor(res.getColor(R.color.purple_500, theme));
+        btn_focus.setBackgroundColor(res.getColor(R.color.app_theme, theme));
         this.btn_unfocus = btn_focus;
     }
     private void setupButtonsGroup(){
@@ -138,7 +137,7 @@ public class SlotsListsManager implements View.OnClickListener{
         }
         btn_unfocus = btns[0];
         btns[0].setTextColor(res.getColor(R.color.white, theme));
-        btns[0].setBackgroundColor(res.getColor(R.color.purple_500, theme));
+        btns[0].setBackgroundColor(res.getColor(R.color.app_theme, theme));
     }
 
     private void fetchSlots(String objType){
@@ -150,7 +149,7 @@ public class SlotsListsManager implements View.OnClickListener{
 
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.GET, url,
-                this::handleSlotsResponse
+                (SuccessHandler) this::setupSlotsView
         );
     }
     private void createSlots(JSONObject obj) throws JSONException {
@@ -192,45 +191,5 @@ public class SlotsListsManager implements View.OnClickListener{
 
         //Fill the HashMap with the fetched slots
         createSlots(obj);
-    }
-    private void handleSlotsResponse(JSONObject obj){
-        try {
-            String result = obj.getString("result");
-            switch (result) {
-                case "success":
-                    setupSlotsView(obj);
-                    break;
-
-                case "no_user":
-                    Toast.makeText(ctx, R.string.no_user_result,
-                            Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(ctx, LoginActivity.class);
-                    ctx.startActivity(i);
-                    break;
-
-                case "invalid_object":
-                    Toast.makeText(ctx, R.string.invalid_object_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "not_allowed":
-                    Toast.makeText(ctx, R.string.not_allowed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "params_null":
-                    Toast.makeText(ctx, R.string.params_null_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "query_failed":
-                    Toast.makeText(ctx, R.string.query_failed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-            }
-        } catch (IllegalStateException | JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 }

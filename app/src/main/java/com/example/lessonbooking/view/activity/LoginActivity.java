@@ -9,6 +9,8 @@ import android.text.method.PasswordTransformationMethod;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.android.volley.Response;
 import com.example.lessonbooking.R;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -136,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         String urlReq = url;
         RequestManager.getInstance(ctx).makeRequest(Request.Method.POST,
                 urlReq,
-                this::handleLoginResponse
+                (Response.Listener<JSONObject>) this::handleLoginResponse
         );
 
     }

@@ -8,9 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="app_theme">#3F51B5</color>
+    <color name="app_theme_700">#2B377A</color>
 
     <color name="success">#28A745</color>
     <color name="danger">#CC1F2E</color>
     <color name="primary">#007BFF</color>
+    <color name="primary_700">#FF0055AF</color>
     <color name="secondary">#6C757D</color>
 </resources>

@@ -20,6 +20,7 @@ import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.model.Lesson;
 import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.utilities.GenericUtils;
+import com.example.lessonbooking.utilities.SuccessHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +44,6 @@ public class LessonActivity extends AppCompatActivity {
             status.setValue(newStatus);
         }
     }
-
 
     private Lesson lesson;
     private int lessonIndex;
@@ -162,14 +162,7 @@ public class LessonActivity extends AppCompatActivity {
         RequestManager.getInstance(ctx).cancelAllRequests();
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.POST, url,
-                this::handleupdateLessonStatusResponse
-        );
-    }
-    private void handleupdateLessonStatusResponse(JSONObject obj){
-        try {
-            String result = obj.getString("result");
-            switch (result){
-                case "success":
+                (SuccessHandler) obj -> {
                     String newStatus = obj.getString("newStatus");
                     statusViewModel.setStatus(newStatus);
                     Toast.makeText(ctx, newStatus.equals("effettuata") ?
@@ -177,38 +170,7 @@ public class LessonActivity extends AppCompatActivity {
                             "Lezione disdetta!", Toast.LENGTH_SHORT).show();
 
                     setButtonClickListener();
-                    break;
-                case "no_user":
-                    Toast.makeText(ctx, R.string.no_user_result,
-                            Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(ctx, LoginActivity.class);
-                    startActivity(i);
-                    break;
-
-                case "invalid_object":
-                    Toast.makeText(ctx, R.string.invalid_object_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "not_allowed":
-                    Toast.makeText(ctx, R.string.not_allowed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "params_null":
-                    Toast.makeText(ctx, R.string.params_null_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "query_failed":
-                    Toast.makeText(ctx, R.string.query_failed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-
-            }
-        } catch (IllegalStateException | JSONException e) {
-            e.printStackTrace();
-        }
+                }
+        );
     }
 }
