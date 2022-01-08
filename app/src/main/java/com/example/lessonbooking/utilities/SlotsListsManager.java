@@ -51,9 +51,10 @@ public class SlotsListsManager implements View.OnClickListener{
         }
     }
 
-
+    // init array with the button_id for booking  or retrievineg lesson
     private final int[] btns_id = {R.id.Lunedi, R.id.Martedi,
             R.id.Mercoledi, R.id.Giovedi, R.id.Venerdi};
+
     private Button btn_unfocus;
     private RecyclerView recyclerView;
     private TextView waitingText;
@@ -110,8 +111,9 @@ public class SlotsListsManager implements View.OnClickListener{
         waitingText.setText("");
         setFocus(btn_unfocus, view.findViewById(v.getId()));
         lists.put(currentDay, adapter.getsData());
-
+        //get from resource the name  of button clicked
         String newDay = v.getResources().getResourceEntryName(v.getId());
+        // get  list  from hashmap  with the value of nwe day
         List<Slot> newList = lists.get(newDay);
         currentDay = newDay;
         model.setSlotsList(newList);
@@ -127,6 +129,10 @@ public class SlotsListsManager implements View.OnClickListener{
         btn_focus.setBackgroundColor(res.getColor(R.color.purple_500, theme));
         this.btn_unfocus = btn_focus;
     }
+    /**
+     * mapping  button / id retring from xml resource
+     * onclicklistener was setted with  the method "Onclick" from  this class
+     * */
     private void setupButtonsGroup(){
         Button[] btns = new Button[5];
         for(int i = 0; i < btns.length; i++){
@@ -138,6 +144,12 @@ public class SlotsListsManager implements View.OnClickListener{
         btns[0].setBackgroundColor(res.getColor(R.color.purple_500, theme));
     }
 
+    /** Entry point:
+     * IF account is null requestmanager you 're in catalog fragment  and
+     * the request manager return  the list of avaible slot.
+     * ELSE  you're in booking fragment and the request manager return the
+     * list of free avaible slot fetched by course and teacher
+     * */
     private void fetchSlots(String objType){
         String action = (account == null) ?
                 "" : "&course=" + selectedCourse +

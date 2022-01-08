@@ -60,7 +60,7 @@ public class LogoutManager {
                             " per effettuare logout", Toast.LENGTH_LONG).show();
                     break;
             }
-
+            //Finish the activity where the function makelogout was called
             ctx.startActivity(new Intent(ctx,
                     LoginActivity.class));
             ((Activity) ctx).finish();
@@ -70,6 +70,9 @@ public class LogoutManager {
         }
     }
 
+    /** Call to servlet of logout   return a call  to method handleresponse with json
+     *  object like param
+     * */
     public void makeLogout(){
 
         String url = ctx.getString(R.string.servlet_url) + "logout";

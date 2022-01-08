@@ -115,7 +115,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     private void login(String action) {
-
+        //Entry point
+        // login utility check the text of textfield
         String url = getString(R.string.servlet_url) +
                 "login?action=" + action;
 
