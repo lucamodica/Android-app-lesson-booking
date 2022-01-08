@@ -109,8 +109,9 @@ public class SlotsListsManager implements View.OnClickListener{
         setFocus(btn_unfocus, view.findViewById(v.getId()));
         lists.replace(currentDay, adapter.getAdapterList());
         System.out.println(currentDay + ": " + lists.get(currentDay));
-
+        //get from resource the name  of button clicked
         String newDay = v.getResources().getResourceEntryName(v.getId());
+        // get  list  from hashmap  with the value of nwe day
         System.out.println("New day: " + newDay);
         List<Slot> newList = lists.get(newDay);
         System.out.println("New list: " + newList);
@@ -129,6 +130,10 @@ public class SlotsListsManager implements View.OnClickListener{
         btn_focus.setBackgroundColor(res.getColor(R.color.app_theme, theme));
         this.btn_unfocus = btn_focus;
     }
+    /**
+     * mapping  button / id retring from xml resource
+     * onclicklistener was setted with  the method "Onclick" from  this class
+     * */
     private void setupButtonsGroup(){
         Button[] btns = new Button[5];
         for(int i = 0; i < btns.length; i++){
@@ -140,6 +145,12 @@ public class SlotsListsManager implements View.OnClickListener{
         btns[0].setBackgroundColor(res.getColor(R.color.app_theme, theme));
     }
 
+    /** Entry point:
+     * IF account is null requestmanager you 're in catalog fragment  and
+     * the request manager return  the list of avaible slot.
+     * ELSE  you're in booking fragment and the request manager return the
+     * list of free avaible slot fetched by course and teacher
+     * */
     private void fetchSlots(String objType){
         String action = (account == null) ?
                 "" : "&course=" + selectedCourse +
