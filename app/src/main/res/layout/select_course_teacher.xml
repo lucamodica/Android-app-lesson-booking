@@ -169,7 +169,7 @@
             android:id="@+id/button_next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/purple_700"
+            android:backgroundTint="@color/app_theme"
             android:drawableRight="@drawable/ic_baseline_arrow_forward_24"
             android:paddingLeft="10dip"
             android:paddingRight="10dip"

@@ -53,6 +53,7 @@
     <string name="booking_fragment_title">Ecco a te tutti gli slot prenotabili</string>
     <string name="empty_slots_list">Nessuno slot disponibile</string>
     <string name="empty_lessons_list">Nessuna lezione trovata</string>
+    <string name="book_btn_text">Prenota</string>
 
     <!-- Values for LessonActivity -->
     <string name="lesson_info_title">Info lezione</string>
@@ -71,5 +72,13 @@
     <string name="not_allowed_result">Richiesta non consentita</string>
     <string name="params_null_result">Parametri nulli o mancanti</string>
     <string name="query_failed_result">Richiesta fallita</string>
-    <string name="book_btn_text">Prenota</string>
+    <string name="invalid_checks_result">Parametri della lezione errati</string>
+    <string name="invalid_course_teacher_for_lesson_result">
+        Associazione corso/docente inesistente
+    </string>
+    <string name="slot_busy_result">
+        Slot occupato, o lezione non disdetta gia esistente
+        per l\'utente o il docente
+    </string>
+
 </resources>

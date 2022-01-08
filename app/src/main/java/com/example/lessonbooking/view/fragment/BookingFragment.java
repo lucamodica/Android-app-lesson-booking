@@ -2,8 +2,6 @@ package com.example.lessonbooking.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
@@ -14,45 +12,31 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.example.lessonbooking.R;
-import com.example.lessonbooking.adapter.SlotsRecyclerViewAdapter;
 import com.example.lessonbooking.connectivity.LogoutManager;
 import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.databinding.SelectCourseTeacherBinding;
 import com.example.lessonbooking.model.Course;
 import com.example.lessonbooking.model.Model;
-import com.example.lessonbooking.model.Slot;
 import com.example.lessonbooking.model.Teacher;
-import com.example.lessonbooking.utilities.GenericUtils;
 import com.example.lessonbooking.utilities.SlotsListsManager;
-import com.example.lessonbooking.view.activity.LoginActivity;
+import com.example.lessonbooking.utilities.SuccessHandler;
 import com.example.lessonbooking.view.activity.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 
 public class BookingFragment extends Fragment implements AdapterView.OnItemSelectedListener{
-
 
     private SelectCourseTeacherBinding binding;
     private View root;
@@ -222,50 +206,12 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
         //Make request
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.GET, url,
-                success -> handleResponse(success, objType)
-        );
-    }
-    private void handleResponse(JSONObject obj, String objType){
-
-        try {
-            String result = obj.getString("result");
-            switch (result) {
-                case "success":
+                (SuccessHandler)  obj -> {
                     JSONArray arr = obj.getJSONArray("content");
                     createDropdown(arr, objType);
                     setContentDropdowns(objType, arr.length());
-                    break;
-
-                case "no_user":
-                    Toast.makeText(ctx, R.string.no_user_result,
-                            Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(ctx, LoginActivity.class);
-                    startActivity(i);
-                    break;
-
-                case "invalid_object":
-                    Toast.makeText(ctx, R.string.invalid_object_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "not_allowed":
-                    Toast.makeText(ctx, R.string.not_allowed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "params_null":
-                    Toast.makeText(ctx, R.string.params_null_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "query_failed":
-                    Toast.makeText(ctx, R.string.query_failed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-            }
-        } catch (IllegalStateException | JSONException e) {
-            e.printStackTrace();
-        }
+                }
+        );
     }
     private void createDropdown(JSONArray arr, String objType)
             throws JSONException {
@@ -321,5 +267,4 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
             );
         }
     }
-
 }

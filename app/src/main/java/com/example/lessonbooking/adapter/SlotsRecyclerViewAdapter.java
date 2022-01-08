@@ -1,7 +1,6 @@
 package com.example.lessonbooking.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,16 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.connectivity.RequestManager;
-import com.example.lessonbooking.model.Lesson;
 import com.example.lessonbooking.model.Slot;
 import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.utilities.PostDiffCallback;
-import com.example.lessonbooking.utilities.SlotsListsManager;
-import com.example.lessonbooking.view.activity.LoginActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.lessonbooking.utilities.SuccessHandler;
 
 import java.util.List;
 
@@ -51,7 +44,8 @@ public class SlotsRecyclerViewAdapter extends
     }
 
 
-    private List<Slot> sData;
+    private List<Slot> sData, originalList;
+    private final TextView waiting;
     private final Context ctx;
     private final LayoutInflater sInflater;
     private final String accountForBooking;
@@ -59,15 +53,16 @@ public class SlotsRecyclerViewAdapter extends
 
     //Data is passed into the constructor
     public SlotsRecyclerViewAdapter(Context context, List<Slot> data,
-                                    String accountForBooking) {
+                                    String accountForBooking, TextView waiting) {
         this.sInflater = LayoutInflater.from(context);
         this.ctx = context;
         this.sData = data;
         this.accountForBooking = accountForBooking;
+        this.waiting = waiting;
     }
 
-    public List<Slot> getsData() {
-        return sData;
+    public List<Slot> getAdapterList() {
+        return originalList;
     }
 
     //Inflates the row layout from xml when needed
@@ -106,6 +101,7 @@ public class SlotsRecyclerViewAdapter extends
         lastClickTime = SystemClock.elapsedRealtime();
 
         //Reqeust url
+        System.out.println(sData);
         Slot s = sData.get(slotPosition);
         String url = ctx.getString(R.string.servlet_url) +
                 "insert?objType=ripetizione&" +
@@ -116,53 +112,18 @@ public class SlotsRecyclerViewAdapter extends
         //Make request
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.POST, url,
-                response -> handleBookSlotResponse(response,
-                        slotPosition)
-        );
-    }
-    //TODO to be reviewed the switch case
-    private void handleBookSlotResponse(JSONObject obj, int slotPosition){
-
-        try{
-            String result = obj.getString("result");
-            switch (result) {
-                case "success":
+                (SuccessHandler) obj -> {
                     Toast.makeText(ctx, "Lezione prenotata!",
                             Toast.LENGTH_SHORT).show();
                     sData.remove(slotPosition);
+                    originalList.remove(slotPosition);
                     notifyItemRemoved(slotPosition);
-                    break;
 
-                case "no_user":
-                    Toast.makeText(ctx, R.string.no_user_result,
-                            Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(ctx, LoginActivity.class);
-                    ctx.startActivity(i);
-                    break;
-
-                case "invalid_object":
-                    Toast.makeText(ctx, R.string.invalid_object_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "not_allowed":
-                    Toast.makeText(ctx, R.string.not_allowed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "params_null":
-                    Toast.makeText(ctx, R.string.params_null_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "query_failed":
-                    Toast.makeText(ctx, R.string.query_failed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-            }
-        } catch (IllegalStateException | JSONException e) {
-            e.printStackTrace();
-        }
+                    if (sData.isEmpty()){
+                        waiting.setText(ctx.getString(R.string.empty_slots_list));
+                    }
+                }
+        );
     }
 
     //Total number of rows
@@ -185,5 +146,6 @@ public class SlotsRecyclerViewAdapter extends
         else {
             sData = newData;
         }
+        originalList = newData;
     }
 }

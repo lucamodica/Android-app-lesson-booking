@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.view.activity.LoginActivity;
 
@@ -78,7 +79,7 @@ public class LogoutManager {
         String url = ctx.getString(R.string.servlet_url) + "logout";
 
         RequestManager.getInstance(ctx).makeRequest(Request.Method.GET,
-                url, this::handleResponse
+                url, (Response.Listener<JSONObject>) this::handleResponse
         );
     }
 }

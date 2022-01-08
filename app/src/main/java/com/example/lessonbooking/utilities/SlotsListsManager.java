@@ -51,12 +51,10 @@ public class SlotsListsManager implements View.OnClickListener{
         }
     }
 
-    // init array with the button_id for booking  or retrievineg lesson
+
     private final int[] btns_id = {R.id.Lunedi, R.id.Martedi,
             R.id.Mercoledi, R.id.Giovedi, R.id.Venerdi};
-
     private Button btn_unfocus;
-    private RecyclerView recyclerView;
     private TextView waitingText;
 
     private Context ctx;
@@ -84,14 +82,14 @@ public class SlotsListsManager implements View.OnClickListener{
         this.ctx = fragment.getContext();
         this.view = fragment.getView();
 
-        recyclerView = Objects.requireNonNull(view).findViewById(recyclerViewId);
+        RecyclerView recyclerView = Objects.requireNonNull(view).findViewById(recyclerViewId);
         recyclerView.setLayoutManager(new LinearLayoutManager(ctx));
         res = ctx.getResources();
         theme = ctx.getTheme();
         waitingText = view.findViewById(R.id.waiting);
 
         //Adapter setup
-        adapter = new SlotsRecyclerViewAdapter(ctx, new ArrayList<>(), account);
+        adapter = new SlotsRecyclerViewAdapter(ctx, new ArrayList<>(), account, waitingText);
         recyclerView.setAdapter(adapter);
 
         //ViewModel binding setup
@@ -107,32 +105,30 @@ public class SlotsListsManager implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-
         waitingText.setText("");
         setFocus(btn_unfocus, view.findViewById(v.getId()));
-        lists.put(currentDay, adapter.getsData());
-        //get from resource the name  of button clicked
+        lists.replace(currentDay, adapter.getAdapterList());
+        System.out.println(currentDay + ": " + lists.get(currentDay));
+
         String newDay = v.getResources().getResourceEntryName(v.getId());
-        // get  list  from hashmap  with the value of nwe day
+        System.out.println("New day: " + newDay);
         List<Slot> newList = lists.get(newDay);
+        System.out.println("New list: " + newList);
         currentDay = newDay;
         model.setSlotsList(newList);
 
-        if (Objects.requireNonNull(newList).isEmpty()){
+        if (Objects.requireNonNull(lists.get(newDay)).isEmpty()){
+            System.out.println("empty");
             waitingText.setText(ctx.getString(R.string.empty_slots_list));
         }
     }
     private void setFocus(Button btn_unfocus, Button btn_focus){
-        btn_unfocus.setTextColor(res.getColor(R.color.purple_500, theme));
+        btn_unfocus.setTextColor(res.getColor(R.color.app_theme, theme));
         btn_unfocus.setBackgroundColor(res.getColor(R.color.white, theme));
         btn_focus.setTextColor(res.getColor(R.color.white, theme));
-        btn_focus.setBackgroundColor(res.getColor(R.color.purple_500, theme));
+        btn_focus.setBackgroundColor(res.getColor(R.color.app_theme, theme));
         this.btn_unfocus = btn_focus;
     }
-    /**
-     * mapping  button / id retring from xml resource
-     * onclicklistener was setted with  the method "Onclick" from  this class
-     * */
     private void setupButtonsGroup(){
         Button[] btns = new Button[5];
         for(int i = 0; i < btns.length; i++){
@@ -141,15 +137,9 @@ public class SlotsListsManager implements View.OnClickListener{
         }
         btn_unfocus = btns[0];
         btns[0].setTextColor(res.getColor(R.color.white, theme));
-        btns[0].setBackgroundColor(res.getColor(R.color.purple_500, theme));
+        btns[0].setBackgroundColor(res.getColor(R.color.app_theme, theme));
     }
 
-    /** Entry point:
-     * IF account is null requestmanager you 're in catalog fragment  and
-     * the request manager return  the list of avaible slot.
-     * ELSE  you're in booking fragment and the request manager return the
-     * list of free avaible slot fetched by course and teacher
-     * */
     private void fetchSlots(String objType){
         String action = (account == null) ?
                 "" : "&course=" + selectedCourse +
@@ -159,7 +149,7 @@ public class SlotsListsManager implements View.OnClickListener{
 
         RequestManager.getInstance(ctx).makeRequest(
                 Request.Method.GET, url,
-                this::handleSlotsResponse
+                (SuccessHandler) this::setupSlotsView
         );
     }
     private void createSlots(JSONObject obj) throws JSONException {
@@ -201,45 +191,5 @@ public class SlotsListsManager implements View.OnClickListener{
 
         //Fill the HashMap with the fetched slots
         createSlots(obj);
-    }
-    private void handleSlotsResponse(JSONObject obj){
-        try {
-            String result = obj.getString("result");
-            switch (result) {
-                case "success":
-                    setupSlotsView(obj);
-                    break;
-
-                case "no_user":
-                    Toast.makeText(ctx, R.string.no_user_result,
-                            Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(ctx, LoginActivity.class);
-                    ctx.startActivity(i);
-                    break;
-
-                case "invalid_object":
-                    Toast.makeText(ctx, R.string.invalid_object_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "not_allowed":
-                    Toast.makeText(ctx, R.string.not_allowed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "params_null":
-                    Toast.makeText(ctx, R.string.params_null_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-
-                case "query_failed":
-                    Toast.makeText(ctx, R.string.query_failed_result,
-                            Toast.LENGTH_LONG).show();
-                    break;
-            }
-        } catch (IllegalStateException | JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 }
