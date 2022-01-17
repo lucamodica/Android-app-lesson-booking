@@ -26,7 +26,7 @@ import com.example.lessonbooking.model.Course;
 import com.example.lessonbooking.model.Model;
 import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.utilities.SlotsListsManager;
-import com.example.lessonbooking.utilities.SuccessHandler;
+import com.example.lessonbooking.connectivity.SuccessHandler;
 import com.example.lessonbooking.view.activity.MainActivity;
 
 import org.json.JSONArray;

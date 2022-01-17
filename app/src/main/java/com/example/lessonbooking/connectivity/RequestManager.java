@@ -9,7 +9,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.lessonbooking.R;
-import com.example.lessonbooking.utilities.SuccessHandler;
 import com.example.lessonbooking.view.activity.LoginActivity;
 
 import org.json.JSONException;

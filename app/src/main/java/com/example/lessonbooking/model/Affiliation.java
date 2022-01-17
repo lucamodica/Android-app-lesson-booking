@@ -1,5 +1,7 @@
 package com.example.lessonbooking.model;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class Affiliation implements Serializable {
@@ -27,6 +29,7 @@ public class Affiliation implements Serializable {
         this.course_title = course_title;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Affiliation{" +

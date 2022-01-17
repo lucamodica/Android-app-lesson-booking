@@ -1,12 +1,10 @@
 package com.example.lessonbooking.utilities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -20,8 +18,8 @@ import com.android.volley.Request;
 import com.example.lessonbooking.R;
 import com.example.lessonbooking.adapter.SlotsRecyclerViewAdapter;
 import com.example.lessonbooking.connectivity.RequestManager;
+import com.example.lessonbooking.connectivity.SuccessHandler;
 import com.example.lessonbooking.model.Slot;
-import com.example.lessonbooking.view.activity.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;

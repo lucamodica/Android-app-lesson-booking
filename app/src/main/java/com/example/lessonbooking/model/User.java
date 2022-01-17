@@ -1,5 +1,7 @@
 package com.example.lessonbooking.model;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -33,6 +35,7 @@ private String password;
         this.password = password;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "User{" +

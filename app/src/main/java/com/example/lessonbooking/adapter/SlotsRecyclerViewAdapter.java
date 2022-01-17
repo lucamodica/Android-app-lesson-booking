@@ -19,7 +19,7 @@ import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.model.Slot;
 import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.utilities.PostDiffCallback;
-import com.example.lessonbooking.utilities.SuccessHandler;
+import com.example.lessonbooking.connectivity.SuccessHandler;
 
 import java.util.List;
 

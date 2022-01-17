@@ -1,4 +1,4 @@
-package com.example.lessonbooking.utilities;
+package com.example.lessonbooking.connectivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;

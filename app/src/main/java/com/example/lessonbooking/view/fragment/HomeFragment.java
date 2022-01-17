@@ -29,7 +29,7 @@ import com.example.lessonbooking.connectivity.LogoutManager;
 import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.databinding.FragmentHomeBinding;
 import com.example.lessonbooking.model.Lesson;
-import com.example.lessonbooking.utilities.SuccessHandler;
+import com.example.lessonbooking.connectivity.SuccessHandler;
 import com.example.lessonbooking.view.activity.MainActivity;
 
 import org.json.JSONArray;

@@ -20,10 +20,7 @@ import com.example.lessonbooking.connectivity.RequestManager;
 import com.example.lessonbooking.model.Lesson;
 import com.example.lessonbooking.model.Teacher;
 import com.example.lessonbooking.utilities.GenericUtils;
-import com.example.lessonbooking.utilities.SuccessHandler;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.lessonbooking.connectivity.SuccessHandler;
 
 
 public class LessonActivity extends AppCompatActivity {
