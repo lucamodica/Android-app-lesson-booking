@@ -33,6 +33,10 @@ public class LessonsRecyclerViewAdapter extends
         TextView status;
         Button info_btn;
 
+         /**
+          * init  components of row from  a view
+          * itemView
+          */
         ViewHolder(View itemView) {
             super(itemView);
             t_slot = itemView.findViewById(R.id.t_slot_lesson_field);
@@ -78,7 +82,11 @@ public class LessonsRecyclerViewAdapter extends
         holder.info_btn.setOnClickListener(
                 v -> openInfoLesson(v, lesson, position));
     }
-
+        /**
+         *when  the button is pressed  the function openInfoLesson  is called and start
+         * Lesson Activity whit the position and the and object like extra params
+         * @param  v lesson position
+         * */
     private void openInfoLesson(View v, Lesson lesson, int position) {
 
         //Intent to take the user to the LessonActivity

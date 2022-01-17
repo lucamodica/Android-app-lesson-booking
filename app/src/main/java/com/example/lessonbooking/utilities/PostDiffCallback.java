@@ -13,6 +13,9 @@ public class PostDiffCallback<T> extends DiffUtil.Callback {
         this.oldPosts = oldPosts;
         this.newPosts = newPosts;
     }
+    /** All method for implementing the recycler view
+     *
+     * */
 
     @Override
     public int getOldListSize() {

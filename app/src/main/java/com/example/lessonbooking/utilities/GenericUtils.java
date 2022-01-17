@@ -32,7 +32,11 @@ public class GenericUtils {
         return Arrays.asList("utente", "amministratore");
     }
 
-    //Set the textColor to the status
+    /**Set the textColor to the status
+     * attiva -> blue
+     * effettuata-> green
+     * disdetta->red
+     * */
     public static void setStatusColor(Context ctx, TextView statusText){
         int color;
         switch (statusText.getText().toString()){

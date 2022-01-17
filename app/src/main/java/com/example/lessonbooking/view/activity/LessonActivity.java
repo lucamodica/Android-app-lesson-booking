@@ -55,7 +55,7 @@ public class LessonActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Get params from Intent
+        //Get params from Intent Object  and position
         Intent data = getIntent();
         if (data != null && data.hasExtra("lesson") &&
                 data.hasExtra("lessonIndex")){
@@ -138,7 +138,7 @@ public class LessonActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("lessonStatus", lesson.getStatus());
         intent.putExtra("lessonIndex", lessonIndex);
-
+//todo ???
         setResult(69420, intent);
         finish();
     }
