@@ -258,12 +258,15 @@ public class BookingFragment extends Fragment implements AdapterView.OnItemSelec
 
         //Case in which none of the teacher teach the couse
         //previously selected
-        if (objType.equals("affiliazione") && result_length == 0){
+        if (result_length == 0){
             nextBtn.setVisibility(View.GONE);
-            teachersSpinner.setVisibility(View.GONE);
+            spinner.setVisibility(View.GONE);
             waitingText.setVisibility(View.VISIBLE);
             waitingText.setText(
+                    (objType.equals("corso")) ?
+                    "Nessun corso dispobile" :
                     "Nessun docente disponibile per la materia: " + selectedCourse
+
             );
         }
     }
