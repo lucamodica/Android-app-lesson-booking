@@ -1,4 +1,4 @@
-# Android app lesson booking
+# Android app Lesson Booking
 
 Android app for *create and manage booking for lessons*. It's developed in Java and communicates with the server realized in [Web-app Lesson Booking](https://github.com/lucamodica/TWEB-project). Guest users can also access to the app, to visualize the course catalogue.
 
